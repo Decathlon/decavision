@@ -76,7 +76,7 @@ def create_dir(path):
     Arguments:
         path (str): path to directory to create
     """
-    if not os.path.existspath():
+    if not os.path.exists(path):
         os.mkdir(path)
 
 
