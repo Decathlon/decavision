@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Welcome to Decathlonian’s documentation! &mdash; decathlonian 0.0.1 documentation</title>
+  <title>Welcome to Decathlonian’s documentation! &mdash; decathlonian 1.1.0 documentation</title>
   
 
   
@@ -132,6 +132,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -144,7 +146,10 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+            
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/dktunited/img-classification" class="fa fa-github"> Edit on GitHub</a>
+            
           
         
       </li>
@@ -160,7 +165,7 @@
   <div class="section" id="welcome-to-decathlonian-s-documentation">
 <h1>Welcome to Decathlonian’s documentation!<a class="headerlink" href="#welcome-to-decathlonian-s-documentation" title="Permalink to this headline">¶</a></h1>
 <p>This library contains the methods required to build an image classification neural network using transfer learning.</p>
-<p>The module can be used to extract a training set of images from Google Images, train a classification model
+<p>The module can be used to prepare a dataset of images for training, train a classification model
 built on top of various pretrained models, optimize model hyperparameters using scikit-optimize library and evaluate
 the accuracy on a test set. The library capitalizes on the concepts of data augmentation, fine tuning and
 hyperparameter optimization, to achieve high accuracy given small sets of training images.</p>
@@ -177,7 +182,6 @@ hyperparameter optimization, to achieve high accuracy given small sets of traini
 <li><p>scikit-optimize</p></li>
 <li><p>pillow</p></li>
 <li><p>numpy</p></li>
-<li><p>selenium</p></li>
 <li><p>pandas</p></li>
 <li><p>scikit-learn</p></li>
 <li><p>augmentor</p></li>
@@ -187,6 +191,9 @@ hyperparameter optimization, to achieve high accuracy given small sets of traini
 <li><p>patool</p></li>
 <li><p>seaborn</p></li>
 </ul>
+<p>The library has been tested on tensorflow 2.2 and 2.3, but it should work locally with any version above 2. When using
+colab, using the preinstalled tensorflow version is advised because there may be compatibility problems with the TPUs if
+using another version.</p>
 <p>This library is available through the Python Package Installer (PyPI) by typing:</p>
 <p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">decathlonian</span></code></p>
 <p>All the dependencies are installed along with the library, so it is safer to perform the installation in a fresh virtual environment.</p>
@@ -199,7 +206,6 @@ shows examples of how to use the code explicitely.</p>
 <p class="caption"><span class="caption-text">Functions</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="data.html">Preparing datasets</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="data.html#module-decathlonian.dataset_preparation.extract_images">Extract from google</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data.html#module-decathlonian.dataset_preparation.data_augmentation">Data augmentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data.html#module-decathlonian.dataset_preparation.generate_tfrecords">Make tfrecords</a></li>
 </ul>
@@ -223,7 +229,6 @@ shows examples of how to use the code explicitely.</p>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="data_example.html">Build a dataset from scratch</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="data_example.html#building-training-validation-and-test-sets-of-images">Building training, validation and test sets of images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_example.html#spliting-a-set-of-images-into-a-training-and-a-validation-set">Spliting a set of images into a training and a validation set</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_example.html#make-data-augmentation-on-training-images">Make data augmentation on training images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_example.html#generate-tfrecord-files">Generate Tfrecord files</a></li>

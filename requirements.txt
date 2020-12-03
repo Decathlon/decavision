@@ -11,6 +11,4 @@ pyunpack
 scikit-learn
 scikit-optimize
 seaborn
-selenium
 tensorflow
-tensorflow-gpu

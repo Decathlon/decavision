@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Preparing datasets &mdash; decathlonian 0.0.1 documentation</title>
+  <title>Preparing datasets &mdash; decathlonian 1.1.0 documentation</title>
   
 
   
@@ -85,7 +85,6 @@
               <p class="caption"><span class="caption-text">Functions</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Preparing datasets</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-decathlonian.dataset_preparation.extract_images">Extract from google</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-decathlonian.dataset_preparation.data_augmentation">Data augmentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-decathlonian.dataset_preparation.generate_tfrecords">Make tfrecords</a></li>
 </ul>
@@ -167,44 +166,6 @@
 <h1>Preparing datasets<a class="headerlink" href="#preparing-datasets" title="Permalink to this headline">¶</a></h1>
 <p>The following code details the functions and classes that are available to build a dataset of images and prepare it for training.</p>
 <p>An example of how to use these functions can be found in <a class="reference internal" href="data_example.html"><span class="doc">Build a dataset from scratch</span></a>.</p>
-<div class="section" id="module-decathlonian.dataset_preparation.extract_images">
-<span id="extract-from-google"></span><h2>Extract from google<a class="headerlink" href="#module-decathlonian.dataset_preparation.extract_images" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="decathlonian.dataset_preparation.extract_images.ExtractImages">
-<em class="property">class </em><code class="sig-prename descclassname">decathlonian.dataset_preparation.extract_images.</code><code class="sig-name descname">ExtractImages</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_dir</span><span class="o">=</span><span class="default_value">'google_data'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.dataset_preparation.extract_images.ExtractImages" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class to search words on google images and download a specific number of images to
-make a dataset for image classification. A csv file with the following columns must be
-included in the output_dir: search_term, number_imgs, category. The file has to be named
-searchterms.csv.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>output_dir</strong> (<em>str</em>) – directory where images will be downloaded and where the csv file is located</p></li>
-<li><p><strong>verbose</strong> (<em>bool</em>) – print a line whenever an image is downloaded</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt id="decathlonian.dataset_preparation.extract_images.ExtractImages.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">delete_previous_images</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">path_to_driver</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.dataset_preparation.extract_images.ExtractImages.run" title="Permalink to this definition">¶</a></dt>
-<dd><p>Download images from google based on the search terms mentioned in the csv file.
-Each word is searched for the desired number of images and these are saved in a folder
-located at output_dir/image_dataset/train/category. A file called ‘google_image_records.csv’
-is also created in the output directory with a list of all downloaded images.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>delete_previous_images</strong> (<em>bool</em>) – if we want to empty the directory before the search, to avoid duplicate images,
-the whole image_dataset folder will be emptied</p></li>
-<li><p><strong>path_to_driver</strong> (<em>str</em>) – path to the chrome driver; if None, we assume it is in the output_folder</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</div>
 <div class="section" id="module-decathlonian.dataset_preparation.data_augmentation">
 <span id="data-augmentation"></span><h2>Data augmentation<a class="headerlink" href="#module-decathlonian.dataset_preparation.data_augmentation" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">

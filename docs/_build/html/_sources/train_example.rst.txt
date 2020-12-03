@@ -10,7 +10,7 @@ Training the classification model
 To train an image classification model, you need to have your training and validation data saved in tfrecords format, as is explained in 
 :doc:`data_example`. We will continue working with this example. The data is in a directory with the following structure::
 
-  google_data/
+  data/
     tfrecords/
       classes.csv
       train/
@@ -22,7 +22,7 @@ To train an image classification model, you need to have your training and valid
 
 The training is then done with the following code::
 
-  classifier = decathlonian.model_training.tfrecords_image_classifier.ImageClassifier(tfrecords_folder='google_data/tfrecords', batch_size=16, transfer_model='B3')
+  classifier = decathlonian.model_training.tfrecords_image_classifier.ImageClassifier(tfrecords_folder='data/tfrecords', batch_size=16, transfer_model='B3')
   classifier.fit()
  
 You can decide the transfer model between Xception, Inception_Resnet, Resnet and B0, B3 or B5 (all EffecientNets). Their respective 
@@ -58,7 +58,7 @@ Optimization of the hyperparameters
 There is no specific rule to select the values of the many hyperparameters so you have to try a variation and find the best. 
 This can be done automatically using the following code::
 
-  classifier = decathlonian.model_training.tfrecords_image_classifier.ImageClassifier(tfrecords_folder='google_data/tfrecords', batch_size=16, transfer_model='B3')
+  classifier = decathlonian.model_training.tfrecords_image_classifier.ImageClassifier(tfrecords_folder='tfrecords', batch_size=16, transfer_model='B3')
   classifier.hyperparameter_optimization(num_iterations=25, n_random_starts=10)
 
 This performs a series of training with various combinations of hyperparameters to find the best model. The most important parameters of 

@@ -25,7 +25,7 @@ class ImageClassifier:
             folders train and val, filenames of the form filenumber-numberofimages.tfrec
         batch_size (int): size of batches of data used for training
         transfer_model (str): pretrained model to use for transfer learning, can be one of Inception,
-            Xception, Inception_Resnet, Resnet, B0, B3 or B5
+            Xception, Inception_Resnet, Resnet, (EfficientNet) B0, B3 or B5
     """
 
     def __init__(self, tfrecords_folder, batch_size=128, transfer_model='Inception'):
@@ -342,7 +342,7 @@ class ImageClassifier:
         at each step in the working directory. If checkpoint present in working directory, optimization starts
         back from where it left off. Logs of all tries are also saved in working directory. Hyperparameters that
         are varied are epochs, hidden_size, learning_rate, learning_rate_fine_tuning, fine_tuning, dropout and
-        l2_lambda.
+        l2_lambda. Possible to save best combination at the end of the optimization.
 
         Arguments:
             n_random_starts (int): number of random combinations of hyperparameters first tried
@@ -350,7 +350,7 @@ class ImageClassifier:
                 num_iterations/n_random_starts)
             min_accuracy (float): if specified, training in single try will stop when improvement in accuracy
                 is smaller than min_accuracy
-            save_results (bool): decide to save optimal hyperparameters in pickle file when done
+            save_results (bool): decide to save optimal hyperparameters in hyperparameters_dimensions.pickle when done
         """
         # initialize logging
         logging.basicConfig(

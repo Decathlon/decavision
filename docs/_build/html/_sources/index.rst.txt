@@ -1,3 +1,5 @@
+:github_url: https://github.com/dktunited/img-classification
+
 .. decathlonian documentation master file, created by
    sphinx-quickstart on Fri Jul 24 09:14:44 2020.
    You can adapt this file completely to your liking, but it should at least
@@ -8,7 +10,7 @@ Welcome to Decathlonian's documentation!
 
 This library contains the methods required to build an image classification neural network using transfer learning.
 
-The module can be used to extract a training set of images from Google Images, train a classification model 
+The module can be used to prepare a dataset of images for training, train a classification model 
 built on top of various pretrained models, optimize model hyperparameters using scikit-optimize library and evaluate 
 the accuracy on a test set. The library capitalizes on the concepts of data augmentation, fine tuning and 
 hyperparameter optimization, to achieve high accuracy given small sets of training images.
@@ -28,7 +30,6 @@ This library works with python 3.6 and above and it is based on the following de
 - scikit-optimize
 - pillow
 - numpy
-- selenium
 - pandas
 - scikit-learn
 - augmentor
@@ -37,6 +38,10 @@ This library works with python 3.6 and above and it is based on the following de
 - pyunpack
 - patool
 - seaborn
+
+The library has been tested on tensorflow 2.2 and 2.3, but it should work locally with any version above 2. When using
+colab, using the preinstalled tensorflow version is advised because there may be compatibility problems with the TPUs if
+using another version.
 
 This library is available through the Python Package Installer (PyPI) by typing:
 

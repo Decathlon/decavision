@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Train and optimize model &mdash; decathlonian 0.0.1 documentation</title>
+  <title>Train and optimize model &mdash; decathlonian 1.1.0 documentation</title>
   
 
   
@@ -170,7 +170,7 @@ You will also perform an optimization of the hyperparameters of the model to ach
 <h2>Training the classification model<a class="headerlink" href="#training-the-classification-model" title="Permalink to this headline">¶</a></h2>
 <p>To train an image classification model, you need to have your training and validation data saved in tfrecords format, as is explained in
 <a class="reference internal" href="data_example.html"><span class="doc">Build a dataset from scratch</span></a>. We will continue working with this example. The data is in a directory with the following structure:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">google_data</span><span class="o">/</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">/</span>
   <span class="n">tfrecords</span><span class="o">/</span>
     <span class="n">classes</span><span class="o">.</span><span class="n">csv</span>
     <span class="n">train</span><span class="o">/</span>
@@ -182,7 +182,7 @@ You will also perform an optimization of the hyperparameters of the model to ach
 </pre></div>
 </div>
 <p>The training is then done with the following code:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">classifier</span> <span class="o">=</span> <span class="n">decathlonian</span><span class="o">.</span><span class="n">model_training</span><span class="o">.</span><span class="n">tfrecords_image_classifier</span><span class="o">.</span><span class="n">ImageClassifier</span><span class="p">(</span><span class="n">tfrecords_folder</span><span class="o">=</span><span class="s1">&#39;google_data/tfrecords&#39;</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">transfer_model</span><span class="o">=</span><span class="s1">&#39;B3&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">classifier</span> <span class="o">=</span> <span class="n">decathlonian</span><span class="o">.</span><span class="n">model_training</span><span class="o">.</span><span class="n">tfrecords_image_classifier</span><span class="o">.</span><span class="n">ImageClassifier</span><span class="p">(</span><span class="n">tfrecords_folder</span><span class="o">=</span><span class="s1">&#39;data/tfrecords&#39;</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">transfer_model</span><span class="o">=</span><span class="s1">&#39;B3&#39;</span><span class="p">)</span>
 <span class="n">classifier</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -216,7 +216,7 @@ it is only possible to export a model to a google cloud bucket.</p>
 <h2>Optimization of the hyperparameters<a class="headerlink" href="#optimization-of-the-hyperparameters" title="Permalink to this headline">¶</a></h2>
 <p>There is no specific rule to select the values of the many hyperparameters so you have to try a variation and find the best.
 This can be done automatically using the following code:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">classifier</span> <span class="o">=</span> <span class="n">decathlonian</span><span class="o">.</span><span class="n">model_training</span><span class="o">.</span><span class="n">tfrecords_image_classifier</span><span class="o">.</span><span class="n">ImageClassifier</span><span class="p">(</span><span class="n">tfrecords_folder</span><span class="o">=</span><span class="s1">&#39;google_data/tfrecords&#39;</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">transfer_model</span><span class="o">=</span><span class="s1">&#39;B3&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">classifier</span> <span class="o">=</span> <span class="n">decathlonian</span><span class="o">.</span><span class="n">model_training</span><span class="o">.</span><span class="n">tfrecords_image_classifier</span><span class="o">.</span><span class="n">ImageClassifier</span><span class="p">(</span><span class="n">tfrecords_folder</span><span class="o">=</span><span class="s1">&#39;tfrecords&#39;</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">transfer_model</span><span class="o">=</span><span class="s1">&#39;B3&#39;</span><span class="p">)</span>
 <span class="n">classifier</span><span class="o">.</span><span class="n">hyperparameter_optimization</span><span class="p">(</span><span class="n">num_iterations</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">n_random_starts</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>

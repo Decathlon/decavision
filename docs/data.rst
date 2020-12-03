@@ -5,12 +5,6 @@ The following code details the functions and classes that are available to build
 
 An example of how to use these functions can be found in :doc:`data_example`.
 
-Extract from google
----------------------
-
-.. automodule:: decathlonian.dataset_preparation.extract_images
-   :members:
-
 Data augmentation
 ---------------------
 

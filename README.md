@@ -5,10 +5,9 @@ The package can be found on [PyPI](www.pypi.com) and the documentation [here](ht
 
 ## Improve the library
 
-If you want to modify something in the code, it is as simple as cloning this repository (using your github credentials 
-since the repo is private)
+If you want to modify something in the code, it is as simple as cloning this repository
 ```
-git clone https://username:key@github.com/dktunited/img-classification.git
+git clone https://github.com/dktunited/img-classification.git
 cd img-classification
 ```
 modifying the scripts and using the code as if you were using the package itself. This can be done locally or in a 
@@ -17,81 +16,9 @@ documentation. If you use the repository locally, make sure that all the require
 ```
 pip install -r requirements.txt
 ```
-
-### Use main.py
-
-If you use this library locally (or on jenkins for example) you can use the main.py file to run the tasks from
-a command line. Most of what can be done with code can be done using the following commands:
-- Download images from Google images. The searchwords.csv file (with columns search_term, number_imgs and category) 
-  must be located in a folder called 'data', along with the chromedriver. Downloaded images wil be saved in 
-  'data/image_dataset/train'.
-  ```
-  python main.py --task extract_images
-  ```
-- Split the images located in 'data/image_dataset/train' into train and val according to the val_fraction.
-  ```
-  python main.py --task split_training --val_fraction 0.1
-  ```
-- Transform into tfrecords the images located in 'data/image_dataset'. These new files are saved in 'data/tfrecords'. 
-  The transfer model needs to be specified to use the correct size for the images.
-  ```
-  python main.py --task generate_tfrecords --transfer_model B3
-  ```
-- Optimize the hyperparameters of the model. A log file is saved with the results of all tries and the best set of 
-  hyperparameters is saved in pickle files.
-  ```
-  python main.py --task hyperparameters --transfer_model B3 --batch_size 64 --number_iterations 20 --n_random_starts 10
-  ```
-- After the best hyperparameters have been found we can use them to train the final model and save it.
-  ```
-  python main.py --task fit --save_model 1 --extract_SavedModel 1 --batch_size 64 --transfer_model B3
-  ```
-- Now that a model is trained and saved we can evaluate its performance on a test set, located at the same place as the train 
-  and val image files.
-  ```
-  python main.py --task evaluate --evaluate_directory test
-  ```
-- Finally it is possible to predict the label of images located in a given folder (here called testing).
-  ```
-  python main.py --task classify --img data/testing
-  ```
-
-### Classifying an image: API call
-
-A simple API was built using Flask framework to classify images online. If you want to use it you first have to 
-install the necessary dependencies
-```
-pip install flask
-pip install flask-cors
-```
-This API can be run locally by the following command:
-```
-python app.py --model_path {your_model_path} --data_path {training_data_location}
-```
-You can specify the path to the model that you want to load and the data that was used to train (to get the list of 
-classes). If you don't specify them, they will default to 'data/trained_models/trained_model.h5' and 
-'data/image_dataset/val' respectively. The API is then available at http://localhost:5000/classify. The API takes one argument (image), describing the path 
-of the image we want to classify. A POST request can be run as follows
-```
-curl -X POST -F img=@{IMAGE_PATH} 'http://localhost:5000/classify'
-```
-where {IMAGE_PATH} is the path of the image that you want to classify. For instance, calling the API to classify the 
-image presented in the previous section returns the following json:
-```
-{
-  "predictions":[
-    {
-    "label":"hockey_player",
-    "probability":0.9165781736373901
-    },
-    {
-    "label":"soccer_player",
-    "probability":0.0834217518568039
-    }
-  ],
-  "success":true
-}
-```
+The library has been tested on tensorflow 2.2 and 2.3, but it should work locally with any version above 2. When using 
+colab, using the preinstalled tensorflow version is advised because there may be compatibility problems with the TPUs if 
+using another version.
 
 ## Deploy package
 
@@ -101,15 +28,15 @@ More info about the procedure can be found [here](https://packaging.python.org/t
 You will have to update the version number in the setup.py file. Increase the first digit if you made MAJOR changes, 
 the second digit for MINOR changes and the third digit for BUG FIXES.
 
-### Procedure (dev)
+### Process (dev)
 
 If you make modifications to the code and want to test what it will look like in the packaged form you can push your 
 code to github and install the package from the repo to use it:
 ```
-pip install git+https://username:key@github.com/dktunited/img-classification.git@branch_name
+pip install git+https://github.com/dktunited/img-classification.git@branch_name
 ```
 
-### Procedure (prod)
+### Process (prod)
 
 After testing to make sure everything works you can deploy to PyPI. To do so you have to install a few dependencies:
 ```
@@ -144,7 +71,7 @@ def function(arg1, arg2):
 ```
 Using this style with sphinx is possible because of the [napoleon](https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html) extension.
 
-### Procedure
+### Process
 
 In order to modify the documentation, the first thing to do is to clone the repository and install the requirements.
 You additionally have to install sphinx and the template that we use:
@@ -213,6 +140,7 @@ access to the decathlonian-doc app.
 
 ### To do
 
+- use tensorflow's efficientnets
 - add other pretrained models (mobilenet, B4)
 - save best model when optimizing
 - choose which hyperparameters to search
