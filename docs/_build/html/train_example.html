@@ -1,0 +1,286 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Train and optimize model &mdash; decathlonian 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Build a dataset from scratch" href="data_example.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> decathlonian
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Preparing datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="train.html">Train models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Model testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="data_example.html">Build a dataset from scratch</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Train and optimize model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#training-the-classification-model">Training the classification model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#saving-and-exporting-the-keras-model">Saving and exporting the keras model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#optimization-of-the-hyperparameters">Optimization of the hyperparameters</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">decathlonian</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Train and optimize model</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/train_example.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="train-and-optimize-model">
+<h1>Train and optimize model<a class="headerlink" href="#train-and-optimize-model" title="Permalink to this headline">¶</a></h1>
+<p>This code example shows how to use this library to train an image classification model from scratch, using a dataset saved in tfrecords format.
+You will also perform an optimization of the hyperparameters of the model to achieve the best accuracy possible.</p>
+<div class="section" id="training-the-classification-model">
+<h2>Training the classification model<a class="headerlink" href="#training-the-classification-model" title="Permalink to this headline">¶</a></h2>
+<p>To train an image classification model, you need to have your training and validation data saved in tfrecords format, as is explained in
+<a class="reference internal" href="data_example.html"><span class="doc">Build a dataset from scratch</span></a>. We will continue working with this example. The data is in a directory with the following structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">google_data</span><span class="o">/</span>
+  <span class="n">tfrecords</span><span class="o">/</span>
+    <span class="n">classes</span><span class="o">.</span><span class="n">csv</span>
+    <span class="n">train</span><span class="o">/</span>
+      <span class="n">tfrecords_train</span><span class="o">.</span><span class="n">tfrec</span>
+      <span class="o">...</span>
+    <span class="n">val</span><span class="o">/</span>
+      <span class="n">tfrecords_val</span><span class="o">.</span><span class="n">tfrec</span>
+      <span class="o">...</span>
+</pre></div>
+</div>
+<p>The training is then done with the following code:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">classifier</span> <span class="o">=</span> <span class="n">decathlonian</span><span class="o">.</span><span class="n">model_training</span><span class="o">.</span><span class="n">tfrecords_image_classifier</span><span class="o">.</span><span class="n">ImageClassifier</span><span class="p">(</span><span class="n">tfrecords_folder</span><span class="o">=</span><span class="s1">&#39;google_data/tfrecords&#39;</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">transfer_model</span><span class="o">=</span><span class="s1">&#39;B3&#39;</span><span class="p">)</span>
+<span class="n">classifier</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>You can decide the transfer model between Xception, Inception_Resnet, Resnet and B0, B3 or B5 (all EffecientNets). Their respective
+sizes and performance metrics can be found in the keras <a class="reference external" href="https://keras.io/api/applications/">documentation</a>.</p>
+<p>The parameters that can be specified when training are:</p>
+<ul class="simple">
+<li><p>hyperparameters (learning_rate, learning_rate_fine_tuning, epochs, hidden_size, dropout, activation, l2_lambda)</p></li>
+<li><p>the option to save the model after saving (save_model for h5, export_model for pb)</p></li>
+<li><p>callbacks (min_accuracy for earlystopping, logs for tensorboard)</p></li>
+<li><p>verbose</p></li>
+</ul>
+<p>This function trains an extra layer on top of the pretrained model and then fine tunes a few of the last layers of the pretrained model.</p>
+</div>
+<div class="section" id="saving-and-exporting-the-keras-model">
+<h2>Saving and exporting the keras model<a class="headerlink" href="#saving-and-exporting-the-keras-model" title="Permalink to this headline">¶</a></h2>
+<p>Once you are satisfied with your results, you can save your trained model using any of the following two methods:</p>
+<ul>
+<li><p>Specify either the save_model (for .h5 format) or export_model (for .pb format, to use with tfserving) argument when training.
+The value of the argument will be the name of the file saved after training.</p></li>
+<li><p>After training, run the following code:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">classifier</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If the filename has the extension .h5 the model will be saved in that format. Otherwise it will be saved in .pb. With a TPU,
+it is only possible to export a model to a google cloud bucket.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="optimization-of-the-hyperparameters">
+<h2>Optimization of the hyperparameters<a class="headerlink" href="#optimization-of-the-hyperparameters" title="Permalink to this headline">¶</a></h2>
+<p>There is no specific rule to select the values of the many hyperparameters so you have to try a variation and find the best.
+This can be done automatically using the following code:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">classifier</span> <span class="o">=</span> <span class="n">decathlonian</span><span class="o">.</span><span class="n">model_training</span><span class="o">.</span><span class="n">tfrecords_image_classifier</span><span class="o">.</span><span class="n">ImageClassifier</span><span class="p">(</span><span class="n">tfrecords_folder</span><span class="o">=</span><span class="s1">&#39;google_data/tfrecords&#39;</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">transfer_model</span><span class="o">=</span><span class="s1">&#39;B3&#39;</span><span class="p">)</span>
+<span class="n">classifier</span><span class="o">.</span><span class="n">hyperparameter_optimization</span><span class="p">(</span><span class="n">num_iterations</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">n_random_starts</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This performs a series of training with various combinations of hyperparameters to find the best model. The most important parameters of
+this method determine how many random tries to start with (n_random_starts) and how many total tries to make (num_iterations). After
+the algorithm is done with the random tries, it starts to learn from the past tries to find better combinations. This is done using
+scikit-optimize. Every iteration, a checkpoint.pkl file is saved and uploaded to your drive so you don’t lose your progress in
+Google Colab (if you are using it). If you want to restart from a previous checkpoint.pkl, the file must be in your working directory.
+During optimization, the results of all the tries are saved in a log file for future reference.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="data_example.html" class="btn btn-neutral float-left" title="Build a dataset from scratch" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Decathlon Canada
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

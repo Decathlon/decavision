@@ -1,0 +1,537 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Utils &mdash; decathlonian 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Build a dataset from scratch" href="data_example.html" />
+    <link rel="prev" title="Model testing" href="testing.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> decathlonian
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Functions</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="data.html">Preparing datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="train.html">Train models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Model testing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-decathlonian.utils.colab_utils">Colab utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-decathlonian.utils.training_utils">Training utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-decathlonian.utils.data_utils">Data utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Utils</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="data_example.html">Build a dataset from scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="train_example.html">Train and optimize model</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">decathlonian</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/utils.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="utils">
+<h1>Utils<a class="headerlink" href="#utils" title="Permalink to this headline">¶</a></h1>
+<p>The following code details the functions and classes that are used extensively in this library. The colab utils are
+useful when working with a Google Colab notebook. They allow to authenticate and download a dataset from your Drive easily. The rest
+of the functions are provided in case they can be useful to someone.</p>
+<div class="section" id="module-decathlonian.utils.colab_utils">
+<span id="colab-utils"></span><h2>Colab utils<a class="headerlink" href="#module-decathlonian.utils.colab_utils" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="decathlonian.utils.colab_utils.authenticate_colab">
+<code class="sig-prename descclassname">decathlonian.utils.colab_utils.</code><code class="sig-name descname">authenticate_colab</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.utils.colab_utils.authenticate_colab" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ask the user to connect to his google account to access google drive and google storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>google drive object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="decathlonian.utils.colab_utils.download_dataset">
+<code class="sig-prename descclassname">decathlonian.utils.colab_utils.</code><code class="sig-name descname">download_dataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file_id</span></em>, <em class="sig-param"><span class="n">save_path</span></em>, <em class="sig-param"><span class="n">drive</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.utils.colab_utils.download_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download compressed dataset (zip or 7z format) from google drive and extract it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_id</strong> (<em>str</em>) – id of the file to download</p></li>
+<li><p><strong>save_path</strong> (<em>str</em>) – location where data is extracted</p></li>
+<li><p><strong>drive</strong> (<em>google drive object</em>) – return of authenticate_colab function</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-decathlonian.utils.training_utils">
+<span id="training-utils"></span><h2>Training utils<a class="headerlink" href="#module-decathlonian.utils.training_utils" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="decathlonian.utils.training_utils.CheckpointDownloader">
+<em class="property">class </em><code class="sig-prename descclassname">decathlonian.utils.training_utils.</code><code class="sig-name descname">CheckpointDownloader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">checkpoint_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.utils.training_utils.CheckpointDownloader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to download current state to Google Drive after each iteration of hyperparameter optimization.
+To be used as callback for scikit-optimize routine. Files are saved in a folder called Checkpoints.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>checkpoint_path</strong> (<em>str</em>) – location where the checkpoint files are;</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="decathlonian.utils.training_utils.CheckpointDownloader.__call__">
+<code class="sig-name descname">__call__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">res</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.utils.training_utils.CheckpointDownloader.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>If working on colab, upload checkpoint file to google drive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>res</strong> (<em>scipy object</em>) – The optimization as a OptimizeResult object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="decathlonian.utils.training_utils.custom_loss">
+<code class="sig-prename descclassname">decathlonian.utils.training_utils.</code><code class="sig-name descname">custom_loss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">old_logits</span></em>, <em class="sig-param"><span class="n">new_logits</span></em>, <em class="sig-param"><span class="n">old_classes</span></em>, <em class="sig-param"><span class="n">L</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">temp</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.utils.training_utils.custom_loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Distilling loss used when updating a model with new classes.
+It forces the model to remember what it learned about the old classes.
+Increasing the parameter L forces the model to remember more.
+High temperature puts more importance on the dominant classes and low temperature focuses on everything.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>old_logits</strong> (<em>keras tensor</em>) – classification layer of the old model, without the activation</p></li>
+<li><p><strong>new_logits</strong> (<em>keras tensor</em>) – classification layer of the new model, without the activation</p></li>
+<li><p><strong>old_classes</strong> (<em>int</em>) – number of classes in the old model</p></li>
+<li><p><strong>L</strong> (<em>float</em>) – parameter that controls how much information to remember</p></li>
+<li><p><strong>temp</strong> (<em>float</em>) – parameter that controls how many classes are important</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>loss function to be used during training</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>keras loss</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-decathlonian.utils.data_utils">
+<span id="data-utils"></span><h2>Data utils<a class="headerlink" href="#module-decathlonian.utils.data_utils" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="decathlonian.utils.data_utils.check_RGB">
+<code class="sig-prename descclassname">decathlonian.utils.data_utils.</code><code class="sig-name descname">check_RGB</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">target_size</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.utils.data_utils.check_RGB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert all images in a folder into RGB format and resize them if desired. Images that
+can’t be opened are deleted. Folder must contain a subfolder for each category.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – path to the image directory</p></li>
+<li><p><strong>target_size</strong> (<em>tuple</em><em>(</em><em>int</em><em>,</em><em>int</em><em>)</em>) – if specified, images are resized to this size</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="decathlonian.utils.data_utils.create_dir">
+<code class="sig-prename descclassname">decathlonian.utils.data_utils.</code><code class="sig-name descname">create_dir</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.utils.data_utils.create_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if directory exists and create it if it does not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – path to directory to create</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="decathlonian.utils.data_utils.download_dataset">
+<code class="sig-prename descclassname">decathlonian.utils.data_utils.</code><code class="sig-name descname">download_dataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">download_dir</span><span class="o">=</span><span class="default_value">'data/'</span></em>, <em class="sig-param"><span class="n">url</span><span class="o">=</span><span class="default_value">'http://data.csail.mit.edu/places/places365/places365standard_easyformat.tar'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.utils.data_utils.download_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download a dataset in format .zip, .tar, .tar.gz or .tgz and extract the data.
+Inspired by: <a class="reference external" href="https://github.com/Hvass-Labs/TensorFlow-Tutorials/blob/master/download.py">https://github.com/Hvass-Labs/TensorFlow-Tutorials/blob/master/download.py</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>download_dir</strong> (<em>str</em>) – folder to store the data</p></li>
+<li><p><strong>url</strong> (<em>str</em>) – location of the dataset on the internet</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="decathlonian.utils.data_utils.prepare_image">
+<code class="sig-prename descclassname">decathlonian.utils.data_utils.</code><code class="sig-name descname">prepare_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">image_path</span></em>, <em class="sig-param"><span class="n">target_size</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.utils.data_utils.prepare_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load and convert image to numpy array to feed it to a neural network. Image is resized, converted to RGB
+and its pixels are normalized. An extra dimension is added to the array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image_path</strong> (<em>str</em>) – path to image to be converted</p></li>
+<li><p><strong>target_size</strong> (<em>tuple</em><em>(</em><em>int</em><em>,</em><em>int</em><em>)</em>) – desired size for the image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>processed image, with shape (1,target_size,3)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="decathlonian.utils.data_utils.print_download_progress">
+<code class="sig-prename descclassname">decathlonian.utils.data_utils.</code><code class="sig-name descname">print_download_progress</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">count</span></em>, <em class="sig-param"><span class="n">block_size</span></em>, <em class="sig-param"><span class="n">total_size</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.utils.data_utils.print_download_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function used for printing the download progress. Inspired by:
+<a class="reference external" href="https://github.com/Hvass-Labs/TensorFlow-Tutorials/blob/master/download.py">https://github.com/Hvass-Labs/TensorFlow-Tutorials/blob/master/download.py</a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="decathlonian.utils.data_utils.split_train">
+<code class="sig-prename descclassname">decathlonian.utils.data_utils.</code><code class="sig-name descname">split_train</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="o">=</span><span class="default_value">'data/image_dataset'</span></em>, <em class="sig-param"><span class="n">split</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">with_test</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.utils.data_utils.split_train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Separate images randomly into a training, a validation and potentially a test dataset.
+Images must be located in a folder called train, which contains a subfolder per category.
+Val and potentially test folders will be created amd images moved into it from train.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – path to the image_dataset directory</p></li>
+<li><p><strong>split</strong> (<em>float</em>) – fraction of each category that we move to the validation (val) subdirectory</p></li>
+<li><p><strong>with_test</strong> (<em>bool</em>) – determine if one image of each category is moved to test dataset</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>Utils<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-decathlonian.utils.utils"></span><dl class="py function">
+<dt id="decathlonian.utils.utils.check_PU">
+<code class="sig-prename descclassname">decathlonian.utils.utils.</code><code class="sig-name descname">check_PU</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.utils.utils.check_PU" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if machine is running on TPU, GPU or CPU.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>whether or not the machine runs on a TPU
+bool: whether or not the machine runs on a GPU</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="decathlonian.utils.utils.check_sep">
+<code class="sig-prename descclassname">decathlonian.utils.utils.</code><code class="sig-name descname">check_sep</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.utils.utils.check_sep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the OS is windows or anything else to return the right separator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>‘' for windows and ‘/’ for others.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="decathlonian.utils.utils.empty_folder">
+<code class="sig-prename descclassname">decathlonian.utils.utils.</code><code class="sig-name descname">empty_folder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">folder</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.utils.utils.empty_folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete all files in a given folder. First try to delete
+locally and if it fails try to delete in google cloud
+storage. If folder is in GCS, the link must include the
+gs:// part and the folder will be deleted as well.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>folder</strong> (<em>str</em>) – path of folder where files are located</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="decathlonian.utils.utils.gcs_bucket">
+<code class="sig-prename descclassname">decathlonian.utils.utils.</code><code class="sig-name descname">gcs_bucket</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">folder</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.utils.utils.gcs_bucket" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create bucket object to be used to access files in google could storage bucket.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>folder</strong> (<em>str</em>) – name of the google storage folder, must be of the form gs://bucketname/prefix</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>google storage object
+string: prefix of the bucket, to be used to access files</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bucket object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="decathlonian.utils.utils.is_gcs">
+<code class="sig-prename descclassname">decathlonian.utils.utils.</code><code class="sig-name descname">is_gcs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.utils.utils.is_gcs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if path is to a google cloud storage directory or a local one. Determined from the presence of ‘gs’
+at the beginning of the path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – path to assess</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if path is on gcs and False if local</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="decathlonian.utils.utils.load_classes">
+<code class="sig-prename descclassname">decathlonian.utils.utils.</code><code class="sig-name descname">load_classes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'classes'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.utils.utils.load_classes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open csv and create list from its content. If csv is on google cloud storage,
+the file is downloaded into working directory and then opened.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – location of the csv file</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – name of csv file to open, without extension</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>first line of the csv file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="decathlonian.utils.utils.load_model">
+<code class="sig-prename descclassname">decathlonian.utils.utils.</code><code class="sig-name descname">load_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">include_top</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.utils.utils.load_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear tensorflow session and load keras .h5 model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – location of the model, including its name</p></li>
+<li><p><strong>include_top</strong> (<em>bool</em>) – whether or not to include the last layer of the model</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>loaded model</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tf.keras model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="decathlonian.utils.utils.upload_file_gcs">
+<code class="sig-prename descclassname">decathlonian.utils.utils.</code><code class="sig-name descname">upload_file_gcs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gcp_path</span></em>, <em class="sig-param"><span class="n">file_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.utils.utils.upload_file_gcs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy local file to a folder in google cloud storage and call it classes.csv.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gcp_path</strong> (<em>str</em>) – full path to gcp folder</p></li>
+<li><p><strong>file_path</strong> (<em>str</em>) – location of path to upload</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="data_example.html" class="btn btn-neutral float-right" title="Build a dataset from scratch" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="testing.html" class="btn btn-neutral float-left" title="Model testing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Decathlon Canada
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

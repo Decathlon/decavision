@@ -1,0 +1,383 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Train models &mdash; decathlonian 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Model testing" href="testing.html" />
+    <link rel="prev" title="Preparing datasets" href="data.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> decathlonian
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Functions</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="data.html">Preparing datasets</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Train models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-decathlonian.model_training.tfrecords_image_classifier">Image classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-decathlonian.model_training.progressive_learning">Progressive learning</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Model testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="data_example.html">Build a dataset from scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="train_example.html">Train and optimize model</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">decathlonian</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Train models</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/train.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="train-models">
+<h1>Train models<a class="headerlink" href="#train-models" title="Permalink to this headline">¶</a></h1>
+<p>The following code details the functions and classes that are available to train an image classification model and opimize its
+hyperparameters. Progressive learning can also be performed to add new classes to a model that was already trained using
+the library without losing all the information learned.</p>
+<p>An example of how to use these functions can be found in <a class="reference internal" href="train_example.html"><span class="doc">Train and optimize model</span></a>.</p>
+<div class="section" id="module-decathlonian.model_training.tfrecords_image_classifier">
+<span id="image-classification"></span><h2>Image classification<a class="headerlink" href="#module-decathlonian.model_training.tfrecords_image_classifier" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="decathlonian.model_training.tfrecords_image_classifier.ImageClassifier">
+<em class="property">class </em><code class="sig-prename descclassname">decathlonian.model_training.tfrecords_image_classifier.</code><code class="sig-name descname">ImageClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tfrecords_folder</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">128</span></em>, <em class="sig-param"><span class="n">transfer_model</span><span class="o">=</span><span class="default_value">'Inception'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.model_training.tfrecords_image_classifier.ImageClassifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to train an image classification model by using transfer learning.
+A hyperparameter optimization tool is also provided. Data must be saved in tfrecords format.
+See data_preparation.generate_tfrecords to go from image data to tfrecords.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tfrecords_folder</strong> (<em>str</em>) – location of tfrecords (can be on google storage if authenticated), saved in
+folders train and val, filenames of the form filenumber-numberofimages.tfrec</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – size of batches of data used for training</p></li>
+<li><p><strong>transfer_model</strong> (<em>str</em>) – pretrained model to use for transfer learning, can be one of Inception,
+Xception, Inception_Resnet, Resnet, B0, B3 or B5</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="decathlonian.model_training.tfrecords_image_classifier.ImageClassifier.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">save_model</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">export_model</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_accuracy</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">epochs</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">hidden_size</span><span class="o">=</span><span class="default_value">1024</span></em>, <em class="sig-param"><span class="n">learning_rate</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">learning_rate_fine_tuning</span><span class="o">=</span><span class="default_value">0.0001</span></em>, <em class="sig-param"><span class="n">dropout</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">l2_lambda</span><span class="o">=</span><span class="default_value">0.0005</span></em>, <em class="sig-param"><span class="n">fine_tuning</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">logs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">activation</span><span class="o">=</span><span class="default_value">'swish'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.model_training.tfrecords_image_classifier.ImageClassifier.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train an image classification model based on a pretrained model. A classification layer is added
+to the pretrained model, with potentially an extra combination of Dense, Dropout and Batchnorm.
+Only added layers are trained, unless there is some fine tuning, in which case a second round of
+training is done with the last block of the pretrained model unfrozen. Training can be stopped if
+no sufficient improvement in accuracy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>learning_rate</strong> (<em>float</em>) – learning rate used when training extra layers</p></li>
+<li><p><strong>learning_rate_fine_tuning</strong> (<em>float</em>) – learning rate used when fine tuning pretrained model</p></li>
+<li><p><strong>epochs</strong> (<em>int</em>) – number of epochs done when training (doubled if fine tuning)</p></li>
+<li><p><strong>activation</strong> (<em>str</em>) – activation function to use in extra layer, any keras activation is possible</p></li>
+<li><p><strong>hidden_size</strong> (<em>int</em>) – number of neurons in extra layer, no layer if 0</p></li>
+<li><p><strong>save_model</strong> (<em>str</em>) – specify a name for the trained model to save it in .h5 format</p></li>
+<li><p><strong>export_model</strong> (<em>str</em>) – specify a name for the trained model to save it in .pb format</p></li>
+<li><p><strong>dropout</strong> (<em>float</em>) – rate of dropout to use in extra layer (&lt;1)</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – show details of training or not</p></li>
+<li><p><strong>fine_tuning</strong> (<em>bool</em>) – fine tune pretrained model or not</p></li>
+<li><p><strong>l2_lambda</strong> (<em>float</em>) – amount of L2 regularization to include in extra layer</p></li>
+<li><p><strong>min_accuracy</strong> (<em>float</em>) – if specified, stop training when improvement in val accuracy is smaller than min_accuracy</p></li>
+<li><p><strong>logs</strong> (<em>str</em>) – if specified, tensorboard is used and logs are saved at this location</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="decathlonian.model_training.tfrecords_image_classifier.ImageClassifier.get_training_dataset">
+<code class="sig-name descname">get_training_dataset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.model_training.tfrecords_image_classifier.ImageClassifier.get_training_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract data from training tfrecords located in tfrecords_folder. Data is shuffled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>iterable dataset with content of training tfrecords (images and labels)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tf.data.dataset</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="decathlonian.model_training.tfrecords_image_classifier.ImageClassifier.get_validation_dataset">
+<code class="sig-name descname">get_validation_dataset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.model_training.tfrecords_image_classifier.ImageClassifier.get_validation_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract data from validation tfrecords located in tfrecords_folder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>iterable dataset with content of validation tfrecords (images and labels)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tf.data.dataset</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="decathlonian.model_training.tfrecords_image_classifier.ImageClassifier.hyperparameter_optimization">
+<code class="sig-name descname">hyperparameter_optimization</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">num_iterations</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">n_random_starts</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">min_accuracy</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">save_results</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.model_training.tfrecords_image_classifier.ImageClassifier.hyperparameter_optimization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try different combinations of hyperparameters to find the best model possible. Start by trying random
+combinations and after some time learn from th previous tries. Scikit-optimize checkoint is saved
+at each step in the working directory. If checkpoint present in working directory, optimization starts
+back from where it left off. Logs of all tries are also saved in working directory. Hyperparameters that
+are varied are epochs, hidden_size, learning_rate, learning_rate_fine_tuning, fine_tuning, dropout and
+l2_lambda.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_random_starts</strong> (<em>int</em>) – number of random combinations of hyperparameters first tried</p></li>
+<li><p><strong>num_iterations</strong> (<em>int</em>) – total number of hyperparameter combinations to try (aim for a 1:1 to 2:1 ratio
+num_iterations/n_random_starts)</p></li>
+<li><p><strong>min_accuracy</strong> (<em>float</em>) – if specified, training in single try will stop when improvement in accuracy
+is smaller than min_accuracy</p></li>
+<li><p><strong>save_results</strong> (<em>bool</em>) – decide to save optimal hyperparameters in pickle file when done</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-decathlonian.model_training.progressive_learning">
+<span id="progressive-learning"></span><h2>Progressive learning<a class="headerlink" href="#module-decathlonian.model_training.progressive_learning" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="decathlonian.model_training.progressive_learning.ProgressiveLearner">
+<em class="property">class </em><code class="sig-prename descclassname">decathlonian.model_training.progressive_learning.</code><code class="sig-name descname">ProgressiveLearner</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tfrecords_folder</span></em>, <em class="sig-param"><span class="n">model_path</span></em>, <em class="sig-param"><span class="n">transfer_model</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">128</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.model_training.progressive_learning.ProgressiveLearner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to update an already trained model with new classes without losing too
+much of the information learned about the old classes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tfrecords_folder</strong> (<em>str</em>) – location of tfrecords (can be on google storage if authenticated), saved in
+folders train and val, filenames of the form filenumber-numberofimages.tfrec</p></li>
+<li><p><strong>model_path</strong> (<em>str</em>) – path to .h5 model trained with this library on the old classes</p></li>
+<li><p><strong>transfer_model</strong> (<em>str</em>) – pretrained model that was used to train the old model, can be one of Inception,
+Xception, Inception_Resnet, Resnet, B0, B3 or B5</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – size of batches of data used for training</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="decathlonian.model_training.progressive_learning.ProgressiveLearner.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">learning_rate</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">learning_rate_fine_tuning</span><span class="o">=</span><span class="default_value">0.0001</span></em>, <em class="sig-param"><span class="n">epochs</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">save_model</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">fine_tuning</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">min_accuracy</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">logs</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.model_training.progressive_learning.ProgressiveLearner.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train an image classification model based on a model trained with a smaller number of classes.
+The whole model is trained, unless there is some fine tuning, in which case a second round of
+training is done with the last layers of the model unfrozen. Training can be stopped if
+no sufficient improvement in accuracy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>learning_rate</strong> (<em>float</em>) – learning rate used when training whole model</p></li>
+<li><p><strong>learning_rate_fine_tuning</strong> (<em>float</em>) – learning rate used when fine tuning last layers</p></li>
+<li><p><strong>epochs</strong> (<em>int</em>) – number of epochs done when training (doubled if fine tuning)</p></li>
+<li><p><strong>save_model</strong> (<em>str</em>) – specify a name for the trained model to save it, model is saved in .h5 if
+the name contains the extension and in .pb if no extension in the name</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – show details of training or not</p></li>
+<li><p><strong>fine_tuning</strong> (<em>bool</em>) – fine tune last layers or not</p></li>
+<li><p><strong>min_accuracy</strong> (<em>float</em>) – if specified, stop training when improvement in accuracy is smaller than min_accuracy</p></li>
+<li><p><strong>logs</strong> (<em>str</em>) – if specified, tensorboard is used and logs are saved at this location</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="decathlonian.model_training.progressive_learning.ProgressiveLearner.hyperparameter_optimization">
+<code class="sig-name descname">hyperparameter_optimization</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.model_training.progressive_learning.ProgressiveLearner.hyperparameter_optimization" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is not implemented for progressive learning.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="testing.html" class="btn btn-neutral float-right" title="Model testing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="data.html" class="btn btn-neutral float-left" title="Preparing datasets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Decathlon Canada
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

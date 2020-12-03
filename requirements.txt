@@ -1,0 +1,16 @@
+augmentor
+dill
+efficientnet
+google-cloud-storage
+matplotlib
+numpy
+pandas
+patool
+pillow
+pyunpack
+scikit-learn
+scikit-optimize
+seaborn
+selenium
+tensorflow
+tensorflow-gpu

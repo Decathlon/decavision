@@ -1,0 +1,11 @@
+chromedriver.exe
+data/augmented_dataset
+data/augmented_dataset/*
+data/trained_models
+data/trained_models/*
+data/*
+__pycache__
+__pycache__/*
+.idea/
+notebooks/.ipynb_checkpoints
+notebooks/.ipynb_checkpoints/*
