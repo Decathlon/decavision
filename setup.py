@@ -7,7 +7,7 @@ with open('requirements.txt', 'r') as req:
 
 setuptools.setup(
     name="decavision",
-    version="1.1.2",
+    version="1.1.3",
     author="Décathlon Canada",
     author_email="sportvisionapi@decathlon.com",
     description="A package to easily train powerful image classification models using colab's free TPUs.",
@@ -15,6 +15,10 @@ setuptools.setup(
                         classification models. It is specially made to exploit the free TPUs that are offered
                         in Google colab notebooks. You can find the full documentation 
                         [here](https://decavision-doc.herokuapp.com/)
+                        
+                        
+                        ## Version 1.1.3
+                        Link to public repository
                         
                         ## Version 1.1.2
                         Change name of package
@@ -36,5 +40,5 @@ setuptools.setup(
     ],
     python_requires='>=3.6',
     install_requires=requirements,
-    url='https://github.com/dktunited/img-classification'
+    url='https://github.com/Decathlon/decavision.git'
 )

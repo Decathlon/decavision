@@ -1,4 +1,4 @@
-:github_url: https://github.com/dktunited/img-classification
+:github_url: https://github.com/Decathlon/decavision.git
 
 .. decavision documentation master file, created by
    sphinx-quickstart on Fri Jul 24 09:14:44 2020.

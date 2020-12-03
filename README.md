@@ -9,8 +9,8 @@ The complete documentation can be found [here](https://decavision-doc.herokuapp.
 
 If you want to modify something in the code, it is as simple as cloning this repository
 ```
-git clone https://github.com/dktunited/img-classification.git
-cd img-classification
+git clone https://github.com/Decathlon/decavision.git
+cd decavision
 ```
 modifying the scripts and using the code as if you were using the package itself. This can be done locally or in a 
 Colab notebook if you want to exploit the free GPUs and TPUs. In that case, an example of notebook is provided in the 
@@ -36,7 +36,7 @@ with the version number and add it to a release.
 If you make modifications to the code and want to test what it will look like in the packaged form you can push your 
 code to github and install the package from the repo to use it:
 ```
-pip install git+https://github.com/dktunited/img-classification.git@branch_name
+pip install git+https://github.com/Decathlon/decavision.git@branch_name
 ```
 
 ### Process (prod)
