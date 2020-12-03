@@ -1,7 +1,9 @@
 # Image classification
 
-This repository contains the code that is used to create the decathlonian package published on PyPI.
-The package can be found on [PyPI](www.pypi.com) and the documentation [here](https://decathlonian-doc.herokuapp.com/).
+This repository contains the code that is used to create the decavision package published on PyPI.
+The package can be found on [PyPI](www.pypi.com/decavision) and is compatible with python versions 3.6 and above.
+
+The complete documentation can be found [here](https://decavision-doc.herokuapp.com/).
 
 ## Improve the library
 
@@ -16,9 +18,6 @@ documentation. If you use the repository locally, make sure that all the require
 ```
 pip install -r requirements.txt
 ```
-The library has been tested on tensorflow 2.2 and 2.3, but it should work locally with any version above 2. When using 
-colab, using the preinstalled tensorflow version is advised because there may be compatibility problems with the TPUs if 
-using another version.
 
 ## Deploy package
 
@@ -27,6 +26,10 @@ More info about the procedure can be found [here](https://packaging.python.org/t
 
 You will have to update the version number in the setup.py file. Increase the first digit if you made MAJOR changes, 
 the second digit for MINOR changes and the third digit for BUG FIXES.
+
+Also make sure that you create a new release on github at the commit that you deploy. To do so you have to create a tag 
+with the version number and add it to a release.
+
 
 ### Process (dev)
 
@@ -116,13 +119,13 @@ More detail about how to use sphinx can be found in this [blog post](https://med
 
 For now the documentation is deployed on heroku. The deployment there is simple. Just follow the steps. This assumes
 that you have the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) and that your heroku account has 
-access to the decathlonian-doc app.
+access to the decavision-doc app.
 
 1. Make sure that you have a file called 'index.php' in the folder _build/html and that it contains the code:
    ```
    <?php include_once("index.html"); ?>
    ```
-   You also need to have a file called 'composer.json' that contains only `{}`.
+   You also need to have a file called ```composer.json``` that contains only `{}`.
 2. Commit all your modifications using git
 3. Login to your heroku account using the command line:
    ```
@@ -130,7 +133,7 @@ access to the decathlonian-doc app.
    ```
 4. Add the heroku project as a remote for git:
    ```
-   heroku git:remote -a decathlonian-doc
+   heroku git:remote -a decavision-doc
    ```
 5. Push the modifications to heroku with the following line:
    ```

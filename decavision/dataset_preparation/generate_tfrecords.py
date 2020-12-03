@@ -4,7 +4,7 @@ import os
 
 import tensorflow as tf
 
-from decathlonian.utils import utils
+from decavision.utils import utils
 
 
 class TfrecordsGenerator:

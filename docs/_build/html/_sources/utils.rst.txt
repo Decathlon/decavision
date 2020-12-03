@@ -9,23 +9,23 @@ of the functions are provided in case they can be useful to someone.
 Colab utils
 ---------------------
 
-.. automodule:: decathlonian.utils.colab_utils
+.. automodule:: decavision.utils.colab_utils
    :members:
 
 Training utils
 ---------------------
 
-.. automodule:: decathlonian.utils.training_utils
+.. automodule:: decavision.utils.training_utils
    :members:
 
 Data utils
 ---------------------
 
-.. automodule:: decathlonian.utils.data_utils
+.. automodule:: decavision.utils.data_utils
    :members:
 
 Utils
 ---------------------
 
-.. automodule:: decathlonian.utils.utils
+.. automodule:: decavision.utils.utils
    :members:

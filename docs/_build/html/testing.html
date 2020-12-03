@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Model testing &mdash; decathlonian 1.1.0 documentation</title>
+  <title>Model testing &mdash; decavision 1.1.2 documentation</title>
   
 
   
@@ -51,7 +51,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> decathlonian
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> decavision
           
 
           
@@ -108,7 +108,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">decathlonian</a>
+          <a href="index.html">decavision</a>
         
       </nav>
 
@@ -162,9 +162,9 @@
 <h1>Model testing<a class="headerlink" href="#model-testing" title="Permalink to this headline">¶</a></h1>
 <p>The following code details the functions and classes that are available to test the performance of a trained model. The model can
 be used to classify images directly or calculate various metrics on a validation/test dataset.</p>
-<span class="target" id="module-decathlonian.model_testing.testing"></span><dl class="py class">
-<dt id="decathlonian.model_testing.testing.ModelTester">
-<em class="property">class </em><code class="sig-prename descclassname">decathlonian.model_testing.testing.</code><code class="sig-name descname">ModelTester</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.model_testing.testing.ModelTester" title="Permalink to this definition">¶</a></dt>
+<span class="target" id="module-decavision.model_testing.testing"></span><dl class="py class">
+<dt id="decavision.model_testing.testing.ModelTester">
+<em class="property">class </em><code class="sig-prename descclassname">decavision.model_testing.testing.</code><code class="sig-name descname">ModelTester</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_testing.testing.ModelTester" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to use a trained image classification model on some images. Using this
 when working with a TPU disables eager execution.</p>
 <dl class="field-list simple">
@@ -173,8 +173,8 @@ when working with a TPU disables eager execution.</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="decathlonian.model_testing.testing.ModelTester.classify_images">
-<code class="sig-name descname">classify_images</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">image_path</span></em>, <em class="sig-param"><span class="n">categories</span></em>, <em class="sig-param"><span class="n">plot</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.model_testing.testing.ModelTester.classify_images" title="Permalink to this definition">¶</a></dt>
+<dt id="decavision.model_testing.testing.ModelTester.classify_images">
+<code class="sig-name descname">classify_images</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">image_path</span></em>, <em class="sig-param"><span class="n">categories</span></em>, <em class="sig-param"><span class="n">plot</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_testing.testing.ModelTester.classify_images" title="Permalink to this definition">¶</a></dt>
 <dd><p>Classify images located directly in a folder. Plots the images and the first three predictions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -188,8 +188,8 @@ when working with a TPU disables eager execution.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="decathlonian.model_testing.testing.ModelTester.confusion_matrix">
-<code class="sig-name descname">confusion_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">normalize</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.model_testing.testing.ModelTester.confusion_matrix" title="Permalink to this definition">¶</a></dt>
+<dt id="decavision.model_testing.testing.ModelTester.confusion_matrix">
+<code class="sig-name descname">confusion_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">normalize</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_testing.testing.ModelTester.confusion_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute and plot the confusion matrix resulting from predictions on a dataset of images.
 Images must be located in separate folders for each class.</p>
 <dl class="field-list simple">
@@ -204,8 +204,8 @@ all the population. If None, confusion matrix will not be normalized.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="decathlonian.model_testing.testing.ModelTester.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.model_testing.testing.ModelTester.evaluate" title="Permalink to this definition">¶</a></dt>
+<dt id="decavision.model_testing.testing.ModelTester.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_testing.testing.ModelTester.evaluate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the accuracy of the model on a dataset of images. The images must be
 in separate folders for each class.</p>
 <dl class="field-list simple">
@@ -216,8 +216,8 @@ in separate folders for each class.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="decathlonian.model_testing.testing.ModelTester.plot_errors">
-<code class="sig-name descname">plot_errors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">num_pictures</span><span class="o">=</span><span class="default_value">9</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.model_testing.testing.ModelTester.plot_errors" title="Permalink to this definition">¶</a></dt>
+<dt id="decavision.model_testing.testing.ModelTester.plot_errors">
+<code class="sig-name descname">plot_errors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">num_pictures</span><span class="o">=</span><span class="default_value">9</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_testing.testing.ModelTester.plot_errors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot images that were not classified correctly by the model. Images to test must
 be located in separate folders for each class, for example a validation dataset.</p>
 <dl class="field-list simple">

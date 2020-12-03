@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Preparing datasets &mdash; decathlonian 1.1.0 documentation</title>
+  <title>Preparing datasets &mdash; decavision 1.1.2 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Train models" href="train.html" />
-    <link rel="prev" title="Welcome to Decathlonian’s documentation!" href="index.html" /> 
+    <link rel="prev" title="Welcome to DecaVision’s documentation!" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -51,7 +51,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> decathlonian
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> decavision
           
 
           
@@ -85,8 +85,8 @@
               <p class="caption"><span class="caption-text">Functions</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Preparing datasets</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-decathlonian.dataset_preparation.data_augmentation">Data augmentation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-decathlonian.dataset_preparation.generate_tfrecords">Make tfrecords</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-decavision.dataset_preparation.data_augmentation">Data augmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-decavision.dataset_preparation.generate_tfrecords">Make tfrecords</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="train.html">Train models</a></li>
@@ -112,7 +112,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">decathlonian</a>
+          <a href="index.html">decavision</a>
         
       </nav>
 
@@ -166,11 +166,11 @@
 <h1>Preparing datasets<a class="headerlink" href="#preparing-datasets" title="Permalink to this headline">¶</a></h1>
 <p>The following code details the functions and classes that are available to build a dataset of images and prepare it for training.</p>
 <p>An example of how to use these functions can be found in <a class="reference internal" href="data_example.html"><span class="doc">Build a dataset from scratch</span></a>.</p>
-<div class="section" id="module-decathlonian.dataset_preparation.data_augmentation">
-<span id="data-augmentation"></span><h2>Data augmentation<a class="headerlink" href="#module-decathlonian.dataset_preparation.data_augmentation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-decavision.dataset_preparation.data_augmentation">
+<span id="data-augmentation"></span><h2>Data augmentation<a class="headerlink" href="#module-decavision.dataset_preparation.data_augmentation" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="decathlonian.dataset_preparation.data_augmentation.DataAugmentor">
-<em class="property">class </em><code class="sig-prename descclassname">decathlonian.dataset_preparation.data_augmentation.</code><code class="sig-name descname">DataAugmentor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">distortion</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">flip_horizontal</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">flip_vertical</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">random_crop</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">random_erasing</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">rotate</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">resize</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">skew</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">shear</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">brightness</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">contrast</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">color</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">target_width</span><span class="o">=</span><span class="default_value">299</span></em>, <em class="sig-param"><span class="n">target_height</span><span class="o">=</span><span class="default_value">299</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.dataset_preparation.data_augmentation.DataAugmentor" title="Permalink to this definition">¶</a></dt>
+<dt id="decavision.dataset_preparation.data_augmentation.DataAugmentor">
+<em class="property">class </em><code class="sig-prename descclassname">decavision.dataset_preparation.data_augmentation.</code><code class="sig-name descname">DataAugmentor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">distortion</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">flip_horizontal</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">flip_vertical</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">random_crop</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">random_erasing</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">rotate</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">resize</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">skew</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">shear</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">brightness</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">contrast</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">color</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">target_width</span><span class="o">=</span><span class="default_value">299</span></em>, <em class="sig-param"><span class="n">target_height</span><span class="o">=</span><span class="default_value">299</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.dataset_preparation.data_augmentation.DataAugmentor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to generate augmented images for classification purposes. Images must be located in a folder with
 subfolders for each category.</p>
 <dl class="field-list simple">
@@ -186,8 +186,8 @@ contrast and color (options described at <a class="reference external" href="htt
 </dd>
 </dl>
 <dl class="py method">
-<dt id="decathlonian.dataset_preparation.data_augmentation.DataAugmentor.generate_images">
-<code class="sig-name descname">generate_images</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">class_size_approximation</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.dataset_preparation.data_augmentation.DataAugmentor.generate_images" title="Permalink to this definition">¶</a></dt>
+<dt id="decavision.dataset_preparation.data_augmentation.DataAugmentor.generate_images">
+<code class="sig-name descname">generate_images</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">class_size_approximation</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.dataset_preparation.data_augmentation.DataAugmentor.generate_images" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate augmented images for all categories in the main folder according to the specified options. Images
 are generated until the desired size is reached and they are saved in the same subfolder as the original
 images.</p>
@@ -199,8 +199,8 @@ images.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="decathlonian.dataset_preparation.data_augmentation.DataAugmentor.generate_images_single_class">
-<code class="sig-name descname">generate_images_single_class</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">class_size_approximation</span></em>, <em class="sig-param"><span class="n">category</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.dataset_preparation.data_augmentation.DataAugmentor.generate_images_single_class" title="Permalink to this definition">¶</a></dt>
+<dt id="decavision.dataset_preparation.data_augmentation.DataAugmentor.generate_images_single_class">
+<code class="sig-name descname">generate_images_single_class</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">class_size_approximation</span></em>, <em class="sig-param"><span class="n">category</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.dataset_preparation.data_augmentation.DataAugmentor.generate_images_single_class" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate augmented images for a single category according to the specified options. Images are generated
 until the desired size is reached and they are saved in an outputs folder at the location of the original
 images.</p>
@@ -217,17 +217,17 @@ images.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-decathlonian.dataset_preparation.generate_tfrecords">
-<span id="make-tfrecords"></span><h2>Make tfrecords<a class="headerlink" href="#module-decathlonian.dataset_preparation.generate_tfrecords" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-decavision.dataset_preparation.generate_tfrecords">
+<span id="make-tfrecords"></span><h2>Make tfrecords<a class="headerlink" href="#module-decavision.dataset_preparation.generate_tfrecords" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="decathlonian.dataset_preparation.generate_tfrecords.TfrecordsGenerator">
-<em class="property">class </em><code class="sig-prename descclassname">decathlonian.dataset_preparation.generate_tfrecords.</code><code class="sig-name descname">TfrecordsGenerator</code><a class="headerlink" href="#decathlonian.dataset_preparation.generate_tfrecords.TfrecordsGenerator" title="Permalink to this definition">¶</a></dt>
+<dt id="decavision.dataset_preparation.generate_tfrecords.TfrecordsGenerator">
+<em class="property">class </em><code class="sig-prename descclassname">decavision.dataset_preparation.generate_tfrecords.</code><code class="sig-name descname">TfrecordsGenerator</code><a class="headerlink" href="#decavision.dataset_preparation.generate_tfrecords.TfrecordsGenerator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to transform images into tfrecords format to train neural networks. Resulting files can be
 saved to google storage or locally. Can’t be used with a TPU because local files need to be read.
 Strongly inspired by: <a class="reference external" href="https://medium.com/&#64;moritzkrger/speeding-up-keras-with-tfrecord-datasets-5464f9836c36">https://medium.com/&#64;moritzkrger/speeding-up-keras-with-tfrecord-datasets-5464f9836c36</a></p>
 <dl class="py method">
-<dt id="decathlonian.dataset_preparation.generate_tfrecords.TfrecordsGenerator.convert_image_folder">
-<code class="sig-name descname">convert_image_folder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">img_folder</span><span class="o">=</span><span class="default_value">'data/image_dataset/train'</span></em>, <em class="sig-param"><span class="n">output_folder</span><span class="o">=</span><span class="default_value">'data/image_dataset/train'</span></em>, <em class="sig-param"><span class="n">img_folder_new</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">shards</span><span class="o">=</span><span class="default_value">16</span></em>, <em class="sig-param"><span class="n">target_size</span><span class="o">=</span><span class="default_value">299, 299</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.dataset_preparation.generate_tfrecords.TfrecordsGenerator.convert_image_folder" title="Permalink to this definition">¶</a></dt>
+<dt id="decavision.dataset_preparation.generate_tfrecords.TfrecordsGenerator.convert_image_folder">
+<code class="sig-name descname">convert_image_folder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">img_folder</span><span class="o">=</span><span class="default_value">'data/image_dataset/train'</span></em>, <em class="sig-param"><span class="n">output_folder</span><span class="o">=</span><span class="default_value">'data/image_dataset/train'</span></em>, <em class="sig-param"><span class="n">img_folder_new</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">shards</span><span class="o">=</span><span class="default_value">16</span></em>, <em class="sig-param"><span class="n">target_size</span><span class="o">=</span><span class="default_value">(299, 299)</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.dataset_preparation.generate_tfrecords.TfrecordsGenerator.convert_image_folder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert all images in a folder (like train or val) to tfrecords. Folder must contain subfolders for each category.
 Possibility to combine data from two folders to perform progressive learning. Tfrecords can be saved
 locally or on google storage. A csv file containing the names of the classes is also saved.</p>
@@ -261,7 +261,7 @@ new categories for the purpose of progressive learning</p></li>
         <a href="train.html" class="btn btn-neutral float-right" title="Train models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to Decathlonian’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to DecaVision’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

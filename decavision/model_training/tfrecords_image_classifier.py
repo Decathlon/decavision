@@ -8,8 +8,8 @@ from efficientnet.tfkeras import EfficientNetB0, EfficientNetB3, EfficientNetB5
 import skopt
 import tensorflow as tf
 
-from decathlonian.utils import training_utils
-from decathlonian.utils import utils
+from decavision.utils import training_utils
+from decavision.utils import utils
 
 AUTO = tf.data.experimental.AUTOTUNE
 

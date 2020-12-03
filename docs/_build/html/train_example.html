@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Train and optimize model &mdash; decathlonian 1.1.0 documentation</title>
+  <title>Train and optimize model &mdash; decavision 1.1.2 documentation</title>
   
 
   
@@ -50,7 +50,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> decathlonian
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> decavision
           
 
           
@@ -112,7 +112,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">decathlonian</a>
+          <a href="index.html">decavision</a>
         
       </nav>
 
@@ -182,7 +182,7 @@ You will also perform an optimization of the hyperparameters of the model to ach
 </pre></div>
 </div>
 <p>The training is then done with the following code:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">classifier</span> <span class="o">=</span> <span class="n">decathlonian</span><span class="o">.</span><span class="n">model_training</span><span class="o">.</span><span class="n">tfrecords_image_classifier</span><span class="o">.</span><span class="n">ImageClassifier</span><span class="p">(</span><span class="n">tfrecords_folder</span><span class="o">=</span><span class="s1">&#39;data/tfrecords&#39;</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">transfer_model</span><span class="o">=</span><span class="s1">&#39;B3&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">classifier</span> <span class="o">=</span> <span class="n">decavision</span><span class="o">.</span><span class="n">model_training</span><span class="o">.</span><span class="n">tfrecords_image_classifier</span><span class="o">.</span><span class="n">ImageClassifier</span><span class="p">(</span><span class="n">tfrecords_folder</span><span class="o">=</span><span class="s1">&#39;data/tfrecords&#39;</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">transfer_model</span><span class="o">=</span><span class="s1">&#39;B3&#39;</span><span class="p">)</span>
 <span class="n">classifier</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -216,7 +216,7 @@ it is only possible to export a model to a google cloud bucket.</p>
 <h2>Optimization of the hyperparameters<a class="headerlink" href="#optimization-of-the-hyperparameters" title="Permalink to this headline">¶</a></h2>
 <p>There is no specific rule to select the values of the many hyperparameters so you have to try a variation and find the best.
 This can be done automatically using the following code:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">classifier</span> <span class="o">=</span> <span class="n">decathlonian</span><span class="o">.</span><span class="n">model_training</span><span class="o">.</span><span class="n">tfrecords_image_classifier</span><span class="o">.</span><span class="n">ImageClassifier</span><span class="p">(</span><span class="n">tfrecords_folder</span><span class="o">=</span><span class="s1">&#39;tfrecords&#39;</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">transfer_model</span><span class="o">=</span><span class="s1">&#39;B3&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">classifier</span> <span class="o">=</span> <span class="n">decavision</span><span class="o">.</span><span class="n">model_training</span><span class="o">.</span><span class="n">tfrecords_image_classifier</span><span class="o">.</span><span class="n">ImageClassifier</span><span class="p">(</span><span class="n">tfrecords_folder</span><span class="o">=</span><span class="s1">&#39;tfrecords&#39;</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">transfer_model</span><span class="o">=</span><span class="s1">&#39;B3&#39;</span><span class="p">)</span>
 <span class="n">classifier</span><span class="o">.</span><span class="n">hyperparameter_optimization</span><span class="p">(</span><span class="n">num_iterations</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">n_random_starts</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>

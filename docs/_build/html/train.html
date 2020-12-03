@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Train models &mdash; decathlonian 1.1.0 documentation</title>
+  <title>Train models &mdash; decavision 1.1.2 documentation</title>
   
 
   
@@ -51,7 +51,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> decathlonian
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> decavision
           
 
           
@@ -86,8 +86,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="data.html">Preparing datasets</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Train models</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-decathlonian.model_training.tfrecords_image_classifier">Image classification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-decathlonian.model_training.progressive_learning">Progressive learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-decavision.model_training.tfrecords_image_classifier">Image classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-decavision.model_training.progressive_learning">Progressive learning</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Model testing</a></li>
@@ -112,7 +112,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">decathlonian</a>
+          <a href="index.html">decavision</a>
         
       </nav>
 
@@ -168,11 +168,11 @@
 hyperparameters. Progressive learning can also be performed to add new classes to a model that was already trained using
 the library without losing all the information learned.</p>
 <p>An example of how to use these functions can be found in <a class="reference internal" href="train_example.html"><span class="doc">Train and optimize model</span></a>.</p>
-<div class="section" id="module-decathlonian.model_training.tfrecords_image_classifier">
-<span id="image-classification"></span><h2>Image classification<a class="headerlink" href="#module-decathlonian.model_training.tfrecords_image_classifier" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-decavision.model_training.tfrecords_image_classifier">
+<span id="image-classification"></span><h2>Image classification<a class="headerlink" href="#module-decavision.model_training.tfrecords_image_classifier" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="decathlonian.model_training.tfrecords_image_classifier.ImageClassifier">
-<em class="property">class </em><code class="sig-prename descclassname">decathlonian.model_training.tfrecords_image_classifier.</code><code class="sig-name descname">ImageClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tfrecords_folder</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">128</span></em>, <em class="sig-param"><span class="n">transfer_model</span><span class="o">=</span><span class="default_value">'Inception'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.model_training.tfrecords_image_classifier.ImageClassifier" title="Permalink to this definition">¶</a></dt>
+<dt id="decavision.model_training.tfrecords_image_classifier.ImageClassifier">
+<em class="property">class </em><code class="sig-prename descclassname">decavision.model_training.tfrecords_image_classifier.</code><code class="sig-name descname">ImageClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tfrecords_folder</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">128</span></em>, <em class="sig-param"><span class="n">transfer_model</span><span class="o">=</span><span class="default_value">'Inception'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_training.tfrecords_image_classifier.ImageClassifier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to train an image classification model by using transfer learning.
 A hyperparameter optimization tool is also provided. Data must be saved in tfrecords format.
 See data_preparation.generate_tfrecords to go from image data to tfrecords.</p>
@@ -188,8 +188,8 @@ Xception, Inception_Resnet, Resnet, (EfficientNet) B0, B3 or B5</p></li>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="decathlonian.model_training.tfrecords_image_classifier.ImageClassifier.fit">
-<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">save_model</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">export_model</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_accuracy</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">epochs</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">hidden_size</span><span class="o">=</span><span class="default_value">1024</span></em>, <em class="sig-param"><span class="n">learning_rate</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">learning_rate_fine_tuning</span><span class="o">=</span><span class="default_value">0.0001</span></em>, <em class="sig-param"><span class="n">dropout</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">l2_lambda</span><span class="o">=</span><span class="default_value">0.0005</span></em>, <em class="sig-param"><span class="n">fine_tuning</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">logs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">activation</span><span class="o">=</span><span class="default_value">'swish'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.model_training.tfrecords_image_classifier.ImageClassifier.fit" title="Permalink to this definition">¶</a></dt>
+<dt id="decavision.model_training.tfrecords_image_classifier.ImageClassifier.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">save_model</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">export_model</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_accuracy</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">epochs</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">hidden_size</span><span class="o">=</span><span class="default_value">1024</span></em>, <em class="sig-param"><span class="n">learning_rate</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">learning_rate_fine_tuning</span><span class="o">=</span><span class="default_value">0.0001</span></em>, <em class="sig-param"><span class="n">dropout</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">l2_lambda</span><span class="o">=</span><span class="default_value">0.0005</span></em>, <em class="sig-param"><span class="n">fine_tuning</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">logs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">activation</span><span class="o">=</span><span class="default_value">'swish'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_training.tfrecords_image_classifier.ImageClassifier.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Train an image classification model based on a pretrained model. A classification layer is added
 to the pretrained model, with potentially an extra combination of Dense, Dropout and Batchnorm.
 Only added layers are trained, unless there is some fine tuning, in which case a second round of
@@ -217,8 +217,8 @@ no sufficient improvement in accuracy.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="decathlonian.model_training.tfrecords_image_classifier.ImageClassifier.get_training_dataset">
-<code class="sig-name descname">get_training_dataset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.model_training.tfrecords_image_classifier.ImageClassifier.get_training_dataset" title="Permalink to this definition">¶</a></dt>
+<dt id="decavision.model_training.tfrecords_image_classifier.ImageClassifier.get_training_dataset">
+<code class="sig-name descname">get_training_dataset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_training.tfrecords_image_classifier.ImageClassifier.get_training_dataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract data from training tfrecords located in tfrecords_folder. Data is shuffled.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -231,8 +231,8 @@ no sufficient improvement in accuracy.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="decathlonian.model_training.tfrecords_image_classifier.ImageClassifier.get_validation_dataset">
-<code class="sig-name descname">get_validation_dataset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.model_training.tfrecords_image_classifier.ImageClassifier.get_validation_dataset" title="Permalink to this definition">¶</a></dt>
+<dt id="decavision.model_training.tfrecords_image_classifier.ImageClassifier.get_validation_dataset">
+<code class="sig-name descname">get_validation_dataset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_training.tfrecords_image_classifier.ImageClassifier.get_validation_dataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract data from validation tfrecords located in tfrecords_folder.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -245,8 +245,8 @@ no sufficient improvement in accuracy.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="decathlonian.model_training.tfrecords_image_classifier.ImageClassifier.hyperparameter_optimization">
-<code class="sig-name descname">hyperparameter_optimization</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">num_iterations</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">n_random_starts</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">min_accuracy</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">save_results</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.model_training.tfrecords_image_classifier.ImageClassifier.hyperparameter_optimization" title="Permalink to this definition">¶</a></dt>
+<dt id="decavision.model_training.tfrecords_image_classifier.ImageClassifier.hyperparameter_optimization">
+<code class="sig-name descname">hyperparameter_optimization</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">num_iterations</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">n_random_starts</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">min_accuracy</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">save_results</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_training.tfrecords_image_classifier.ImageClassifier.hyperparameter_optimization" title="Permalink to this definition">¶</a></dt>
 <dd><p>Try different combinations of hyperparameters to find the best model possible. Start by trying random
 combinations and after some time learn from th previous tries. Scikit-optimize checkoint is saved
 at each step in the working directory. If checkpoint present in working directory, optimization starts
@@ -270,11 +270,11 @@ is smaller than min_accuracy</p></li>
 </dd></dl>
 
 </div>
-<div class="section" id="module-decathlonian.model_training.progressive_learning">
-<span id="progressive-learning"></span><h2>Progressive learning<a class="headerlink" href="#module-decathlonian.model_training.progressive_learning" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-decavision.model_training.progressive_learning">
+<span id="progressive-learning"></span><h2>Progressive learning<a class="headerlink" href="#module-decavision.model_training.progressive_learning" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="decathlonian.model_training.progressive_learning.ProgressiveLearner">
-<em class="property">class </em><code class="sig-prename descclassname">decathlonian.model_training.progressive_learning.</code><code class="sig-name descname">ProgressiveLearner</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tfrecords_folder</span></em>, <em class="sig-param"><span class="n">model_path</span></em>, <em class="sig-param"><span class="n">transfer_model</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">128</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.model_training.progressive_learning.ProgressiveLearner" title="Permalink to this definition">¶</a></dt>
+<dt id="decavision.model_training.progressive_learning.ProgressiveLearner">
+<em class="property">class </em><code class="sig-prename descclassname">decavision.model_training.progressive_learning.</code><code class="sig-name descname">ProgressiveLearner</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tfrecords_folder</span></em>, <em class="sig-param"><span class="n">model_path</span></em>, <em class="sig-param"><span class="n">transfer_model</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">128</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_training.progressive_learning.ProgressiveLearner" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to update an already trained model with new classes without losing too
 much of the information learned about the old classes.</p>
 <dl class="field-list simple">
@@ -290,8 +290,8 @@ Xception, Inception_Resnet, Resnet, B0, B3 or B5</p></li>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="decathlonian.model_training.progressive_learning.ProgressiveLearner.fit">
-<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">learning_rate</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">learning_rate_fine_tuning</span><span class="o">=</span><span class="default_value">0.0001</span></em>, <em class="sig-param"><span class="n">epochs</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">save_model</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">fine_tuning</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">min_accuracy</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">logs</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.model_training.progressive_learning.ProgressiveLearner.fit" title="Permalink to this definition">¶</a></dt>
+<dt id="decavision.model_training.progressive_learning.ProgressiveLearner.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">learning_rate</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">learning_rate_fine_tuning</span><span class="o">=</span><span class="default_value">0.0001</span></em>, <em class="sig-param"><span class="n">epochs</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">save_model</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">fine_tuning</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">min_accuracy</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">logs</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_training.progressive_learning.ProgressiveLearner.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Train an image classification model based on a model trained with a smaller number of classes.
 The whole model is trained, unless there is some fine tuning, in which case a second round of
 training is done with the last layers of the model unfrozen. Training can be stopped if
@@ -314,8 +314,8 @@ the name contains the extension and in .pb if no extension in the name</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="decathlonian.model_training.progressive_learning.ProgressiveLearner.hyperparameter_optimization">
-<code class="sig-name descname">hyperparameter_optimization</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decathlonian.model_training.progressive_learning.ProgressiveLearner.hyperparameter_optimization" title="Permalink to this definition">¶</a></dt>
+<dt id="decavision.model_training.progressive_learning.ProgressiveLearner.hyperparameter_optimization">
+<code class="sig-name descname">hyperparameter_optimization</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_training.progressive_learning.ProgressiveLearner.hyperparameter_optimization" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class is not implemented for progressive learning.</p>
 </dd></dl>
 

@@ -11,11 +11,11 @@ An example of how to use these functions can be found in :doc:`train_example`.
 Image classification
 ---------------------
 
-.. automodule:: decathlonian.model_training.tfrecords_image_classifier
+.. automodule:: decavision.model_training.tfrecords_image_classifier
    :members:
 
 Progressive learning
 ---------------------
 
-.. automodule:: decathlonian.model_training.progressive_learning
+.. automodule:: decavision.model_training.progressive_learning
    :members:

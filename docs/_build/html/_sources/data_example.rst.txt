@@ -27,7 +27,7 @@ of classes, your dataset should be organized in the directory as follows::
 
 Then, you can run the following code::
 
-  decathlonian.utils.data_utils.split_train(path='data/image_dataset', split=0.2)
+  decavision.utils.data_utils.split_train(path='data/image_dataset', split=0.2)
 
 This will go through all the classes in the training set, randomly pick a fraction (*split* argument) of the images, and 
 move them from the train/ directory to a newly created val/ directory.
@@ -41,7 +41,7 @@ flip_horizontal, flip_vertical, random_crop, random_erasing, rotate, resize, ske
 in the specified folder will have a combination of the desired augmentations. Then you need to specify a desired number of images for all the classes, and it will generate new images to get as close as possible 
 to that number::
 
-  augmentor = decathlonian.dataset_preparation.data_augmentation.DataAugmentor(path='data/image_dataset/train', distortion=True, flip_horizontal=True, flip_vertical=True)
+  augmentor = decavision.dataset_preparation.data_augmentation.DataAugmentor(path='data/image_dataset/train', distortion=True, flip_horizontal=True, flip_vertical=True)
   augmentor.generate_images(100)
 
 
@@ -52,7 +52,7 @@ Once this is done you can generate Tfrecords, which is hardly recommended if you
 from your GPU. It is recommended that you create 100 Mb file using multiple shards. Also, you can save the generated files in a 
 GCS Bucket (gs://) as the output folder (only if you are on colab and have authenticated your account)::
 
-  generator = decathlonian_dataset_preparation.generate_tfrecords.TfrecordsGenerator()
+  generator = decavision_dataset_preparation.generate_tfrecords.TfrecordsGenerator()
   generator.convert_image_folder(img_folder='data/image_dataset/train', output_folder='data/tfrecords/train')
 
 You need to use this code once for your train, val (and test folders if you have one). This will delete the old records in the folders and create 

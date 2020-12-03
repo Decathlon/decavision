@@ -6,15 +6,18 @@ with open('requirements.txt', 'r') as req:
         requirements.append(line.strip())
 
 setuptools.setup(
-    name="decathlonian",
-    version="1.1.1",
+    name="decavision",
+    version="1.1.2",
     author="Décathlon Canada",
     author_email="sportvisionapi@decathlon.com",
     description="A package to easily train powerful image classification models using colab's free TPUs.",
     long_description="""The AI team at Décathlon Canada developed a library to help with the training of image 
                         classification models. It is specially made to exploit the free TPUs that are offered
                         in Google colab notebooks. You can find the full documentation 
-                        [here](https://decathlonian-doc.herokuapp.com/)
+                        [here](https://decavision-doc.herokuapp.com/)
+                        
+                        ## Version 1.1.2
+                        Change name of package
                         
                         ## Version 1.1.1
                         Fix typo in split_train

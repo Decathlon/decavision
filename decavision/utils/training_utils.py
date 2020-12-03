@@ -6,7 +6,7 @@ from tensorflow.keras.losses import categorical_crossentropy as logloss
 from tensorflow.keras.losses import sparse_categorical_crossentropy as sparselogloss
 
 try:
-    from decathlonian.utils.colab_utils import authenticate_colab
+    from decavision.utils.colab_utils import authenticate_colab
 except:
     pass
 

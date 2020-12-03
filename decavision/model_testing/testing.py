@@ -11,8 +11,8 @@ from sklearn.metrics import confusion_matrix
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 
-from decathlonian.utils import data_utils
-from decathlonian.utils import utils
+from decavision.utils import data_utils
+from decavision.utils import utils
 
 
 class ModelTester:

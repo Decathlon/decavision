@@ -1,11 +1,11 @@
 :github_url: https://github.com/dktunited/img-classification
 
-.. decathlonian documentation master file, created by
+.. decavision documentation master file, created by
    sphinx-quickstart on Fri Jul 24 09:14:44 2020.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Decathlonian's documentation!
+Welcome to DecaVision's documentation!
 ========================================================
 
 This library contains the methods required to build an image classification neural network using transfer learning.
@@ -39,13 +39,9 @@ This library works with python 3.6 and above and it is based on the following de
 - patool
 - seaborn
 
-The library has been tested on tensorflow 2.2 and 2.3, but it should work locally with any version above 2. When using
-colab, using the preinstalled tensorflow version is advised because there may be compatibility problems with the TPUs if
-using another version.
-
 This library is available through the Python Package Installer (PyPI) by typing:
 
-``pip install decathlonian``
+``pip install decavision``
 
 All the dependencies are installed along with the library, so it is safer to perform the installation in a fresh virtual environment.
 

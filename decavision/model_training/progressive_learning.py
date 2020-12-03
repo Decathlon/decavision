@@ -2,9 +2,9 @@ from efficientnet.tfkeras import EfficientNetB0, EfficientNetB3, EfficientNetB5
 import numpy as np
 import tensorflow as tf
 
-from decathlonian.model_training.tfrecords_image_classifier import ImageClassifier
-from decathlonian.utils import training_utils
-from decathlonian.utils import utils
+from decavision.model_training.tfrecords_image_classifier import ImageClassifier
+from decavision.utils import training_utils
+from decavision.utils import utils
 
 
 AUTO = tf.data.experimental.AUTOTUNE

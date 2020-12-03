@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Build a dataset from scratch &mdash; decathlonian 1.1.0 documentation</title>
+  <title>Build a dataset from scratch &mdash; decavision 1.1.2 documentation</title>
   
 
   
@@ -51,7 +51,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> decathlonian
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> decavision
           
 
           
@@ -113,7 +113,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">decathlonian</a>
+          <a href="index.html">decavision</a>
         
       </nav>
 
@@ -187,7 +187,7 @@ of classes, your dataset should be organized in the directory as follows:</p>
 </pre></div>
 </div>
 <p>Then, you can run the following code:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">decathlonian</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data_utils</span><span class="o">.</span><span class="n">split_train</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;data/image_dataset&#39;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">decavision</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data_utils</span><span class="o">.</span><span class="n">split_train</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;data/image_dataset&#39;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This will go through all the classes in the training set, randomly pick a fraction (<em>split</em> argument) of the images, and
@@ -199,7 +199,7 @@ move them from the train/ directory to a newly created val/ directory.</p>
 flip_horizontal, flip_vertical, random_crop, random_erasing, rotate, resize, skew, shear, brightness, contrast, color. All the images
 in the specified folder will have a combination of the desired augmentations. Then you need to specify a desired number of images for all the classes, and it will generate new images to get as close as possible
 to that number:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">augmentor</span> <span class="o">=</span> <span class="n">decathlonian</span><span class="o">.</span><span class="n">dataset_preparation</span><span class="o">.</span><span class="n">data_augmentation</span><span class="o">.</span><span class="n">DataAugmentor</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;data/image_dataset/train&#39;</span><span class="p">,</span> <span class="n">distortion</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">flip_horizontal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">flip_vertical</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">augmentor</span> <span class="o">=</span> <span class="n">decavision</span><span class="o">.</span><span class="n">dataset_preparation</span><span class="o">.</span><span class="n">data_augmentation</span><span class="o">.</span><span class="n">DataAugmentor</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;data/image_dataset/train&#39;</span><span class="p">,</span> <span class="n">distortion</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">flip_horizontal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">flip_vertical</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">augmentor</span><span class="o">.</span><span class="n">generate_images</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -209,7 +209,7 @@ to that number:</p>
 <p>Once this is done you can generate Tfrecords, which is hardly recommended if you want to use TPU, or just to get better performance
 from your GPU. It is recommended that you create 100 Mb file using multiple shards. Also, you can save the generated files in a
 GCS Bucket (gs://) as the output folder (only if you are on colab and have authenticated your account):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">generator</span> <span class="o">=</span> <span class="n">decathlonian_dataset_preparation</span><span class="o">.</span><span class="n">generate_tfrecords</span><span class="o">.</span><span class="n">TfrecordsGenerator</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">generator</span> <span class="o">=</span> <span class="n">decavision_dataset_preparation</span><span class="o">.</span><span class="n">generate_tfrecords</span><span class="o">.</span><span class="n">TfrecordsGenerator</span><span class="p">()</span>
 <span class="n">generator</span><span class="o">.</span><span class="n">convert_image_folder</span><span class="p">(</span><span class="n">img_folder</span><span class="o">=</span><span class="s1">&#39;data/image_dataset/train&#39;</span><span class="p">,</span> <span class="n">output_folder</span><span class="o">=</span><span class="s1">&#39;data/tfrecords/train&#39;</span><span class="p">)</span>
 </pre></div>
 </div>

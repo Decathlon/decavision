@@ -8,11 +8,11 @@ An example of how to use these functions can be found in :doc:`data_example`.
 Data augmentation
 ---------------------
 
-.. automodule:: decathlonian.dataset_preparation.data_augmentation
+.. automodule:: decavision.dataset_preparation.data_augmentation
    :members:
 
 Make tfrecords
 ---------------------
 
-.. automodule:: decathlonian.dataset_preparation.generate_tfrecords
+.. automodule:: decavision.dataset_preparation.generate_tfrecords
    :members:
