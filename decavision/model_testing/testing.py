@@ -32,7 +32,7 @@ class ModelTester:
         try:
             self.model = load_model(model)
             print('Model loaded correctly')
-        except Exception as e:
+        except:
             print('There was a problem when trying to load your model: {}'.format(e))
 
         self.input_shape = self.model.input_shape[1:3]
