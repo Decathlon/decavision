@@ -38,6 +38,7 @@ When evaluating a pull request, here is a list of the things to check
 - major changes must be explained in the documentation and in that case make sure that the `index.php` and `composer.json` files exist
 - make sure the code works locally and on colab with a GPU and a TPU
 - make sure that all the functions have docstrings and that they are all up to date
+- `conf.py` file of the docs must show the most recent version
 
 ## Deploy package
 
