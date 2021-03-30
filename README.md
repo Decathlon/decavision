@@ -14,10 +14,30 @@ cd decavision
 ```
 modifying the scripts and using the code as if you were using the package itself. This can be done locally or in a 
 Colab notebook if you want to exploit the free GPUs and TPUs. In that case, an example of notebook is provided in the 
-documentation. If you use the repository locally, make sure that all the requirements are installed:
+documentation. If you use the repository locally, make sure that all the requirements are installed and it is 
+recommended to work in a clean environment:
 ```
 pip install -r requirements.txt
 ```
+
+## Pull request
+
+When working on the source code you have to do it in a new branch. Only the code on the master branch is considered 
+for deployment so a PR must be made and accepted to push the changes online.
+
+### pep8speaks
+
+A [bot](https://github.com/OrkoHunter/pep8speaks) is used in the repository to analyse PRs and check if the code follows 
+PEP8 conventions. The bot comments all the problems and nothing forces the changes to be done. Reviewers can use the 
+comment to request for modifications. To modify the errors used by pep8speaks, take a look at the `.pep8speaks.yml` file
+
+### PR checklist
+
+When evaluating a pull request, here is a list of the things to check
+- `setup.py` file must be updated with a new version number and explanations of the modifications in the long description
+- major changes must be explained in the documentation and in that case make sure that the `index.php` and `composer.json` files exist
+- make sure the code works locally and on colab with a GPU and a TPU
+- make sure that all the functions have docstrings and that they are all up to date
 
 ## Deploy package
 
@@ -54,6 +74,7 @@ This will create two files (a .whl and a .tar.gz) in a 'dist' directory, with re
 ```
 python -m twine upload dist/*
 ```
+This command will ask you to login to your PyPI account and you need to have the rights to the package.
 
 ## Build documentation
 
