@@ -6,7 +6,7 @@ import os
 import dill
 import skopt
 import tensorflow as tf
-from tensorflow.keras.applications import EfficientNetB0, EfficientNetB3, EfficientNetB5, EfficientNetB7
+from efficientnet.tfkeras import EfficientNetB0, EfficientNetB3, EfficientNetB5, EfficientNetB7
 
 from decavision.utils import training_utils
 from decavision.utils import utils
