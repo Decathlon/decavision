@@ -4,9 +4,9 @@ import math
 import os
 
 import dill
-from efficientnet.tfkeras import EfficientNetB0, EfficientNetB3, EfficientNetB5
 import skopt
 import tensorflow as tf
+from tensorflow.keras.applications import EfficientNetB0, EfficientNetB3, EfficientNetB5, EfficientNetB7
 
 from decavision.utils import training_utils
 from decavision.utils import utils
@@ -197,6 +197,11 @@ class ImageClassifier:
             base_model = EfficientNetB5(weights='imagenet', include_top=False,
                                         input_shape=(*self.target_size, 3))
             base_model_last_block = 417  # last block 559, two blocks 417
+            
+        elif self.transfer_model == 'B7':
+            base_model = EfficientNetB7(weights='imagenet', include_top=False,
+                                        input_shape=(*self.target_size, 3))
+            base_model_last_block = None  # all layers trainable
         else:
             base_model = tf.keras.applications.InceptionV3(weights='imagenet',
                                                            include_top=False, input_shape=(*self.target_size, 3))
