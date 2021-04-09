@@ -25,7 +25,7 @@ class ImageClassifier:
             folders train and val, filenames of the form filenumber-numberofimages.tfrec
         batch_size (int): size of batches of data used for training
         transfer_model (str): pretrained model to use for transfer learning, can be one of Inception,
-            Xception, Inception_Resnet, Resnet, (EfficientNet) B0, B3 or B5
+            Xception, Inception_Resnet, Resnet, (EfficientNet) B0, B3, B5 or B7
     """
 
     def __init__(self, tfrecords_folder, batch_size=128, transfer_model='Inception'):
