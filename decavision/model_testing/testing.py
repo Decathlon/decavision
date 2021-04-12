@@ -3,7 +3,6 @@ import math
 import os
 import random
 
-from efficientnet.tfkeras import EfficientNetB0, EfficientNetB3, EfficientNetB5
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sn
@@ -234,8 +233,8 @@ class ModelTester:
     
     def generate_classification_report(self, path):
         """
-        Compute classification report resulting from predictions on a dataset of images.
-        Images must be located in separate folders for each class.
+        Computes classification report resulting from predictions on a dataset of images
+        and prints the results. Images must be located in separate folders for each class. The report shows average accuracy, precision, recall and f1-scores. Precision, recall and f1-scores are also computed for each class.
 
         Arguments:
             path (str): location of the images
