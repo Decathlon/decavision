@@ -230,7 +230,7 @@ class ModelTester:
         generator = self._load_dataset(path)
         results = self.model.evaluate(generator)
         print('Accuracy of', results[1] * 100, '%')
-    
+
     def generate_classification_report(self, path):
         """
         Computes classification report resulting from predictions on a dataset of images
@@ -247,4 +247,3 @@ class ModelTester:
         print('Labels loaded')
         # Show classification report
         print(classification_report(cls_true, cls_pred, target_names=labels, digits=4))
-        
