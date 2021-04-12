@@ -25,7 +25,7 @@ The training is then done with the following code::
   classifier = decavision.model_training.tfrecords_image_classifier.ImageClassifier(tfrecords_folder='data/tfrecords', batch_size=16, transfer_model='B3')
   classifier.fit()
  
-You can decide the transfer model between Xception, Inception_Resnet, Resnet and B0, B3 or B5 (all EffecientNets). Their respective 
+You can decide the transfer model between Xception, Inception_Resnet, Resnet and B0, B3, B5 or B7 (all EffecientNets). Their respective 
 sizes and performance metrics can be found in the keras `documentation <https://keras.io/api/applications/>`_.
 
 The parameters that can be specified when training are:

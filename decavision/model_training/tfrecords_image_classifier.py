@@ -4,9 +4,9 @@ import math
 import os
 
 import dill
-from efficientnet.tfkeras import EfficientNetB0, EfficientNetB3, EfficientNetB5
 import skopt
 import tensorflow as tf
+from efficientnet.tfkeras import EfficientNetB0, EfficientNetB3, EfficientNetB5, EfficientNetB7
 
 from decavision.utils import training_utils
 from decavision.utils import utils
@@ -25,7 +25,7 @@ class ImageClassifier:
             folders train and val, filenames of the form filenumber-numberofimages.tfrec
         batch_size (int): size of batches of data used for training
         transfer_model (str): pretrained model to use for transfer learning, can be one of Inception,
-            Xception, Inception_Resnet, Resnet, (EfficientNet) B0, B3 or B5
+            Xception, Inception_Resnet, Resnet, (EfficientNet) B0, B3, B5 or B7
     """
 
     def __init__(self, tfrecords_folder, batch_size=128, transfer_model='Inception'):
@@ -34,11 +34,11 @@ class ImageClassifier:
         self.use_TPU, self.use_GPU = utils.check_PU()
         if self.use_TPU and batch_size % 8:
             print('Batch size {} is not multiple of 8, required for TPU'.format(batch_size))
-            batch_size = 8 * round(batch_size/8)
+            batch_size = 8 * round(batch_size / 8)
             print('New batch size is {}'.format(batch_size))
         self.batch_size = batch_size
         self.transfer_model = transfer_model
-        
+
         # We expect the classes to be saved in the same folder where tfrecords are
         self.categories = utils.load_classes(tfrecords_folder)
         print('Classes ({}) :'.format(len(self.categories)))
@@ -48,36 +48,36 @@ class ImageClassifier:
             os.path.join(tfrecords_folder, 'train'))
         self.nb_train_shards = len(train_tfrecords)
         print('Training tfrecords = {}'.format(self.nb_train_shards))
-        
+
         val_tfrecords = tf.io.gfile.listdir(
             os.path.join(tfrecords_folder, 'val'))
         self.nb_val_shards = len(val_tfrecords)
         print('Val tfrecords = {}'.format(self.nb_val_shards))
-        
+
         # Expected tfrecord file name : filenumber-numberofimages.tfrec (02-2223.tfrec)
         self.nb_train_images = 0
         for train_tfrecord in train_tfrecords:
             self.nb_train_images += int(train_tfrecord.split('.')[0].split('-')[1])
-        print('Training images = '+str(self.nb_train_images))
-        
+        print('Training images = ' + str(self.nb_train_images))
+
         nb_val_images = 0
         for val_tfrecord in val_tfrecords:
             nb_val_images += int(val_tfrecord.split('.')[0].split('-')[1])
-        print('Val images = '+str(nb_val_images))
-        
-        self.training_shard_size = math.ceil(self.nb_train_images/self.nb_train_shards)
+        print('Val images = ' + str(nb_val_images))
+
+        self.training_shard_size = math.ceil(self.nb_train_images / self.nb_train_shards)
         print('Training shard size = {}'.format(self.training_shard_size))
 
-        val_shard_size = math.ceil(nb_val_images/self.nb_val_shards)
+        val_shard_size = math.ceil(nb_val_images / self.nb_val_shards)
         print('Val shard size = {}'.format(val_shard_size))
 
-        print('Training batch size = '+str(self.batch_size))
+        print('Training batch size = ' + str(self.batch_size))
         self.steps_per_epoch = int(self.nb_train_images / self.batch_size)
-        print('Training steps per epochs = '+str(self.steps_per_epoch))
+        print('Training steps per epochs = ' + str(self.steps_per_epoch))
 
-        print('Val batch size = '+str(self.batch_size))
+        print('Val batch size = ' + str(self.batch_size))
         self.validation_steps = int(nb_val_images / self.batch_size)
-        print('Val steps per epochs = '+str(self.validation_steps))
+        print('Val steps per epochs = ' + str(self.validation_steps))
 
         if transfer_model in ['Inception', 'Xception', 'Inception_Resnet', 'B3', 'B5']:
             self.target_size = (299, 299)
@@ -98,15 +98,15 @@ class ImageClassifier:
         Returns:
             tf.data.dataset: iterable dataset with content of relevant tfrecords (images and labels)
         """
-        
+
         def _read_tfrecord(example):
             """ Extract image and label from single tfrecords example."""
             features = {
-                    'image': tf.io.FixedLenFeature((), tf.string),
-                    'label': tf.io.FixedLenFeature((), tf.int64),
-                }
+                'image': tf.io.FixedLenFeature((), tf.string),
+                'label': tf.io.FixedLenFeature((), tf.int64),
+            }
             example = tf.io.parse_single_example(example, features)
-                
+
             image = tf.image.decode_jpeg(example['image'], channels=3)
             image = tf.image.convert_image_dtype(image, dtype=tf.float32)
             feature = tf.image.resize(image, [*self.target_size])
@@ -119,7 +119,7 @@ class ImageClassifier:
             dataset = tf.data.TFRecordDataset(
                 filenames, buffer_size=buffer_size)
             return dataset
-    
+
         file_pattern = os.path.join(self.tfrecords_folder, "train/*" if is_training else "val/*")
         dataset = tf.data.Dataset.list_files(file_pattern, shuffle=is_training)
 
@@ -130,7 +130,7 @@ class ImageClassifier:
         dataset = dataset.interleave(_load_dataset, nb_readers, num_parallel_calls=AUTO)
         if is_training:
             # Shuffle only for training.
-            dataset = dataset.shuffle(buffer_size=math.ceil(self.training_shard_size*self.nb_train_shards/4))
+            dataset = dataset.shuffle(buffer_size=math.ceil(self.training_shard_size * self.nb_train_shards / 4))
         dataset = dataset.repeat()
         dataset = dataset.map(_read_tfrecord, num_parallel_calls=AUTO)
         dataset = dataset.batch(batch_size=self.batch_size, drop_remainder=self.use_TPU)
@@ -197,6 +197,11 @@ class ImageClassifier:
             base_model = EfficientNetB5(weights='imagenet', include_top=False,
                                         input_shape=(*self.target_size, 3))
             base_model_last_block = 417  # last block 559, two blocks 417
+
+        elif self.transfer_model == 'B7':
+            base_model = EfficientNetB7(weights='imagenet', include_top=False,
+                                        input_shape=(*self.target_size, 3))
+            base_model_last_block = None  # all layers trainable
         else:
             base_model = tf.keras.applications.InceptionV3(weights='imagenet',
                                                            include_top=False, input_shape=(*self.target_size, 3))
@@ -269,26 +274,26 @@ class ImageClassifier:
                 callbacks = [early_stop]
             else:
                 callbacks.append(early_stop)
-        
+
         # compile the model and fit the model
         if self.use_TPU:
             tpu_cluster_resolver = tf.distribute.cluster_resolver.TPUClusterResolver()
             tf.config.experimental_connect_to_cluster(tpu_cluster_resolver)
             tf.tpu.experimental.initialize_tpu_system(tpu_cluster_resolver)
             strategy = tf.distribute.experimental.TPUStrategy(tpu_cluster_resolver)
-            
+
             with strategy.scope():
                 model, base_model_last_block, loss, metrics = self._create_model(activation, hidden_size, dropout, l2_lambda)
                 print('Compiling for TPU')
                 optimizer = tf.keras.optimizers.Adam(lr=learning_rate)
                 model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
-                    
+
         else:
             model, base_model_last_block, loss, metrics = self._create_model(activation, hidden_size, dropout, l2_lambda)
             print('Compiling for GPU') if self.use_GPU else print('Compiling for CPU')
             optimizer = tf.keras.optimizers.Adam(lr=learning_rate)
             model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
-                
+
         print('Fitting')
         history = model.fit(self.get_training_dataset(), steps_per_epoch=self.steps_per_epoch, epochs=epochs,
                             validation_data=self.get_validation_dataset(), validation_steps=self.validation_steps,
@@ -299,10 +304,10 @@ class ImageClassifier:
             print('===========')
             print('Fine-tuning')
             print('===========')
-            
+
             fine_tune_epochs = epochs
             total_epochs = epochs + fine_tune_epochs
-            
+
             print('Unfreezing last block of layers from the base model')
             for layer in model.layers[:base_model_last_block]:
                 layer.trainable = False
@@ -316,7 +321,7 @@ class ImageClassifier:
             print('Recompiling model')
             optimizer = tf.keras.optimizers.Adam(lr=learning_rate_fine_tuning)
             model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
-                
+
             print('Fine tunning')
             history = model.fit(self.get_training_dataset(), steps_per_epoch=self.steps_per_epoch, epochs=total_epochs,
                                 validation_data=self.get_validation_dataset(), validation_steps=self.validation_steps,
@@ -393,7 +398,6 @@ class ImageClassifier:
             # fall back default values
             default_parameters = [2, 1024, 5e-4, 6e-4, 0.9, 1e-3, True]
             start_from_checkpoint = False
-
 
         checkpoint_saver = skopt.callbacks.CheckpointSaver('checkpoint.pkl', store_objective=False)
         checkpoint_downloader = training_utils.CheckpointDownloader('checkpoint.pkl')
