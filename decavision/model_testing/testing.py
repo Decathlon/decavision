@@ -47,7 +47,7 @@ class ModelTester:
         Returns:
             generator: images plus information about them (labels, paths, etc)
         """
-        datagen = tf.keras.preprocessing.image.ImageDataGenerator(rescale= 1 / 255)
+        datagen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1 / 255)
         generator = datagen.flow_from_directory(directory=path,
                                                 target_size=self.input_shape,
                                                 shuffle=False,
