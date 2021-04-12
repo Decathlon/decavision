@@ -144,7 +144,7 @@ class ImageClassifier:
         dataset = dataset.prefetch(AUTO)
         return dataset
 
-    def data_augment(image, label):
+    def data_augment(self, image, label):
         """
         Data augmentation pipeline which augments the data by randomly flipping, changing brightness
         and saturation for each batch during training a model.
@@ -165,16 +165,16 @@ class ImageClassifier:
         image = tf.clip_by_value(image, 0.0, 1.0)
         return image, label
 
-    def get_training_dataset(self, self._get_dataset, self.nb_train_shards):
+    def get_training_dataset(self):
         """
         Extract data from training tfrecords located in tfrecords_folder. Data is shuffled and augmented.
 
         Returns:
             tf.data.dataset: iterable dataset with content of training tfrecords (images and labels)
         """
-        dataset = _get_dataset(True, nb_train_shards)
+        dataset = self._get_dataset(True, self.nb_train_shards)
         # Augment data
-        dataset = dataset.map(data_augment, num_parallel_calls=AUTO)
+        dataset = dataset.map(self.data_augment, num_parallel_calls=AUTO)
         return dataset
 
     def get_validation_dataset(self):
