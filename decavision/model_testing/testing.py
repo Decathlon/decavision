@@ -248,3 +248,4 @@ class ModelTester:
         print('Labels loaded')
         # Show classification report
         print(classification_report(cls_true, cls_pred, target_names=labels, digits=4))
+        
