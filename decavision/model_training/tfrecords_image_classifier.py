@@ -165,7 +165,7 @@ class ImageClassifier:
         image = tf.clip_by_value(image, 0.0, 1.0)
         return image, label
 
-    def get_training_dataset(self):
+    def get_training_dataset(self, self._get_dataset, self.nb_train_shards):
         """
         Extract data from training tfrecords located in tfrecords_folder. Data is shuffled and augmented.
 
