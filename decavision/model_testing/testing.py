@@ -3,11 +3,10 @@ import math
 import os
 import random
 
-from efficientnet.tfkeras import EfficientNetB0, EfficientNetB3, EfficientNetB5
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sn
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, classification_report
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 
@@ -48,7 +47,7 @@ class ModelTester:
         Returns:
             generator: images plus information about them (labels, paths, etc)
         """
-        datagen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1/255)
+        datagen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1 / 255)
         generator = datagen.flow_from_directory(directory=path,
                                                 target_size=self.input_shape,
                                                 shuffle=False,
@@ -231,3 +230,20 @@ class ModelTester:
         generator = self._load_dataset(path)
         results = self.model.evaluate(generator)
         print('Accuracy of', results[1] * 100, '%')
+
+    def generate_classification_report(self, path):
+        """
+        Computes classification report resulting from predictions on a dataset of images
+        and prints the results. Images must be located in separate folders for each class. The report shows average accuracy, precision, recall and f1-scores. Precision, recall and f1-scores are also computed for each class.
+
+        Arguments:
+            path (str): location of the images
+        """
+        generator = self._load_dataset(path)
+        cls_true = generator.classes
+        labels = list(generator.class_indices.keys())
+        cls_pred = self.model.predict(generator)
+        cls_pred = np.argmax(cls_pred, axis=1)
+        print('Labels loaded')
+        # Show classification report
+        print(classification_report(cls_true, cls_pred, target_names=labels, digits=4))
