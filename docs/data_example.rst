@@ -44,6 +44,8 @@ to that number::
   augmentor = decavision.dataset_preparation.data_augmentation.DataAugmentor(path='data/image_dataset/train', distortion=True, flip_horizontal=True, flip_vertical=True)
   augmentor.generate_images(100)
 
+If you don't want to generate new images there is an option to do data augmentation during training by modifying the training data online.
+
 
 Generate Tfrecord files
 -----------------------

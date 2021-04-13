@@ -22,18 +22,18 @@ To train an image classification model, you need to have your training and valid
 
 The training is then done with the following code::
 
-  classifier = decavision.model_training.tfrecords_image_classifier.ImageClassifier(tfrecords_folder='data/tfrecords', batch_size=16, transfer_model='B3', augment=False)
+  classifier = decavision.model_training.tfrecords_image_classifier.ImageClassifier(tfrecords_folder='data/tfrecords', batch_size=16, transfer_model='B3')
   classifier.fit()
  
 You can decide the transfer model between Xception, Inception_Resnet, Resnet and B0, B3, B5 or B7 (all EffecientNets). Their respective 
-sizes and performance metrics can be found in the keras `documentation <https://keras.io/api/applications/>`_. Also, note that we are not doing doing data augmentation during training as we already used the offline augmentation feature previously.
+sizes and performance metrics can be found in the keras `documentation <https://keras.io/api/applications/>`_. Also, note that on the fly data augmentation is done by default so if you already generated new images manually be sure to set augment to False.
 
 The parameters that can be specified when training are:
 
 * hyperparameters (learning_rate, learning_rate_fine_tuning, epochs, hidden_size, dropout, activation, l2_lambda)
 * the option to save the model after saving (save_model for h5, export_model for pb)
 * callbacks (min_accuracy for earlystopping, logs for tensorboard)
-*  verbose
+* verbose
 
 This function trains an extra layer on top of the pretrained model and then fine tunes a few of the last layers of the pretrained model.
 
