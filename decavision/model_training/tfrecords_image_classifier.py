@@ -176,7 +176,7 @@ class ImageClassifier:
         Returns:
             tf.data.dataset: iterable dataset with content of training tfrecords (images and labels)
         """
-        if self.augment == True:
+        if self.augment is True:
             dataset = self._get_dataset(True, self.nb_train_shards)
             # Augment data
             dataset = dataset.map(self.data_augment, num_parallel_calls=AUTO)
