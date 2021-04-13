@@ -26,9 +26,10 @@ class ImageClassifier:
         batch_size (int): size of batches of data used for training
         transfer_model (str): pretrained model to use for transfer learning, can be one of Inception,
             Xception, Inception_Resnet, Resnet, (EfficientNet) B0, B3, B5 or B7
+        augment (boolean): Whether to augment the training data, default is True
     """
 
-    def __init__(self, tfrecords_folder, batch_size=128, transfer_model='Inception'):
+    def __init__(self, tfrecords_folder, batch_size=128, transfer_model='Inception', augment=True):
 
         self.tfrecords_folder = tfrecords_folder
         self.use_TPU, self.use_GPU = utils.check_PU()
@@ -39,6 +40,7 @@ class ImageClassifier:
             print('New batch size is {}'.format(batch_size))
         self.batch_size = batch_size
         self.transfer_model = transfer_model
+        self.augment = augment
 
         # We expect the classes to be saved in the same folder where tfrecords are
         self.categories = utils.load_classes(tfrecords_folder)
@@ -82,10 +84,12 @@ class ImageClassifier:
         self.validation_steps = int(nb_val_images / self.batch_size)
         print('Val steps per epochs = ' + str(self.validation_steps))
 
-        if transfer_model in ['Inception', 'Xception', 'Inception_Resnet', 'B3', 'B5']:
+        if transfer_model in ['Inception', 'Xception', 'Inception_Resnet', 'B3', 'B5', 'B7']:
             self.target_size = (299, 299)
         else:
             self.target_size = (224, 224)
+
+        print("Data augmentation during training: " + str(augment))
 
     def _get_dataset(self, is_training, nb_readers):
         """
@@ -172,9 +176,13 @@ class ImageClassifier:
         Returns:
             tf.data.dataset: iterable dataset with content of training tfrecords (images and labels)
         """
-        dataset = self._get_dataset(True, self.nb_train_shards)
-        # Augment data
-        dataset = dataset.map(self.data_augment, num_parallel_calls=AUTO)
+        if self.augment == True:
+            dataset = self._get_dataset(True, self.nb_train_shards)
+            # Augment data
+            dataset = dataset.map(self.data_augment, num_parallel_calls=AUTO)
+            return dataset
+        else:
+            dataset = self._get_dataset(True, self.nb_train_shards)
         return dataset
 
     def get_validation_dataset(self):
