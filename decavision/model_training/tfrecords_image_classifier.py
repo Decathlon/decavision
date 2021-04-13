@@ -26,18 +26,21 @@ class ImageClassifier:
         batch_size (int): size of batches of data used for training
         transfer_model (str): pretrained model to use for transfer learning, can be one of Inception,
             Xception, Inception_Resnet, Resnet, (EfficientNet) B0, B3, B5 or B7
+        augment (boolean): Whether to augment the training data, default is True
     """
 
-    def __init__(self, tfrecords_folder, batch_size=128, transfer_model='Inception'):
+    def __init__(self, tfrecords_folder, batch_size=128, transfer_model='Inception', augment=True):
 
         self.tfrecords_folder = tfrecords_folder
         self.use_TPU, self.use_GPU = utils.check_PU()
         if self.use_TPU and batch_size % 8:
-            print('Batch size {} is not multiple of 8, required for TPU'.format(batch_size))
+            print(
+                'Batch size {} is not multiple of 8, required for TPU'.format(batch_size))
             batch_size = 8 * round(batch_size / 8)
             print('New batch size is {}'.format(batch_size))
         self.batch_size = batch_size
         self.transfer_model = transfer_model
+        self.augment = augment
 
         # We expect the classes to be saved in the same folder where tfrecords are
         self.categories = utils.load_classes(tfrecords_folder)
@@ -57,7 +60,8 @@ class ImageClassifier:
         # Expected tfrecord file name : filenumber-numberofimages.tfrec (02-2223.tfrec)
         self.nb_train_images = 0
         for train_tfrecord in train_tfrecords:
-            self.nb_train_images += int(train_tfrecord.split('.')[0].split('-')[1])
+            self.nb_train_images += int(train_tfrecord.split('.')
+                                        [0].split('-')[1])
         print('Training images = ' + str(self.nb_train_images))
 
         nb_val_images = 0
@@ -65,7 +69,8 @@ class ImageClassifier:
             nb_val_images += int(val_tfrecord.split('.')[0].split('-')[1])
         print('Val images = ' + str(nb_val_images))
 
-        self.training_shard_size = math.ceil(self.nb_train_images / self.nb_train_shards)
+        self.training_shard_size = math.ceil(
+            self.nb_train_images / self.nb_train_shards)
         print('Training shard size = {}'.format(self.training_shard_size))
 
         val_shard_size = math.ceil(nb_val_images / self.nb_val_shards)
@@ -79,10 +84,12 @@ class ImageClassifier:
         self.validation_steps = int(nb_val_images / self.batch_size)
         print('Val steps per epochs = ' + str(self.validation_steps))
 
-        if transfer_model in ['Inception', 'Xception', 'Inception_Resnet', 'B3', 'B5']:
+        if transfer_model in ['Inception', 'Xception', 'Inception_Resnet', 'B3', 'B5', 'B7']:
             self.target_size = (299, 299)
         else:
             self.target_size = (224, 224)
+
+        print("Data augmentation during training: " + str(augment))
 
     def _get_dataset(self, is_training, nb_readers):
         """
@@ -120,31 +127,63 @@ class ImageClassifier:
                 filenames, buffer_size=buffer_size)
             return dataset
 
-        file_pattern = os.path.join(self.tfrecords_folder, "train/*" if is_training else "val/*")
+        file_pattern = os.path.join(
+            self.tfrecords_folder, "train/*" if is_training else "val/*")
         dataset = tf.data.Dataset.list_files(file_pattern, shuffle=is_training)
 
         # Enable non-determinism only for training.
         options = tf.data.Options()
         options.experimental_deterministic = not is_training
         dataset = dataset.with_options(options)
-        dataset = dataset.interleave(_load_dataset, nb_readers, num_parallel_calls=AUTO)
+        dataset = dataset.interleave(
+            _load_dataset, nb_readers, num_parallel_calls=AUTO)
         if is_training:
             # Shuffle only for training.
-            dataset = dataset.shuffle(buffer_size=math.ceil(self.training_shard_size * self.nb_train_shards / 4))
+            dataset = dataset.shuffle(buffer_size=math.ceil(
+                self.training_shard_size * self.nb_train_shards / 4))
         dataset = dataset.repeat()
         dataset = dataset.map(_read_tfrecord, num_parallel_calls=AUTO)
-        dataset = dataset.batch(batch_size=self.batch_size, drop_remainder=self.use_TPU)
+        dataset = dataset.batch(
+            batch_size=self.batch_size, drop_remainder=self.use_TPU)
         dataset = dataset.prefetch(AUTO)
         return dataset
 
+    def data_augment(self, image, label):
+        """
+        Data augmentation pipeline which augments the data by randomly flipping, changing brightness
+        and saturation for each batch during training a model.
+
+        References:
+        https://www.wouterbulten.nl/blog/tech/data-augmentation-using-tensorflow-data-dataset/#code
+        https://www.tensorflow.org/tutorials/images/data_augmentation
+
+        Returns:
+            augmented images and labels
+        """
+        # Flip
+        image = tf.image.random_flip_left_right(image)
+        # Brightness and saturation
+        image = tf.image.random_brightness(image, max_delta=32.0 / 255.0)
+        image = tf.image.random_saturation(image, lower=0.5, upper=1.5)
+        # Make sure the image is still in [0, 1] range, after augmentation
+        image = tf.clip_by_value(image, 0.0, 1.0)
+        return image, label
+
     def get_training_dataset(self):
         """
-        Extract data from training tfrecords located in tfrecords_folder. Data is shuffled.
+        Extract data from training tfrecords located in tfrecords_folder. Data is shuffled and augmented.
 
         Returns:
             tf.data.dataset: iterable dataset with content of training tfrecords (images and labels)
         """
-        return self._get_dataset(True, self.nb_train_shards)
+        if self.augment is True:
+            dataset = self._get_dataset(True, self.nb_train_shards)
+            # Augment data
+            dataset = dataset.map(self.data_augment, num_parallel_calls=AUTO)
+            return dataset
+        else:
+            dataset = self._get_dataset(True, self.nb_train_shards)
+        return dataset
 
     def get_validation_dataset(self):
         """ Extract data from validation tfrecords located in tfrecords_folder.
@@ -222,12 +261,15 @@ class ImageClassifier:
                                       kernel_regularizer=tf.keras.regularizers.l2(l=l2_lambda))(x)
             # scale: When the next layer is linear (also e.g. nn.relu), this can be disabled since the
             # scaling can be done by the next layer.
-            x = tf.keras.layers.BatchNormalization(scale=activation != 'relu')(x)
+            x = tf.keras.layers.BatchNormalization(
+                scale=activation != 'relu')(x)
             x = tf.keras.layers.Activation(activation=activation)(x)
             x = tf.keras.layers.Dropout(rate=dropout)(x)
 
-        x = tf.keras.layers.Dense(len(self.categories), name='logs')(x)  # Output layer
-        predictions = tf.keras.layers.Activation('softmax', name='preds')(x)  # Output activation
+        x = tf.keras.layers.Dense(
+            len(self.categories), name='logs')(x)  # Output layer
+        predictions = tf.keras.layers.Activation(
+            'softmax', name='preds')(x)  # Output activation
         loss = 'sparse_categorical_crossentropy'
         metrics = ['sparse_categorical_accuracy']
 
@@ -261,7 +303,8 @@ class ImageClassifier:
         """
         callbacks = None
         if logs:
-            logdir = os.path.join(logs, datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+            logdir = os.path.join(
+                logs, datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
             print('Fit log dir : ' + logdir)
             tensorboard_callback = tf.keras.callbacks.TensorBoard(logdir)
             callbacks = [tensorboard_callback]
@@ -280,17 +323,21 @@ class ImageClassifier:
             tpu_cluster_resolver = tf.distribute.cluster_resolver.TPUClusterResolver()
             tf.config.experimental_connect_to_cluster(tpu_cluster_resolver)
             tf.tpu.experimental.initialize_tpu_system(tpu_cluster_resolver)
-            strategy = tf.distribute.experimental.TPUStrategy(tpu_cluster_resolver)
+            strategy = tf.distribute.experimental.TPUStrategy(
+                tpu_cluster_resolver)
 
             with strategy.scope():
-                model, base_model_last_block, loss, metrics = self._create_model(activation, hidden_size, dropout, l2_lambda)
+                model, base_model_last_block, loss, metrics = self._create_model(
+                    activation, hidden_size, dropout, l2_lambda)
                 print('Compiling for TPU')
                 optimizer = tf.keras.optimizers.Adam(lr=learning_rate)
                 model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
 
         else:
-            model, base_model_last_block, loss, metrics = self._create_model(activation, hidden_size, dropout, l2_lambda)
-            print('Compiling for GPU') if self.use_GPU else print('Compiling for CPU')
+            model, base_model_last_block, loss, metrics = self._create_model(
+                activation, hidden_size, dropout, l2_lambda)
+            print('Compiling for GPU') if self.use_GPU else print(
+                'Compiling for CPU')
             optimizer = tf.keras.optimizers.Adam(lr=learning_rate)
             model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
 
@@ -368,7 +415,8 @@ class ImageClassifier:
         )
         # declare the hyperparameters search space
         dim_epochs = skopt.space.Integer(low=1, high=6, name='epochs')
-        dim_hidden_size = skopt.space.Integer(low=512, high=2048, name='hidden_size')
+        dim_hidden_size = skopt.space.Integer(
+            low=512, high=2048, name='hidden_size')
         dim_learning_rate = skopt.space.Real(low=1e-6, high=1e-2, prior='log-uniform',
                                              name='learning_rate')
         dim_learning_rate_fine_tuning = skopt.space.Real(low=1e-6, high=1e-2, prior='log-uniform',
@@ -399,8 +447,10 @@ class ImageClassifier:
             default_parameters = [2, 1024, 5e-4, 6e-4, 0.9, 1e-3, True]
             start_from_checkpoint = False
 
-        checkpoint_saver = skopt.callbacks.CheckpointSaver('checkpoint.pkl', store_objective=False)
-        checkpoint_downloader = training_utils.CheckpointDownloader('checkpoint.pkl')
+        checkpoint_saver = skopt.callbacks.CheckpointSaver(
+            'checkpoint.pkl', store_objective=False)
+        checkpoint_downloader = training_utils.CheckpointDownloader(
+            'checkpoint.pkl')
         verbose = skopt.callbacks.VerboseCallback(n_total=num_iterations)
 
         @skopt.utils.use_named_args(dimensions=dimensions)
@@ -414,7 +464,8 @@ class ImageClassifier:
             logging.info(f'epochs:{epochs}')
             logging.info(f'hidden_size:{hidden_size}')
             logging.info(f'learning rate:{learning_rate}')
-            logging.info(f'learning rate fine tuning:{learning_rate_fine_tuning}')
+            logging.info(
+                f'learning rate fine tuning:{learning_rate_fine_tuning}')
             logging.info(f'dropout:{dropout}')
             logging.info(f'l2_lambda:{l2_lambda}')
             logging.info(f'fine_tuning:{fine_tuning}')
@@ -467,7 +518,8 @@ class ImageClassifier:
         # build results dictionary
         results_dict = {dimensions[i].name: search_result.x[i]
                         for i in range(len(dimensions))}
-        logging.info('Optimal fitness value of:{}'.format(-float(search_result.fun)))
+        logging.info(
+            'Optimal fitness value of:{}'.format(-float(search_result.fun)))
         logging.info('Optimal hyperparameters:{}'.format(results_dict))
 
 
