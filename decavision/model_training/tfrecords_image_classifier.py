@@ -328,10 +328,9 @@ class ImageClassifier:
                                                              patience=5,
                                                              mode='max')
             if not callbacks:
-                    callbacks = [reduce_lr, early_stop]
+                callbacks = [reduce_lr, early_stop]
             else:
                 callbacks.append(reduce_lr, early_stop)
-        
 
         # compile the model and fit the model
         if self.use_TPU:
