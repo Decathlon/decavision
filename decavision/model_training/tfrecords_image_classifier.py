@@ -317,15 +317,15 @@ class ImageClassifier:
                 callbacks = [early_stop]
             else:
                 callbacks.append(early_stop)
-                
+
         # use reduce learning rate and early stopping callbacks
-        else: 
+        else:
             early_stop = tf.keras.callbacks.EarlyStopping(monitor='val_sparse_categorical_accuracy',
                                                           patience=8,
                                                           restore_best_weights=True)
             reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_sparse_categorical_accuracy',
-                                                             factor=0.1, 
-                                                             patience=5, 
+                                                             factor=0.1,
+                                                             patience=5,
                                                              mode='max')
             if not callbacks:
                     callbacks = [reduce_lr, early_stop]
