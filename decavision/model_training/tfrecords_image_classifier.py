@@ -275,7 +275,7 @@ class ImageClassifier:
 
         return tf.keras.Model(inputs=base_model.input, outputs=predictions), base_model_last_block, loss, metrics
 
-    def fit(self, save_model=None, export_model=None, min_accuracy=None,
+    def fit(self, save_model=None, export_model=None, patience=0,
             epochs=5, hidden_size=1024, learning_rate=1e-3, learning_rate_fine_tuning=1e-4,
             dropout=0.5, l2_lambda=5e-4, fine_tuning=True,
             verbose=True, logs=None, activation='swish'):
@@ -298,7 +298,7 @@ class ImageClassifier:
             verbose (bool): show details of training or not
             fine_tuning (bool): fine tune pretrained model or not
             l2_lambda (float): amount of L2 regularization to include in extra layer
-            min_accuracy (float): if specified, stop training when improvement in val accuracy is smaller than min_accuracy
+            patience (int): if specified, stops training when improvement in val accuracy is not observed using early stopping
             logs (str): if specified, tensorboard is used and logs are saved at this location
         """
         callbacks = None
@@ -309,28 +309,22 @@ class ImageClassifier:
             tensorboard_callback = tf.keras.callbacks.TensorBoard(logdir)
             callbacks = [tensorboard_callback]
 
-        # if we want to stop training when no sufficient improvement in accuracy has been achieved
-        if min_accuracy is not None:
+        # if we want to stop training when no sufficient improvement in validation metric has been achieved
+        if patience:
             early_stop = tf.keras.callbacks.EarlyStopping(monitor='val_sparse_categorical_accuracy',
-                                                          min_delta=min_accuracy)
+                                                          patience=8,
+                                                          restore_best_weights=True)
             if not callbacks:
                 callbacks = [early_stop]
             else:
                 callbacks.append(early_stop)
 
         # use reduce learning rate and early stopping callbacks
-        else:
-            early_stop = tf.keras.callbacks.EarlyStopping(monitor='val_sparse_categorical_accuracy',
-                                                          patience=8,
-                                                          restore_best_weights=True)
-            reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_sparse_categorical_accuracy',
-                                                             factor=0.1,
-                                                             patience=5,
-                                                             mode='max')
-            if not callbacks:
-                callbacks = [reduce_lr, early_stop]
-            else:
-                callbacks.append(reduce_lr, early_stop)
+        reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_sparse_categorical_accuracy',
+                                                         factor=0.1,
+                                                         patience=5,
+                                                         mode='max')
+        callbacks.append(reduce_lr)
 
         # compile the model and fit the model
         if self.use_TPU:
@@ -401,7 +395,7 @@ class ImageClassifier:
             self.model.save(export_model)
             print('Model exported')
 
-    def hyperparameter_optimization(self, num_iterations=20, n_random_starts=10, min_accuracy=None, save_results=False):
+    def hyperparameter_optimization(self, num_iterations=20, n_random_starts=10, patience=0, save_results=False):
         """
         Try different combinations of hyperparameters to find the best model possible. Start by trying random
         combinations and after some time learn from th previous tries. Scikit-optimize checkoint is saved
@@ -414,8 +408,7 @@ class ImageClassifier:
             n_random_starts (int): number of random combinations of hyperparameters first tried
             num_iterations (int): total number of hyperparameter combinations to try (aim for a 1:1 to 2:1 ratio
                 num_iterations/n_random_starts)
-            min_accuracy (float): if specified, training in single try will stop when improvement in accuracy
-                is smaller than min_accuracy
+            patience (int): if specified, stops training when improvement in val accuracy is not observed using early stopping
             save_results (bool): decide to save optimal hyperparameters in hyperparameters_dimensions.pickle when done
         """
         # initialize logging
@@ -488,7 +481,7 @@ class ImageClassifier:
             self.fit(epochs=epochs, hidden_size=hidden_size, learning_rate=learning_rate,
                      learning_rate_fine_tuning=learning_rate_fine_tuning,
                      dropout=dropout, l2_lambda=l2_lambda, fine_tuning=fine_tuning,
-                     min_accuracy=min_accuracy)
+                     patience=patience)
 
             # extract fitness
             fitness = self.fitness
