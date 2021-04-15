@@ -32,7 +32,7 @@ The parameters that can be specified when training are:
 
 * hyperparameters (learning_rate, learning_rate_fine_tuning, epochs, hidden_size, dropout, activation, l2_lambda)
 * the option to save the model after saving (save_model for h5, export_model for pb)
-* callbacks (min_accuracy for earlystopping, logs for tensorboard)
+* callbacks (reduce learning rate, earlystopping, logs for tensorboard)
 * verbose
 
 This function trains an extra layer on top of the pretrained model and then fine tunes a few of the last layers of the pretrained model.
