@@ -302,12 +302,22 @@ class ImageClassifier:
             logs (str): if specified, tensorboard is used and logs are saved at this location
         """
         callbacks = None
+        # use reduce learning rate and early stopping callbacks
+        reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_sparse_categorical_accuracy',
+                                                         factor=0.1,
+                                                         patience=5,
+                                                         mode='max')
+        callbacks = [reduce_lr]
+
         if logs:
             logdir = os.path.join(
                 logs, datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
             print('Fit log dir : ' + logdir)
             tensorboard_callback = tf.keras.callbacks.TensorBoard(logdir)
-            callbacks = [tensorboard_callback]
+            if not callbacks:
+                callbacks = [tensorboard_callback]
+            else:
+                callbacks.append(tensorboard_callback)
 
         # if we want to stop training when no sufficient improvement in validation metric has been achieved
         if patience:
@@ -318,13 +328,6 @@ class ImageClassifier:
                 callbacks = [early_stop]
             else:
                 callbacks.append(early_stop)
-
-        # use reduce learning rate and early stopping callbacks
-        reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_sparse_categorical_accuracy',
-                                                         factor=0.1,
-                                                         patience=5,
-                                                         mode='max')
-        callbacks.append(reduce_lr)
 
         # compile the model and fit the model
         if self.use_TPU:
