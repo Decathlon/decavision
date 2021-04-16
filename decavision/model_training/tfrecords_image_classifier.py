@@ -298,10 +298,10 @@ class ImageClassifier:
             verbose (bool): show details of training or not
             fine_tuning (bool): fine tune pretrained model or not
             l2_lambda (float): amount of L2 regularization to include in extra layer
-            patience (int): if specified, stops training when improvement in val accuracy is not observed using early stopping
+            patience (int): if non zero, stop training when improvement in val accuracy is not observed for the given number of epochs. If used, best model is restored when training is stopped
             logs (str): if specified, tensorboard is used and logs are saved at this location
         """
-        callbacks = None
+
         # use reduce learning rate and early stopping callbacks
         reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_sparse_categorical_accuracy',
                                                          factor=0.1,
@@ -314,20 +314,14 @@ class ImageClassifier:
                 logs, datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
             print('Fit log dir : ' + logdir)
             tensorboard_callback = tf.keras.callbacks.TensorBoard(logdir)
-            if not callbacks:
-                callbacks = [tensorboard_callback]
-            else:
-                callbacks.append(tensorboard_callback)
+            callbacks.append(tensorboard_callback)
 
         # if we want to stop training when no sufficient improvement in validation metric has been achieved
         if patience:
             early_stop = tf.keras.callbacks.EarlyStopping(monitor='val_sparse_categorical_accuracy',
-                                                          patience=8,
+                                                          patience=patience,
                                                           restore_best_weights=True)
-            if not callbacks:
-                callbacks = [early_stop]
-            else:
-                callbacks.append(early_stop)
+            callbacks.append(early_stop)
 
         # compile the model and fit the model
         if self.use_TPU:
@@ -411,7 +405,7 @@ class ImageClassifier:
             n_random_starts (int): number of random combinations of hyperparameters first tried
             num_iterations (int): total number of hyperparameter combinations to try (aim for a 1:1 to 2:1 ratio
                 num_iterations/n_random_starts)
-            patience (int): if specified, stops training when improvement in val accuracy is not observed using early stopping
+            patience (int): if non zero, stop training when improvement in val accuracy is not observed for the given number of epochs. If used, best model is restored when training is stopped
             save_results (bool): decide to save optimal hyperparameters in hyperparameters_dimensions.pickle when done
         """
         # initialize logging
