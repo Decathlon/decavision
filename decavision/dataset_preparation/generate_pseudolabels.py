@@ -1,5 +1,3 @@
-import csv
-import math
 import os
 import pandas as pd
 import tensorflow as tf
@@ -7,7 +5,6 @@ import numpy as np
 import shutil
 import matplotlib.pyplot as plt
 
-from PIL import Image
 from tensorflow.keras.models import load_model
 from distutils.dir_util import copy_tree
 from tqdm import tqdm
@@ -55,7 +52,7 @@ class PseudoLabelGenerator:
                 pseudo_path (str): path to store train data and pseudo data
                 save_confidences_csv (boolean): Whether to save CSV file with pseudo confidences, default is False.
                 plot_confidences (boolean): Whether to plot confidence graphs for raw confidences and per class confidences.
-                threshold (float): Discard images with prediction below this confidence, default is None. 
+                threshold (float): Discard images with prediction below this confidence, default is None.
 
             Returns:
                 pseudo_data_path: A folder with both labeled and pseudo labeled images.
