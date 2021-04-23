@@ -98,7 +98,6 @@ class PseudoLabelGenerator:
         # Plot graph for highest confidence pseudo labels for each class
         for idx in range(len(classes)):
             predictions = []
-            samples = []
             for i in raw_predictions_all:
                 predictions.append(i[idx])
 
@@ -174,7 +173,6 @@ class PseudoLabelGenerator:
         raw_predictions = []  # single confidence value of predicted class
         predicted_class = []  # predicted class index
         raw_predictions_all = []  # confidences for all classes
-        pseudo_class_names = []  # name of pseudo class
         for path in tqdm(unlabeled_image_paths[:100]):
             # Load the image
             img = np.array(self._load_img(os.path.join(self.unlabeled_path, path),
