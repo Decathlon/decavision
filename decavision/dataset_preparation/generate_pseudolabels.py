@@ -173,7 +173,7 @@ class PseudoLabelGenerator:
         raw_predictions = []  # single confidence value of predicted class
         predicted_class = []  # predicted class index
         raw_predictions_all = []  # confidences for all classes
-        for path in tqdm(unlabeled_image_paths[:100]):
+        for path in tqdm(unlabeled_image_paths):
             # Load the image
             img = np.array(self._load_img(os.path.join(self.unlabeled_path, path),
                                           target_size=(299, 299)))
@@ -214,7 +214,3 @@ class PseudoLabelGenerator:
                     csv_path="outputs/data.csv", classes=class_names)
             else:
                 print("No CSV file is present to plot the data.")
-
-
-if __name__ == '__main__':
-    transformer = PseudoLabelGenerator()
