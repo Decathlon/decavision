@@ -122,6 +122,26 @@ class PseudoLabelGenerator:
                             output_path="{}/highest_confidence_predictions.png".format(
                                 self.output_folder))
 
+    def make_dataset(self, filenames, batch_size):
+        def parse_image(filename):
+            image = tf.io.read_file(filename)
+            image = tf.image.decode_jpeg(image, channels=3)
+            image = tf.image.resize(image, [299, 299])
+            image = tf.cast(image, tf.uint8)
+            image = tf.image.convert_image_dtype(image, dtype=tf.float32)
+            return image
+
+        def configure_for_performance(ds):
+            ds = ds.batch(batch_size)
+            ds = ds.prefetch(buffer_size=tf.data.experimental.AUTOTUNE)
+            return ds
+
+        filenames_ds = tf.data.Dataset.from_tensor_slices(filenames)
+        images_ds = filenames_ds.map(parse_image,
+                                     num_parallel_calls=tf.data.experimental.AUTOTUNE)
+        ds = configure_for_performance(images_ds)
+        return ds
+
     def move_unlabeled_images(self, threshold):
         """
         Split unlabeled images into folders based on pseudo labels. A copy of the unsplit images is kept.
@@ -154,7 +174,7 @@ class PseudoLabelGenerator:
                                     os.path.join(self.pseudo_data_path, class_name))
         print("Moved unlabeled images to their pseudo label categories.")
 
-    def generate_pseudolabel_data(self, plot_confidences=False, threshold=None, move_images=False):
+    def generate_pseudolabel_data(self, plot_confidences=False, threshold=None, move_images=False, batch_size=32):
         """ Use trained model to make pseudo labels and save them into a csv file. Also possible to plot the results
             and move the unlabeled images directly to the category corresponding to their pseudo label.
 
@@ -162,6 +182,7 @@ class PseudoLabelGenerator:
                 plot_confidences (boolean): Whether to plot confidence graphs for raw confidences and per class confidences.
                 threshold (float): Discard images with prediction below this confidence, default is None.
                 move_images (bool): Move images into categories or not
+                batch_size (int): Batch size while making predictions
 
             Returns:
                 pseudo_data_path: A folder with both labeled and pseudo labeled images.
@@ -172,25 +193,25 @@ class PseudoLabelGenerator:
         unlabeled_image_paths = os.listdir(self.unlabeled_path)
         print("There are {} unlabeled images.".format(
             len(unlabeled_image_paths)))
+
         raw_predictions_paths = []
         raw_predictions = []  # single confidence value of predicted class
         predicted_class = []  # predicted class index
         raw_predictions_all = []  # confidences for all classes
-        for path in tqdm(unlabeled_image_paths):
-            # Load the image
-            img = np.array(self._load_img(os.path.join(self.unlabeled_path, path),
-                                          target_size=(299, 299)))
-            # Make predictions using trained model
-            y_pred = self.model.predict(np.expand_dims(img, axis=0), verbose=0)
-            # Get class index
+
+        unlabeled_filenames = [os.path.join(self.unlabeled_path,
+                                            path) for path in unlabeled_image_paths]
+        ds = self.make_dataset(unlabeled_filenames, batch_size)
+        y_preds = self.model.predict(ds)
+        #import pdb; pdb.set_trace()
+        for y_pred in y_preds:
             y = np.argmax(y_pred)
             # Get probability score
-            proba = y_pred[0][y]
-
+            proba = y_pred[y]
             predicted_class.append(y)
             raw_predictions.append(proba)
-            raw_predictions_all.append(list(y_pred[0]))
-            raw_predictions_paths.append(path)
+            raw_predictions_all.append(list(y_pred))
+        raw_predictions_paths = [path for path in unlabeled_image_paths]
 
         # 'Pseudo Class Names': pseudo_class_names,
         print("Saving CSV with pseudo predictions.")
@@ -207,4 +228,4 @@ class PseudoLabelGenerator:
 
         if plot_confidences:
             print("Plotting data.")
-            self.plot_confidence_scores(classes=class_names)
+            self.plot_confidence_scores()
