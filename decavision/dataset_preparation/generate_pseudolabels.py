@@ -15,29 +15,35 @@ class PseudoLabelGenerator:
     """
     Class to generate pseudo labels.
     Arguments:
-        model_path (str): folder which stores the trained model
-        train_path (str): folder which holds training data
+        model_path (str): location of the h5 tensorflow model to use
+        train_data_path (str): folder which holds training data
         unlabeled_path (str): folder which holds unlabeled data
-        pseudo_path (str): folder to store training data and pseudo data combined
+        pseudo_data_path (str): folder to store training data and pseudo data combined
         output_folder (str): folder to store outputs
-        csv_path (str): name of csv file
+        csv_filename (str): name of csv file
     """
 
-    def __init__(self, model_path="model", train_data_path="data/image_dataset/train", unlabeled_path="data/image_dataset/unlabeled", pseudo_data_path="data/image_dataset/train_ssl", output_folder="outputs", csv_path="data.csv"):
-        self.model_path = model_path
+    def __init__(self, model_path="model.h5", train_data_path="data/image_dataset/train",
+                 unlabeled_path="data/unlabeled", pseudo_data_path="data/train_ssl",
+                 output_folder="outputs", csv_filename="data.csv"):
+
         self.train_data_path = train_data_path
         self.unlabeled_path = unlabeled_path
         self.pseudo_data_path = pseudo_data_path
         self.output_folder = output_folder
-        self.csv_path = csv_path
+        self.csv_path = os.path.join(self.output_folder, csv_filename)
 
         # Load model
-        self.model = load_model(self.model_path, compile=False)
+        self.model = load_model(model_path, compile=False)
         print("Loaded model.")
 
         # Make new output folder
         if not os.path.exists(self.output_folder):
             os.mkdir(self.output_folder)
+
+        # Make dictionary for classes and their index
+        self.class_names = sorted(os.listdir(self.train_data_path))
+        self.class_dict = {cat: i for (i, cat) in enumerate(self.class_names)}
 
     def _load_img(self, path, target_size=(299, 299)):
         """
@@ -63,7 +69,7 @@ class PseudoLabelGenerator:
 
     def _plot_data(self, predictions, name, output_path):
         """
-        Plots a bar plot.
+        Plots a bar plot and saves it to a file.
 
         Arguments:
             predictions (list): List of predictions
@@ -82,14 +88,15 @@ class PseudoLabelGenerator:
         plt.savefig(output_path, dpi=100)
         plt.clf()  # clear buffer, otherwise plot overlap!
 
-    def _plot_confidence_scores(self, classes):
+    def plot_confidence_scores(self, per_class=True, overall=True):
         """
-        Save pseudo label names and their confidence scores in a csv file.
+        Generate bar plots for highest confidence predictions per class and overall and save them.
 
         Arguments:
-            classes (list): List containing the class names
+            per_class (bool): make bar plots per class or not
+            overall (bool): make overall bar plot or not
         """
-        dt = pd.read_csv(os.path.join(self.output_folder, self.csv_path))
+        dt = pd.read_csv(self.csv_path)
         dt['All Class Predictions List'] = dt['All Class Predictions'].apply(
             lambda x: ast.literal_eval(x))
 
@@ -100,41 +107,41 @@ class PseudoLabelGenerator:
         raw_predictions_all = [pred[0] for pred in raw_predictions_all_]
 
         # Plot graph for highest confidence pseudo labels for each class
-
-        for idx, _ in enumerate(classes):
-            predictions = [pred[idx] for pred in raw_predictions_all]
-            title = "Confidences for the class: {}".format(classes[idx])
-            path = "{}/{}_confidences.png".format(
-                self.output_folder, classes[idx])
-            self._plot_data(predictions, title, path)
+        if per_class:
+            for idx, cat in enumerate(self.class_names):
+                predictions = [pred[idx] for pred in raw_predictions_all]
+                title = "Confidences for the class: {}".format(cat)
+                path = "{}/{}_confidences.png".format(
+                    self.output_folder, cat)
+                self._plot_data(predictions, title, path)
 
         # Plot graph for highest confidence pseudo labels for all unlabeled images
-        self._plot_data(raw_predictions,
-                        name="Highest confidence pseudo labels",
-                        output_path="{}/highest_confidence_predictions.png".format(
-                            self.output_folder))
+        if overall:
+            self._plot_data(raw_predictions,
+                            name="Highest confidence pseudo labels",
+                            output_path="{}/highest_confidence_predictions.png".format(
+                                self.output_folder))
 
-    def _move_unlabeled_images(self, threshold, dictionary):
+    def move_unlabeled_images(self, threshold):
         """
-        Save pseudo labels.
+        Split unlabeled images into folders based on pseudo labels. A copy of the unsplit images is kept.
 
         Arguments:
             threshold (float): Discard images with prediction below this confidence, default is None.
-            dictionary (dict): Class dictionary
         """
 
         # Copy the training/labeled data to the destination folder where
         # we will also store the pseudo labels.
         copy_tree(self.train_data_path, self.pseudo_data_path)
 
-        dt = pd.read_csv(os.path.join(self.output_folder, self.csv_path))
+        dt = pd.read_csv(self.csv_path)
         filepaths = dt[["Filepaths"]].values
         predicted_class = dt[["Predicted Class"]].values
         raw_predictions = dt[["Highest Confidence"]].values
 
         for proba, y, path in zip(raw_predictions, predicted_class, filepaths):
             # The results variable should be the same as the class category
-            for class_name, index in dictionary.items():
+            for class_name, index in self.class_dict.items():
                 if threshold:
                     # For thresholding predictions
                     if index == y and proba >= threshold:
@@ -145,23 +152,20 @@ class PseudoLabelGenerator:
                     if index == y:
                         shutil.copy(os.path.join(self.unlabeled_path, str(path[0])),
                                     os.path.join(self.pseudo_data_path, class_name))
-        print("Saved pseudo labels.")
+        print("Moved unlabeled images to their pseudo label categories.")
 
-    def generate_pseudolabel_data(self, save_confidences_csv=False,
-                                  plot_confidences=False, threshold=None):
-        """ Convert image and label to tfrecord example.
+    def generate_pseudolabel_data(self, plot_confidences=False, threshold=None, move_images=False):
+        """ Use trained model to make pseudo labels and save them into a csv file. Also possible to plot the results
+            and move the unlabeled images directly to the category corresponding to their pseudo label.
+
             Arguments:
-                save_confidences_csv (boolean): Whether to save CSV file with pseudo confidences, default is False.
                 plot_confidences (boolean): Whether to plot confidence graphs for raw confidences and per class confidences.
                 threshold (float): Discard images with prediction below this confidence, default is None.
+                move_images (bool): Move images into categories or not
 
             Returns:
                 pseudo_data_path: A folder with both labeled and pseudo labeled images.
         """
-
-        # Make dictionary for classes and their index
-        class_names = sorted(os.listdir(self.train_data_path))
-        class_dict = {cat: i for (i, cat) in enumerate(class_names)}
 
         print("Generating pseudo labels...")
         # Generate pseudo labels
@@ -188,27 +192,19 @@ class PseudoLabelGenerator:
             raw_predictions_all.append(list(y_pred[0]))
             raw_predictions_paths.append(path)
 
-        if not os.path.exists("outputs"):
-            os.mkdir("outputs")
-        if save_confidences_csv:
-            # 'Pseudo Class Names': pseudo_class_names,
-            print("Saving CSV with pseudo predictions.")
-            data = {'Filepaths': raw_predictions_paths,
-                    'Predicted Class': predicted_class,
-                    'Highest Confidence': raw_predictions,
-                    'All Class Predictions': raw_predictions_all}
-            df = pd.DataFrame(data)
-            df.to_csv(os.path.join(self.output_folder,
-                      self.csv_path), index=False)
+        # 'Pseudo Class Names': pseudo_class_names,
+        print("Saving CSV with pseudo predictions.")
+        data = {'Filepaths': raw_predictions_paths,
+                'Predicted Class': predicted_class,
+                'Highest Confidence': raw_predictions,
+                'All Class Predictions': raw_predictions_all}
+        df = pd.DataFrame(data)
+        df.to_csv(self.csv_path, index=False)
 
-        # Save pseudo labeled images
-        self._move_unlabeled_images(threshold=threshold,
-                                    dictionary=class_dict)
+        # move pseudo labeled images
+        if move_images:
+            self.move_unlabeled_images(threshold=threshold)
 
         if plot_confidences:
-            # Plot only if there are any CSV files.
-            if save_confidences_csv:
-                print("Plotting data.")
-                self._plot_confidence_scores(classes=class_names)
-            else:
-                print("No CSV file is present to plot the data.")
+            print("Plotting data.")
+            self.plot_confidence_scores(classes=class_names)
