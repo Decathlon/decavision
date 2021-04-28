@@ -194,7 +194,6 @@ class PseudoLabelGenerator:
         print("There are {} unlabeled images.".format(
             len(unlabeled_image_paths)))
 
-        raw_predictions_paths = []
         raw_predictions = []  # single confidence value of predicted class
         predicted_class = []  # predicted class index
         raw_predictions_all = []  # confidences for all classes
