@@ -203,7 +203,12 @@ class PseudoLabelGenerator:
         unlabeled_filenames = [os.path.join(self.unlabeled_path,
                                             path) for path in unlabeled_image_paths]
         ds = self._make_dataset(unlabeled_filenames, batch_size)
-        y_preds = self.model.predict(ds)
+
+        y_preds = []
+        for batch in tqdm(ds):
+            y_preds_ = self.model.predict(batch)
+            y_preds.extend(list(y_preds_))
+
         for y_pred in y_preds:
             y = np.argmax(y_pred)
             # Get probability score
