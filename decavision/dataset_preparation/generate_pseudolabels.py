@@ -122,7 +122,7 @@ class PseudoLabelGenerator:
                             output_path="{}/highest_confidence_predictions.png".format(
                                 self.output_folder))
 
-    def make_dataset(self, filenames, batch_size):
+    def _make_dataset(self, filenames, batch_size):
         def parse_image(filename):
             image = tf.io.read_file(filename)
             image = tf.image.decode_jpeg(image, channels=3)
@@ -142,9 +142,10 @@ class PseudoLabelGenerator:
         ds = configure_for_performance(images_ds)
         return ds
 
-    def move_unlabeled_images(self, threshold):
+    def move_unlabeled_images(self, threshold=None):
         """
-        Split unlabeled images into folders based on pseudo labels. A copy of the unsplit images is kept.
+        Split unlabeled images into folders of the training data based on pseudo labels. A new training dataset is
+        created with the labeled and pseudo labeled data.
 
         Arguments:
             threshold (float): Discard images with prediction below this confidence, default is None.
@@ -180,7 +181,8 @@ class PseudoLabelGenerator:
 
             Arguments:
                 plot_confidences (boolean): Whether to plot confidence graphs for raw confidences and per class confidences.
-                threshold (float): Discard images with prediction below this confidence, default is None.
+                threshold (float): Discard images with prediction below this confidence, default is None. Only used
+                    if move_images is True.
                 move_images (bool): Move images into categories or not
                 batch_size (int): Batch size while making predictions
 
@@ -200,9 +202,8 @@ class PseudoLabelGenerator:
 
         unlabeled_filenames = [os.path.join(self.unlabeled_path,
                                             path) for path in unlabeled_image_paths]
-        ds = self.make_dataset(unlabeled_filenames, batch_size)
+        ds = self._make_dataset(unlabeled_filenames, batch_size)
         y_preds = self.model.predict(ds)
-        #import pdb; pdb.set_trace()
         for y_pred in y_preds:
             y = np.argmax(y_pred)
             # Get probability score
