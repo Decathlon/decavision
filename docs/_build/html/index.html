@@ -94,7 +94,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="data_example.html">Build a dataset from scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="train_example.html">Train and optimize model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ssl_example.html">Improve a model using unlabelled images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssl_example.html">Improve a classification model using unlabelled images</a></li>
 </ul>
 
             
@@ -177,11 +177,11 @@ hyperparameter optimization, to achieve high accuracy given small sets of traini
 <p>This library has a few distinguishing features. It is specifically designed to work with Google Colab notebooks and
 leverage their TPUs, to seamlessly transition from quick iterations of modeling approaches to large-scale training.
 Functionalities of hyperparmaters tuning and progressive learning are included and easily integrated in the pipeline to
-reach higher accuracy. Finally, state-of-the art efficientnet transfer learning models and Tensorflow 2 functionalities
+reach higher accuracy. Finally, state-of-the art EfficientNet transfer learning models and TensorFlow 2 functionalities
 are considered to provide high efficiency.</p>
 <p>A great way of explaining the library is using an example notebook, which you can find <a class="reference external" href="https://colab.research.google.com/drive/1s9pnNotdPoHI4n_7OZl4zwEP9rccJ3f-?usp=sharing/">here</a>.</p>
 <p>The most recent version of this library adds a feature to leverage unlabelled images in order to improve the performance
-of image classifiers. This procedure is called semi-supervised learning and is discussed in this <a class="reference external" href="https://medium.com/decathlondevelopers/improving-performance-of-image-classification-models-using-pretraining-and-a-combination-of-e271c96808d2/">blog post</a>.</p>
+of image classifiers. This procedure is called semi-supervised learning (SSL) and is discussed in this <a class="reference external" href="https://medium.com/decathlondevelopers/improving-performance-of-image-classification-models-using-pretraining-and-a-combination-of-e271c96808d2/">blog post</a>.</p>
 </div>
 <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
@@ -249,7 +249,7 @@ shows examples of how to use the code explicitely.</p>
 <li class="toctree-l2"><a class="reference internal" href="train_example.html#optimization-of-the-hyperparameters">Optimization of the hyperparameters</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="ssl_example.html">Improve a model using unlabelled images</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="ssl_example.html">Improve a classification model using unlabelled images</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="ssl_example.html#preliminary-steps">Preliminary steps</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ssl_example.html#generating-pseudo-labels">Generating pseudo labels</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ssl_example.html#training-the-student-model">Training the student model</a></li>

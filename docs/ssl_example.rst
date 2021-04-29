@@ -1,10 +1,11 @@
-Improve a model using unlabelled images
-========================================
+Improve a classification model using unlabelled images
+=======================================================
 
 This code example shows how to use this library to exploit unlabelled data to increase the performance of an image
 classifier. The main procedure consists in first training a classifier using the labelled data (or using an already
 trained one). Then this model is used to make predictions for the unlabelled data, which are used as pseudo labels to
-create a new dataset. This larger dataset is then used to train a larger and more performant classifier.
+create a new dataset which consists of both the pseudo labels and the training data previously used to train the classifier.
+This larger dataset is then used to train a larger and more performant classifier.
 
 
 Preliminary steps

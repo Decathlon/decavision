@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Improve a model using unlabelled images &mdash; decavision 1.2.0 documentation</title>
+  <title>Improve a classification model using unlabelled images &mdash; decavision 1.2.0 documentation</title>
   
 
   
@@ -94,7 +94,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="data_example.html">Build a dataset from scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="train_example.html">Train and optimize model</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Improve a model using unlabelled images</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Improve a classification model using unlabelled images</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#preliminary-steps">Preliminary steps</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#generating-pseudo-labels">Generating pseudo labels</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#training-the-student-model">Training the student model</a></li>
@@ -148,7 +148,7 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Improve a model using unlabelled images</li>
+      <li>Improve a classification model using unlabelled images</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -167,12 +167,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="improve-a-model-using-unlabelled-images">
-<h1>Improve a model using unlabelled images<a class="headerlink" href="#improve-a-model-using-unlabelled-images" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="improve-a-classification-model-using-unlabelled-images">
+<h1>Improve a classification model using unlabelled images<a class="headerlink" href="#improve-a-classification-model-using-unlabelled-images" title="Permalink to this headline">¶</a></h1>
 <p>This code example shows how to use this library to exploit unlabelled data to increase the performance of an image
 classifier. The main procedure consists in first training a classifier using the labelled data (or using an already
 trained one). Then this model is used to make predictions for the unlabelled data, which are used as pseudo labels to
-create a new dataset. This larger dataset is then used to train a larger and more performant classifier.</p>
+create a new dataset which consists of both the pseudo labels and the training data previously used to train the classifier.
+This larger dataset is then used to train a larger and more performant classifier.</p>
 <div class="section" id="preliminary-steps">
 <h2>Preliminary steps<a class="headerlink" href="#preliminary-steps" title="Permalink to this headline">¶</a></h2>
 <p>The first ingredient necessary to use semi-supervised learning is a labelled dataset, exactly as described in
