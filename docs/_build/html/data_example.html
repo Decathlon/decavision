@@ -3,11 +3,11 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Build a dataset from scratch &mdash; decavision 1.1.2 documentation</title>
+  <title>Build a dataset from scratch &mdash; decavision 1.2.0 documentation</title>
   
 
   
@@ -16,7 +16,10 @@
 
   
   
+
   
+  
+
   
 
   
@@ -29,7 +32,6 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -51,7 +53,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> decavision
+            <a href="index.html" class="icon icon-home"> decavision
           
 
           
@@ -92,12 +94,13 @@
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Build a dataset from scratch</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#spliting-a-set-of-images-into-a-training-and-a-validation-set">Spliting a set of images into a training and a validation set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#splitting-a-set-of-images-into-a-training-and-a-validation-set">Splitting a set of images into a training and a validation set</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#make-data-augmentation-on-training-images">Make data augmentation on training images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#generate-tfrecord-files">Generate Tfrecord files</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="train_example.html">Train and optimize model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssl_example.html">Improve a classification model using unlabelled images</a></li>
 </ul>
 
             
@@ -138,6 +141,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -149,7 +154,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="_sources/data_example.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -168,10 +173,10 @@
 <p>This code example shows how you can use this library to prepare a dataset of images for training. You can
 perform data augmentation on your images and transform the dataset into tfrecords to be used to train a classification model.
 The data can come from any source and the only requirement is that the images are saved in separate folders for each class.</p>
-<div class="section" id="spliting-a-set-of-images-into-a-training-and-a-validation-set">
-<h2>Spliting a set of images into a training and a validation set<a class="headerlink" href="#spliting-a-set-of-images-into-a-training-and-a-validation-set" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="splitting-a-set-of-images-into-a-training-and-a-validation-set">
+<h2>Splitting a set of images into a training and a validation set<a class="headerlink" href="#splitting-a-set-of-images-into-a-training-and-a-validation-set" title="Permalink to this headline">¶</a></h2>
 <p>If you have a single set of images, but would like to split it into a training and a validation set, first place your images in
-a train folder, which is located in the folder ‘data/image_dataset’ for this example. Using hockey and soccer players as examples
+a train folder located in ‘data/image_dataset’ for this example. Using hockey and soccer players as examples
 of classes, your dataset should be organized in the directory as follows:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">/</span>
   <span class="n">image_dataset</span><span class="o">/</span>
@@ -203,6 +208,7 @@ to that number:</p>
 <span class="n">augmentor</span><span class="o">.</span><span class="n">generate_images</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>If you don’t want to generate new images there is an option to do data augmentation during training by modifying the training data online.</p>
 </div>
 <div class="section" id="generate-tfrecord-files">
 <h2>Generate Tfrecord files<a class="headerlink" href="#generate-tfrecord-files" title="Permalink to this headline">¶</a></h2>
@@ -223,37 +229,29 @@ a csv file with the names of your classes.</p>
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="train_example.html" class="btn btn-neutral float-right" title="Train and optimize model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="utils.html" class="btn btn-neutral float-left" title="Utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="train_example.html" class="btn btn-neutral float-right" title="Train and optimize model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="utils.html" class="btn btn-neutral float-left" title="Utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2020, Decathlon Canada
+        &#169; Copyright 2020, Decathlon Canada.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 

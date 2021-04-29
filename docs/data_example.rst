@@ -6,11 +6,11 @@ perform data augmentation on your images and transform the dataset into tfrecord
 The data can come from any source and the only requirement is that the images are saved in separate folders for each class.
 
 
-Spliting a set of images into a training and a validation set
--------------------------------------------------------------
+Splitting a set of images into a training and a validation set
+----------------------------------------------------------------
 
 If you have a single set of images, but would like to split it into a training and a validation set, first place your images in 
-a train folder, which is located in the folder 'data/image_dataset' for this example. Using hockey and soccer players as examples 
+a train folder located in 'data/image_dataset' for this example. Using hockey and soccer players as examples
 of classes, your dataset should be organized in the directory as follows::
 
   data/

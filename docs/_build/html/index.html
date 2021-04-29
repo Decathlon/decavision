@@ -3,11 +3,11 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Welcome to DecaVision’s documentation! &mdash; decavision 1.1.2 documentation</title>
+  <title>Welcome to DecaVision’s documentation! &mdash; decavision 1.2.0 documentation</title>
   
 
   
@@ -16,7 +16,10 @@
 
   
   
+
   
+  
+
   
 
   
@@ -29,7 +32,6 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -50,7 +52,7 @@
           
 
           
-            <a href="#" class="icon icon-home" alt="Documentation Home"> decavision
+            <a href="#" class="icon icon-home"> decavision
           
 
           
@@ -92,6 +94,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="data_example.html">Build a dataset from scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="train_example.html">Train and optimize model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssl_example.html">Improve a classification model using unlabelled images</a></li>
 </ul>
 
             
@@ -134,6 +137,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -145,7 +150,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             
               <!-- User defined GitHub URL -->
               <a href="https://github.com/Decathlon/decavision.git" class="fa fa-github"> Edit on GitHub</a>
@@ -169,8 +174,14 @@
 built on top of various pretrained models, optimize model hyperparameters using scikit-optimize library and evaluate
 the accuracy on a test set. The library capitalizes on the concepts of data augmentation, fine tuning and
 hyperparameter optimization, to achieve high accuracy given small sets of training images.</p>
-<p>This library has a few distinguishing features. It is specifically designed to work with Google Colab notebooks and leverage their TPUs, to seamlessly transition from quick iterations of modeling approaches to large-scale training. Functionalities of hyperparmaters tuning and progressive learning are included and easily integrated in the pipeline to reach higher accuracy. Finally, state-of-the art efficientnet transfer learning models and Tensorflow 2 functionalities are considered to provide high efficiency.</p>
+<p>This library has a few distinguishing features. It is specifically designed to work with Google Colab notebooks and
+leverage their TPUs, to seamlessly transition from quick iterations of modeling approaches to large-scale training.
+Functionalities of hyperparmaters tuning and progressive learning are included and easily integrated in the pipeline to
+reach higher accuracy. Finally, state-of-the art EfficientNet transfer learning models and TensorFlow 2 functionalities
+are considered to provide high efficiency.</p>
 <p>A great way of explaining the library is using an example notebook, which you can find <a class="reference external" href="https://colab.research.google.com/drive/1s9pnNotdPoHI4n_7OZl4zwEP9rccJ3f-?usp=sharing/">here</a>.</p>
+<p>The most recent version of this library adds a feature to leverage unlabelled images in order to improve the performance
+of image classifiers. This procedure is called semi-supervised learning (SSL) and is discussed in this <a class="reference external" href="https://medium.com/decathlondevelopers/improving-performance-of-image-classification-models-using-pretraining-and-a-combination-of-e271c96808d2/">blog post</a>.</p>
 </div>
 <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
@@ -205,6 +216,7 @@ shows examples of how to use the code explicitely.</p>
 <li class="toctree-l1"><a class="reference internal" href="data.html">Preparing datasets</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="data.html#module-decavision.dataset_preparation.data_augmentation">Data augmentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data.html#module-decavision.dataset_preparation.generate_tfrecords">Make tfrecords</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#module-decavision.dataset_preparation.generate_pseudolabels">Generate pseudo labels for unlabelled data</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="train.html">Train models</a><ul>
@@ -226,7 +238,7 @@ shows examples of how to use the code explicitely.</p>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="data_example.html">Build a dataset from scratch</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="data_example.html#spliting-a-set-of-images-into-a-training-and-a-validation-set">Spliting a set of images into a training and a validation set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_example.html#splitting-a-set-of-images-into-a-training-and-a-validation-set">Splitting a set of images into a training and a validation set</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_example.html#make-data-augmentation-on-training-images">Make data augmentation on training images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_example.html#generate-tfrecord-files">Generate Tfrecord files</a></li>
 </ul>
@@ -235,6 +247,12 @@ shows examples of how to use the code explicitely.</p>
 <li class="toctree-l2"><a class="reference internal" href="train_example.html#training-the-classification-model">Training the classification model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="train_example.html#saving-and-exporting-the-keras-model">Saving and exporting the keras model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="train_example.html#optimization-of-the-hyperparameters">Optimization of the hyperparameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ssl_example.html">Improve a classification model using unlabelled images</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ssl_example.html#preliminary-steps">Preliminary steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssl_example.html#generating-pseudo-labels">Generating pseudo labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssl_example.html#training-the-student-model">Training the student model</a></li>
 </ul>
 </li>
 </ul>
@@ -246,7 +264,7 @@ shows examples of how to use the code explicitely.</p>
 </div>
 <div class="section" id="support">
 <h1>Support<a class="headerlink" href="#support" title="Permalink to this headline">¶</a></h1>
-<p>Pull requests to the library are welcomed.  If you have any problem, question or suggestion regarding this library, don’t hesitate to create an issue or contact us at <a class="reference external" href="mailto:aicanada&#37;&#52;&#48;decathlon&#46;net">aicanada<span>&#64;</span>decathlon<span>&#46;</span>net</a>.</p>
+<p>Pull requests to the library are welcomed. If you have any problem, question or suggestion regarding this library, don’t hesitate to create an issue or contact us at <a class="reference external" href="mailto:aicanada&#37;&#52;&#48;decathlon&#46;net">aicanada<span>&#64;</span>decathlon<span>&#46;</span>net</a>.</p>
 </div>
 
 
@@ -254,35 +272,28 @@ shows examples of how to use the code explicitely.</p>
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="data.html" class="btn btn-neutral float-right" title="Preparing datasets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
+        <a href="data.html" class="btn btn-neutral float-right" title="Preparing datasets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2020, Decathlon Canada
+        &#169; Copyright 2020, Decathlon Canada.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
