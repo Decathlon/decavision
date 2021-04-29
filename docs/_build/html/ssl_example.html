@@ -1,0 +1,272 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Improve a model using unlabelled images &mdash; decavision 1.2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Train and optimize model" href="train_example.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> decavision
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Preparing datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="train.html">Train models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Model testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="data_example.html">Build a dataset from scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="train_example.html">Train and optimize model</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Improve a model using unlabelled images</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#preliminary-steps">Preliminary steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generating-pseudo-labels">Generating pseudo labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#training-the-student-model">Training the student model</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">decavision</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Improve a model using unlabelled images</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/ssl_example.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="improve-a-model-using-unlabelled-images">
+<h1>Improve a model using unlabelled images<a class="headerlink" href="#improve-a-model-using-unlabelled-images" title="Permalink to this headline">¶</a></h1>
+<p>This code example shows how to use this library to exploit unlabelled data to increase the performance of an image
+classifier. The main procedure consists in first training a classifier using the labelled data (or using an already
+trained one). Then this model is used to make predictions for the unlabelled data, which are used as pseudo labels to
+create a new dataset. This larger dataset is then used to train a larger and more performant classifier.</p>
+<div class="section" id="preliminary-steps">
+<h2>Preliminary steps<a class="headerlink" href="#preliminary-steps" title="Permalink to this headline">¶</a></h2>
+<p>The first ingredient necessary to use semi-supervised learning is a labelled dataset, exactly as described in
+<a class="reference internal" href="data_example.html"><span class="doc">Build a dataset from scratch</span></a>, saved at ‘data/image_dataset’. This dataset is used as in <a class="reference internal" href="train_example.html"><span class="doc">Train and optimize model</span></a> to train the best
+possible model, which is called in this context the <em>teacher</em> and is saved as ‘model.h5’. Of course in the context
+where you want to improve a model, you skip this step and use your own existing model.</p>
+<p>The other ingredient is a dataset of unlabelled images. This is ideally (but not necessarily) composed of relevant
+images to the problem that are not split into categories. The images are saved in a single folder called ‘data/unlabeled’.</p>
+</div>
+<div class="section" id="generating-pseudo-labels">
+<h2>Generating pseudo labels<a class="headerlink" href="#generating-pseudo-labels" title="Permalink to this headline">¶</a></h2>
+<p>The most important step in semi-supervised learning consists in labelling the unlabelled data, which is done using the
+following code:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">generator</span> <span class="o">=</span> <span class="n">decavision</span><span class="o">.</span><span class="n">dataset_preparation</span><span class="o">.</span><span class="n">generate_pseudolabels</span><span class="o">.</span><span class="n">PseudoLabelGenerator</span><span class="p">()</span>
+<span class="n">generator</span><span class="o">.</span><span class="n">generate_pseudolabel_data</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This uses the teacher model to predict the label of each unlabelled image. These predictions are then saved in a csv file at ‘outputs/data.csv’.</p>
+<p>Since the unlabelled images can come from different places, it is important to make sure that bad images are not used
+further. To ensure data quality, it can be helpful to plot the distribution of the predictions using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">generator</span><span class="o">.</span><span class="n">plot_confidence_scores</span><span class="p">(</span><span class="n">per_class</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A chart will be saved in the ‘outputs’ folder with the highest probability predicted for each image. If some probabilities
+are too low, it means that the image is so bad that the teacher model does not recognize it. Such image should ideally
+be discarded. This chart thus helps pick the threshold variable that will be used to create the new dataset with only relevant images.</p>
+<p>The final step is to use the predictions along with the threshold (if one is used) to distribute the unlabelled images
+into classes. This pseudo labelled dataset is then combined with the original training data to make a larger dataset:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">generator</span><span class="o">.</span><span class="n">move_unlabeled_images</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that the original datasets are kept intact. The larger dataset is made from copies of the images.</p>
+<p>All these steps can also be done directly with the following code:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">generator</span><span class="o">.</span><span class="n">generate_pseudolabel_data</span><span class="p">(</span><span class="n">plot_confidences</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">move_images</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="training-the-student-model">
+<h2>Training the student model<a class="headerlink" href="#training-the-student-model" title="Permalink to this headline">¶</a></h2>
+<p>With the larger dataset in hand the last step is to train a new and improved model, the <em>student</em> model, using the same
+method that was used for the teacher model. There are only a few points that are important to keep in mind to achieve
+the best model possible:</p>
+<ul class="simple">
+<li><p>Make sure that you use data augmentation when training the student model.</p></li>
+<li><p>Use a larger model. For example if you used EfficientNet B3 for the teacher, try B5 for the student.</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="train_example.html" class="btn btn-neutral float-left" title="Train and optimize model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Decathlon Canada.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
