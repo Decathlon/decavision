@@ -13,7 +13,8 @@ from tqdm import tqdm
 
 class PseudoLabelGenerator:
     """
-    Class to generate pseudo labels.
+    Class to generate pseudo labels for unlabeled images using a trained model.
+
     Arguments:
         model_path (str): location of the h5 tensorflow model to use
         train_data_path (str): folder which holds training data
@@ -49,7 +50,7 @@ class PseudoLabelGenerator:
         """
         Load an image from a given path and normalize it
 
-        Args:
+        Arguments:
             path (list): Input image path
             target_size (tuple): Size of image
         Returns:
