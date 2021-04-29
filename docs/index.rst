@@ -15,9 +15,16 @@ built on top of various pretrained models, optimize model hyperparameters using 
 the accuracy on a test set. The library capitalizes on the concepts of data augmentation, fine tuning and 
 hyperparameter optimization, to achieve high accuracy given small sets of training images.
 
-This library has a few distinguishing features. It is specifically designed to work with Google Colab notebooks and leverage their TPUs, to seamlessly transition from quick iterations of modeling approaches to large-scale training. Functionalities of hyperparmaters tuning and progressive learning are included and easily integrated in the pipeline to reach higher accuracy. Finally, state-of-the art efficientnet transfer learning models and Tensorflow 2 functionalities are considered to provide high efficiency. 
+This library has a few distinguishing features. It is specifically designed to work with Google Colab notebooks and
+leverage their TPUs, to seamlessly transition from quick iterations of modeling approaches to large-scale training.
+Functionalities of hyperparmaters tuning and progressive learning are included and easily integrated in the pipeline to
+reach higher accuracy. Finally, state-of-the art efficientnet transfer learning models and Tensorflow 2 functionalities
+are considered to provide high efficiency.
 
 A great way of explaining the library is using an example notebook, which you can find `here <https://colab.research.google.com/drive/1s9pnNotdPoHI4n_7OZl4zwEP9rccJ3f-?usp=sharing/>`_. 
+
+The most recent version of this library adds a feature to leverage unlabelled images in order to improve the performance
+of image classifiers. This procedure is called semi-supervised learning and is discussed in this `blog post <https://medium.com/decathlondevelopers/improving-performance-of-image-classification-models-using-pretraining-and-a-combination-of-e271c96808d2/>`_.
 
 Installation
 =============
@@ -67,6 +74,7 @@ shows examples of how to use the code explicitely.
 
    data_example
    train_example
+   ssl_example
 
 Roadmap
 =======
@@ -76,4 +84,4 @@ Follow the `Sport Vision API <https://developers.decathlon.com/products/sport-vi
 Support
 ========
 
-Pull requests to the library are welcomed.  If you have any problem, question or suggestion regarding this library, don't hesitate to create an issue or contact us at aicanada@decathlon.net.
+Pull requests to the library are welcomed. If you have any problem, question or suggestion regarding this library, don't hesitate to create an issue or contact us at aicanada@decathlon.net.
