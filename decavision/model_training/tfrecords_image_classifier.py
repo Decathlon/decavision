@@ -328,14 +328,14 @@ class ImageClassifier:
             tpu_cluster_resolver = tf.distribute.cluster_resolver.TPUClusterResolver()
             tf.config.experimental_connect_to_cluster(tpu_cluster_resolver)
             tf.tpu.experimental.initialize_tpu_system(tpu_cluster_resolver)
-            strategy = tf.distribute.experimental.TPUStrategy(
+            strategy = tf.distribute.TPUStrategy(
                 tpu_cluster_resolver)
 
             with strategy.scope():
                 model, base_model_last_block, loss, metrics = self._create_model(
                     activation, hidden_size, dropout, l2_lambda)
                 print('Compiling for TPU')
-                optimizer = tf.keras.optimizers.Adam(lr=learning_rate)
+                optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
                 model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
 
         else:
@@ -343,7 +343,7 @@ class ImageClassifier:
                 activation, hidden_size, dropout, l2_lambda)
             print('Compiling for GPU') if self.use_GPU else print(
                 'Compiling for CPU')
-            optimizer = tf.keras.optimizers.Adam(lr=learning_rate)
+            optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
             model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
 
         print('Fitting')
@@ -371,7 +371,7 @@ class ImageClassifier:
             # Fit the model
             # we need to recompile the model for these modifications to take effect with a low learning rate
             print('Recompiling model')
-            optimizer = tf.keras.optimizers.Adam(lr=learning_rate_fine_tuning)
+            optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate_fine_tuning)
             model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
 
             print('Fine tunning')
