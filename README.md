@@ -49,8 +49,15 @@ You will have to update the version number in the setup.py file. Increase the fi
 the second digit for MINOR changes and the third digit for BUG FIXES.
 
 Also make sure that you create a new release on github at the commit that you deploy. To do so you have to create a tag 
-with the version number and add it to a release.
-
+with the version number and add it to a release. The command to create a tag is
+```
+git tag -a vX.X.X commit_id -m "Your message here"
+```
+with the `commit_id``being the id of the commit that you are deploying. Then you just use
+```
+git push origin vX.X.X
+```
+to send the tag to github.
 
 ### Process (dev)
 
