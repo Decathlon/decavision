@@ -22,7 +22,7 @@ copyright = '2020, Decathlon Canada'
 author = 'Decathlon Canada'
 
 # The full version, including alpha/beta/rc tags
-release = '1.2.0'
+release = '1.2.1'
 
 
 # -- General configuration ---------------------------------------------------
