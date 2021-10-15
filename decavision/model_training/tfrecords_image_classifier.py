@@ -84,8 +84,14 @@ class ImageClassifier:
         self.validation_steps = int(nb_val_images / self.batch_size)
         print('Val steps per epochs = ' + str(self.validation_steps))
 
-        if transfer_model in ['Inception', 'Xception', 'Inception_Resnet', 'B3', 'B5', 'B7']:
+        if transfer_model in ['Inception', 'Xception', 'Inception_Resnet']:
             self.target_size = (299, 299)
+        elif transfer_model == 'B3':
+            self.target_size = (300, 300)
+        elif transfer_model == 'B5':
+            self.target_size = (456, 456)
+        elif transfer_model == 'B7':
+            self.target_size = (600, 600)
         else:
             self.target_size = (224, 224)
 
@@ -115,7 +121,9 @@ class ImageClassifier:
             example = tf.io.parse_single_example(example, features)
 
             image = tf.image.decode_jpeg(example['image'], channels=3)
-            image = tf.image.convert_image_dtype(image, dtype=tf.float32)
+            # normalization of pixels is already done in TF EfficientNets
+            if self.transfer_model not in ['B0', 'B3', 'B5', 'B7']:
+                image = tf.image.convert_image_dtype(image, dtype=tf.float32)
             feature = tf.image.resize(image, [*self.target_size])
             label = tf.cast([example['label']], tf.int32)
             return feature, label
@@ -225,20 +233,20 @@ class ImageClassifier:
                                                         include_top=False, input_shape=(*self.target_size, 3))
             base_model_last_block = 155  # last block 165, two blocks 155
         elif self.transfer_model == 'B0':
-            base_model = EfficientNetB0(weights='imagenet', include_top=False,
+            base_model = tf.keras.applications.EfficientNetB0(weights='imagenet', include_top=False,
                                         input_shape=(*self.target_size, 3))
             base_model_last_block = 213  # last block 229, two blocks 213
         elif self.transfer_model == 'B3':
-            base_model = EfficientNetB3(weights='imagenet', include_top=False,
+            base_model = tf.keras.applications.EfficientNetB3(weights='imagenet', include_top=False,
                                         input_shape=(*self.target_size, 3))
             base_model_last_block = 354  # last block 370, two blocks 354
         elif self.transfer_model == 'B5':
-            base_model = EfficientNetB5(weights='imagenet', include_top=False,
+            base_model = tf.keras.applications.EfficientNetB5(weights='imagenet', include_top=False,
                                         input_shape=(*self.target_size, 3))
             base_model_last_block = 417  # last block 559, two blocks 417
 
         elif self.transfer_model == 'B7':
-            base_model = EfficientNetB7(weights='imagenet', include_top=False,
+            base_model = tf.keras.applications.EfficientNetB7(weights='imagenet', include_top=False,
                                         input_shape=(*self.target_size, 3))
             base_model_last_block = None  # all layers trainable
         else:
