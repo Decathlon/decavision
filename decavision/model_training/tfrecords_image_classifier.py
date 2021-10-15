@@ -6,6 +6,7 @@ import os
 import dill
 import skopt
 import tensorflow as tf
+import tensorflow_hub as hub
 from efficientnet.tfkeras import EfficientNetB0, EfficientNetB3, EfficientNetB5, EfficientNetB7
 
 from decavision.utils import training_utils
@@ -84,7 +85,7 @@ class ImageClassifier:
         self.validation_steps = int(nb_val_images / self.batch_size)
         print('Val steps per epochs = ' + str(self.validation_steps))
 
-        if transfer_model in ['Inception', 'Xception', 'Inception_Resnet', 'B3', 'B5', 'B7']:
+        if transfer_model in ['Inception', 'Xception', 'Inception_Resnet', 'B3', 'B5', 'B7', 'V2']:
             self.target_size = (299, 299)
         else:
             self.target_size = (224, 224)
@@ -241,6 +242,14 @@ class ImageClassifier:
             base_model = EfficientNetB7(weights='imagenet', include_top=False,
                                         input_shape=(*self.target_size, 3))
             base_model_last_block = None  # all layers trainable
+        elif self.transfer_model == 'V2':
+            print("Downloading model from tensorflow hub")
+            url = 'https://tfhub.dev/google/imagenet/efficientnet_v2_imagenet21k_m/feature_vector/2'
+            layer = hub.KerasLayer(url, trainable=True, input_shape=self.target_size)
+            input = tf.keras.layers.Input(shape = (*self.target_size, 3))
+            output = layer(input)
+            base_model = tf.keras.Model(inputs=input, outputs=output)
+            base_model_last_block = None  # all layers trainable
         else:
             base_model = tf.keras.applications.InceptionV3(weights='imagenet',
                                                            include_top=False, input_shape=(*self.target_size, 3))
@@ -252,7 +261,8 @@ class ImageClassifier:
 
         # Add the classification layers using Keras functional API
         x = base_model.output
-        x = tf.keras.layers.GlobalAveragePooling2D()(x)
+        if self.transfer_model != 'V2':
+            x = tf.keras.layers.GlobalAveragePooling2D()(x)
         # Hidden layer for classification
         if hidden_size == 0:
             x = tf.keras.layers.Dropout(rate=dropout)(x)

@@ -12,4 +12,5 @@ scikit-learn==0.23.2
 scikit-optimize==0.8.1
 seaborn==0.11.0
 tensorflow>=2.5.0
+tensorflow-hub
 tqdm==4.60.0
