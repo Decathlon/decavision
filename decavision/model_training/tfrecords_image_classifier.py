@@ -242,9 +242,14 @@ class ImageClassifier:
             base_model = EfficientNetB7(weights='imagenet', include_top=False,
                                         input_shape=(*self.target_size, 3))
             base_model_last_block = None  # all layers trainable
-        elif self.transfer_model == 'V2':
+        elif self.transfer_model in ['V2-S', 'V2-M', 'V2-L', 'V2-XL']:
             print("Downloading model from tensorflow hub")
-            url = 'https://tfhub.dev/google/imagenet/efficientnet_v2_imagenet21k_m/feature_vector/2'
+            os.environ["TFHUB_MODEL_LOAD_FORMAT"] = "UNCOMPRESSED"
+            tfhub_links = {'V2-S': 'https://tfhub.dev/google/imagenet/efficientnet_v2_imagenet21k_s/feature_vector/2',
+                           'V2-M': 'https://tfhub.dev/google/imagenet/efficientnet_v2_imagenet21k_m/feature_vector/2',
+                           'V2-L': 'https://tfhub.dev/google/imagenet/efficientnet_v2_imagenet21k_l/feature_vector/2',
+                           'V2-XL': 'https://tfhub.dev/google/imagenet/efficientnet_v2_imagenet21k_xl/feature_vector/2'}
+            url = tfhub_links[self.transfer_model]
             layer = hub.KerasLayer(url, trainable=True, input_shape=self.target_size)
             input = tf.keras.layers.Input(shape = (*self.target_size, 3))
             output = layer(input)
