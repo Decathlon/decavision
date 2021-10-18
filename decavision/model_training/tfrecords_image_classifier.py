@@ -266,7 +266,7 @@ class ImageClassifier:
 
         # Add the classification layers using Keras functional API
         x = base_model.output
-        if self.transfer_model != 'V2':
+        if self.transfer_model in ['V2-S', 'V2-M', 'V2-L', 'V2-XL']:
             x = tf.keras.layers.GlobalAveragePooling2D()(x)
         # Hidden layer for classification
         if hidden_size == 0:
