@@ -85,14 +85,22 @@ class ImageClassifier:
         print('Val steps per epochs = ' + str(self.validation_steps))
 
         if transfer_model in ['Inception', 'Xception', 'Inception_Resnet']:
+            self.scale = 1.
             self.target_size = (299, 299)
+        elif transfer_model == 'B0':
+            self.scale = 255.
+            self.target_size = (224, 224)
         elif transfer_model == 'B3':
+            self.scale = 255.
             self.target_size = (300, 300)
         elif transfer_model == 'B5':
+            self.scale = 255.
             self.target_size = (456, 456)
         elif transfer_model == 'B7':
+            self.scale = 255.
             self.target_size = (600, 600)
         else:
+            self.scale = 1.
             self.target_size = (224, 224)
 
         print("Data augmentation during training: " + str(augment))
@@ -174,7 +182,7 @@ class ImageClassifier:
         image = tf.image.random_brightness(image, max_delta=32.0 / 255.0)
         image = tf.image.random_saturation(image, lower=0.5, upper=1.5)
         # Make sure the image is still in [0, 1] range, after augmentation
-        image = tf.clip_by_value(image, 0.0, 1.0)
+        image = tf.clip_by_value(image, 0.0, self.scale)
         return image, label
 
     def get_training_dataset(self):
