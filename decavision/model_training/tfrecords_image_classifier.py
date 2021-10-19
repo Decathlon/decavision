@@ -289,9 +289,7 @@ class ImageClassifier:
         loss = 'sparse_categorical_crossentropy'
         metrics = ['sparse_categorical_accuracy']
 
-        model =  tf.keras.Model(inputs=base_model.input, outputs=predictions)
-        model._name = self.transfer_model
-        return model, base_model_last_block, loss, metrics
+        return tf.keras.Model(inputs=base_model.input, outputs=predictions, name=self.transfer_model), base_model_last_block, loss, metrics
 
     def fit(self, save_model=None, export_model=None, patience=0,
             epochs=5, hidden_size=1024, learning_rate=1e-3, learning_rate_fine_tuning=1e-4,
