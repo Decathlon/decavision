@@ -1,6 +1,5 @@
 augmentor==0.2.8
 dill==0.3.2
-efficientnet==1.1.1
 google-cloud-storage==1.31.2
 matplotlib==3.3.2
 numpy==1.19.2
