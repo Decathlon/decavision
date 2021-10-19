@@ -85,24 +85,23 @@ class ImageClassifier:
         self.validation_steps = int(nb_val_images / self.batch_size)
         print('Val steps per epochs = ' + str(self.validation_steps))
 
-        if transfer_model in ['Inception', 'Xception', 'Inception_Resnet']:
-            self.scale = 1.
-            self.target_size = (299, 299)
-        elif transfer_model == 'B0':
+        input_dims = {'Inception': 299,
+                      'Xception': 299,
+                      'Inception Resnet': 299,
+                      'B0': 224,
+                      'B3': 300,
+                      'B5': 456,
+                      'B7': 600,
+                      'V2-S': 384,
+                      'V2-M': 480,
+                      'V2-L': 480,
+                      'V2-XL': 512}
+        if transfer_model in ['B0', 'B3', 'B5', 'B7']:
             self.scale = 255.
-            self.target_size = (224, 224)
-        elif transfer_model == 'B3':
-            self.scale = 255.
-            self.target_size = (300, 300)
-        elif transfer_model == 'B5':
-            self.scale = 255.
-            self.target_size = (456, 456)
-        elif transfer_model == 'B7':
-            self.scale = 255.
-            self.target_size = (600, 600)
         else:
             self.scale = 1.
-            self.target_size = (224, 224)
+
+        self.target_size = (input_dims.get(self.transfer_model, 224), input_dims.get(self.transfer_model, 224))
 
         print("Data augmentation during training: " + str(augment))
 
