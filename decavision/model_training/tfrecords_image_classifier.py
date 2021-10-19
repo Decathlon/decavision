@@ -319,6 +319,9 @@ class ImageClassifier:
         training is done with the last block of the pretrained model unfrozen. Training can be stopped if
         no sufficient improvement in accuracy.
 
+        If one of the Efficientnet Bs is used, the model includes a layer that normalizes the pixels. This processing
+        step is not included in the other models so it has to be done on the data separately.
+
         Arguments:
             learning_rate (float): learning rate used when training extra layers
             learning_rate_fine_tuning (float): learning rate used when fine tuning pretrained model
