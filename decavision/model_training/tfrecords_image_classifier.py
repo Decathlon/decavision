@@ -6,6 +6,7 @@ import os
 import dill
 import skopt
 import tensorflow as tf
+import tensorflow_hub as hub
 from efficientnet.tfkeras import EfficientNetB0, EfficientNetB3, EfficientNetB5, EfficientNetB7
 
 from decavision.utils import training_utils
@@ -257,6 +258,19 @@ class ImageClassifier:
             base_model = tf.keras.applications.EfficientNetB7(weights='imagenet', include_top=False,
                                         input_shape=(*self.target_size, 3))
             base_model_last_block = None  # all layers trainable
+        elif self.transfer_model in ['V2-S', 'V2-M', 'V2-L', 'V2-XL']:
+            print("Downloading model from tensorflow hub")
+            os.environ["TFHUB_MODEL_LOAD_FORMAT"] = "UNCOMPRESSED"
+            tfhub_links = {'V2-S': 'https://tfhub.dev/google/imagenet/efficientnet_v2_imagenet21k_s/feature_vector/2',
+                           'V2-M': 'https://tfhub.dev/google/imagenet/efficientnet_v2_imagenet21k_m/feature_vector/2',
+                           'V2-L': 'https://tfhub.dev/google/imagenet/efficientnet_v2_imagenet21k_l/feature_vector/2',
+                           'V2-XL': 'https://tfhub.dev/google/imagenet/efficientnet_v2_imagenet21k_xl/feature_vector/2'}
+            url = tfhub_links[self.transfer_model]
+            layer = hub.KerasLayer(url, trainable=True, input_shape=self.target_size)
+            input = tf.keras.layers.Input(shape = (*self.target_size, 3))
+            output = layer(input)
+            base_model = tf.keras.Model(inputs=input, outputs=output)
+            base_model_last_block = None  # all layers trainable
         else:
             base_model = tf.keras.applications.InceptionV3(weights='imagenet',
                                                            include_top=False, input_shape=(*self.target_size, 3))
@@ -268,7 +282,8 @@ class ImageClassifier:
 
         # Add the classification layers using Keras functional API
         x = base_model.output
-        x = tf.keras.layers.GlobalAveragePooling2D()(x)
+        if self.transfer_model not in ['V2-S', 'V2-M', 'V2-L', 'V2-XL']:
+            x = tf.keras.layers.GlobalAveragePooling2D()(x)
         # Hidden layer for classification
         if hidden_size == 0:
             x = tf.keras.layers.Dropout(rate=dropout)(x)
