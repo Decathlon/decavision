@@ -27,9 +27,10 @@ class ImageClassifier:
         transfer_model (str): pretrained model to use for transfer learning, can be one of Inception,
             Xception, Inception_Resnet, Resnet, (EfficientNet) B0, B3, B5, B7 or (EfficientnetV2) V2-S, V2-M, V2-L, V2-XL
         augment (boolean): Whether to augment the training data, default is True
+        input_shape (tuple(int,int)): shape of the input images for the model, if not specified, recommended sizes are used for each one
     """
 
-    def __init__(self, tfrecords_folder, batch_size=128, transfer_model='Inception', augment=True):
+    def __init__(self, tfrecords_folder, batch_size=128, transfer_model='Inception', augment=True, input_shape=None):
 
         self.tfrecords_folder = tfrecords_folder
         self.use_TPU, self.use_GPU = utils.check_PU()
@@ -100,7 +101,10 @@ class ImageClassifier:
         else:
             self.scale = 1.
 
-        self.target_size = (input_dims.get(self.transfer_model, 224), input_dims.get(self.transfer_model, 224))
+        if input_shape:
+            self.target_size = input_shape
+        else:
+            self.target_size = (input_dims.get(self.transfer_model, 224), input_dims.get(self.transfer_model, 224))
 
         print("Data augmentation during training: " + str(augment))
 
