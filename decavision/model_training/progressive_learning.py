@@ -19,7 +19,7 @@ class ProgressiveLearner(ImageClassifier):
             folders train and val, filenames of the form filenumber-numberofimages.tfrec
         model_path (str): path to .h5 model trained with this library on the old classes
         transfer_model (str): pretrained model that was used to train the old model, can be one of Inception,
-            Xception, Inception_Resnet, Resnet, B0, B3 or B5
+            Xception, Inception_Resnet, Resnet, B0, B3, B5, B7, V2-S, V2-M, V2-L or V2-XL
         batch_size (int): size of batches of data used for training
     """
 
@@ -101,7 +101,7 @@ class ProgressiveLearner(ImageClassifier):
 
     def fit(self, learning_rate=1e-3, learning_rate_fine_tuning=1e-4,
             epochs=5, save_model=False, verbose=True,
-            fine_tuning=True, min_accuracy=None, logs=None):
+            fine_tuning=True, logs=None):
         """
         Train an image classification model based on a model trained with a smaller number of classes.
         The whole model is trained, unless there is some fine tuning, in which case a second round of

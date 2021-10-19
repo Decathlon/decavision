@@ -25,7 +25,7 @@ class ImageClassifier:
             folders train and val, filenames of the form filenumber-numberofimages.tfrec
         batch_size (int): size of batches of data used for training
         transfer_model (str): pretrained model to use for transfer learning, can be one of Inception,
-            Xception, Inception_Resnet, Resnet, (EfficientNet) B0, B3, B5 or B7
+            Xception, Inception_Resnet, Resnet, (EfficientNet) B0, B3, B5, B7 or (EfficientnetV2) V2-S, V2-M, V2-L, V2-XL
         augment (boolean): Whether to augment the training data, default is True
     """
 
