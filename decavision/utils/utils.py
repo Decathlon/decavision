@@ -6,7 +6,7 @@ from google.cloud import storage
 import tensorflow as tf
 
 
-def load_model(path, include_top=True):
+def load_model_clear(path, include_top=True):
     """
     Clear tensorflow session and load keras .h5 model.
 

@@ -1,5 +1,6 @@
 import numpy as np
 import tensorflow as tf
+import tensorflow_hub as hub
 
 from decavision.model_training.tfrecords_image_classifier import ImageClassifier
 from decavision.utils import training_utils
@@ -28,7 +29,7 @@ class ProgressiveLearner(ImageClassifier):
         self.distil = False
         self.temp = 5
         self.L = 5
-        self.old_model = utils.load_model(model_path)
+        self.old_model = utils.load_model_clear(model_path)
         self.logits = self.old_model.layers[-2].output
 
     def _update_model(self):
