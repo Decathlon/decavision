@@ -4,7 +4,7 @@ import sys
 
 from google.cloud import storage
 import tensorflow as tf
-from tensorflow_hub import hub
+import tensorflow_hub as hub
 
 
 def load_model_clear(path, include_top=True):
