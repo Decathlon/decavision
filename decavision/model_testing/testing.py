@@ -9,6 +9,7 @@ import seaborn as sn
 from sklearn.metrics import confusion_matrix, classification_report
 import tensorflow as tf
 from tensorflow.keras.models import load_model
+import tensorflow_hub as hub
 
 from decavision.utils import data_utils
 from decavision.utils import utils
@@ -29,7 +30,7 @@ class ModelTester:
             # necessary because keras generators don'T work with TPUs...
             tf.compat.v1.disable_eager_execution()
         try:
-            self.model = load_model(model)
+            self.model = load_model(model, custom_objects={"KerasLayer": hub.KerasLayer})
             # efficientnets have the scaling included in them so no need to rescale the images when loading
             if self.model.name[0] == 'B':
                 self.rescaling = 1

@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 from tensorflow.keras.models import load_model
+import tensorflow_hub as hub
 from tqdm import tqdm
 
 
@@ -35,7 +36,7 @@ class PseudoLabelGenerator:
         self.csv_path = os.path.join(self.output_folder, csv_filename)
 
         # Load model
-        self.model = load_model(model_path, compile=False)
+        self.model = load_model(model_path, compile=False, custom_objects={"KerasLayer": hub.KerasLayer})
         print("Loaded model.")
 
         # Make new output folder

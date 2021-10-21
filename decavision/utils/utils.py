@@ -4,6 +4,7 @@ import sys
 
 from google.cloud import storage
 import tensorflow as tf
+from tensorflow_hub import hub
 
 
 def load_model_clear(path, include_top=True):
@@ -18,7 +19,7 @@ def load_model_clear(path, include_top=True):
         tf.keras model: loaded model
     """
     tf.keras.backend.clear_session()
-    model = tf.keras.models.load_model(path, compile=include_top)
+    model = tf.keras.models.load_model(path, compile=include_top, custom_objects={"KerasLayer": hub.KerasLayer})
     print('Model loaded !')
     if not include_top:
         model = tf.keras.Model(inputs=model.input, outputs=model.layers[-2].output)

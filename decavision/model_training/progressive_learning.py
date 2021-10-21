@@ -1,6 +1,5 @@
 import numpy as np
 import tensorflow as tf
-import tensorflow_hub as hub
 
 from decavision.model_training.tfrecords_image_classifier import ImageClassifier
 from decavision.utils import training_utils
