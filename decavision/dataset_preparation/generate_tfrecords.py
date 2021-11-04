@@ -27,7 +27,7 @@ class TfrecordsGenerator:
 
     def convert_image_folder(self, img_folder='data/image_dataset/train',
                              output_folder='data/image_dataset/train',
-                             img_folder_new=None,
+                             img_folder_new=None, target_size=None,
                              shards=16):
         """
         Convert all images in a folder (like train or val) to tfrecords. Folder must contain subfolders for each category.
@@ -40,6 +40,7 @@ class TfrecordsGenerator:
             img_folder_new (str): if specified, images from this folder are included in the tfrecords as
                 new categories for the purpose of progressive learning
             shards (int): number of files to create
+            target_size (tuple(int,int)): size to reshape the images if desired
         """
         # Create output directory if it does not exists
         if not os.path.exists(output_folder):
@@ -69,7 +70,12 @@ class TfrecordsGenerator:
             label = tf.strings.split(tf.expand_dims(filename, axis=-1), sep=utils.check_sep())
             label = label.values[-2]
             return image, label
-        
+
+        def resize_image(image, label):
+            image = tf.image.resize(image, size=[*target_size])
+            image = tf.reshape(image, [*target_size, 3])
+            return image, label
+
         def recompress_image(image, label):
             image = tf.cast(image, tf.uint8)
             image = tf.image.encode_jpeg(image, quality=100, format = 'rgb',
@@ -80,6 +86,8 @@ class TfrecordsGenerator:
         
         filenames = tf.data.Dataset.list_files(img_pattern)  # This also shuffles the images
         dataset = filenames.map(decode_jpeg_and_label, num_parallel_calls=AUTO)
+        if target_size:
+            dataset = dataset.map(resize_image, num_parallel_calls=AUTO)
         dataset = dataset.map(recompress_image, num_parallel_calls=AUTO)
         dataset = dataset.batch(shard_size)  # sharding: there will be one "batch" of images per file
         
