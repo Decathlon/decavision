@@ -7,7 +7,7 @@ with open('requirements.txt', 'r') as req:
 
 setuptools.setup(
     name="decavision",
-    version="1.2.1",
+    version="1.3.0",
     author="Décathlon Canada",
     author_email="sportvisionapi@decathlon.com",
     description="A package to easily train powerful image classification models using colab's free TPUs.",
@@ -16,6 +16,10 @@ setuptools.setup(
                         in Google colab notebooks. You can find the full documentation 
                         [here](https://decavision-doc.herokuapp.com/)
 
+                        ## Version 1.3.0
+                        Use suggested image sizes
+                        Add EfficientNetV2 models
+                        
                         ## Version 1.2.1
                         Change to Tensorflow 2.5
 
