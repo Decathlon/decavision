@@ -25,13 +25,13 @@ A great way of explaining the library is using an example notebook, which you ca
 
 The most recent version of this library adds a feature to leverage unlabelled images in order to improve the performance
 of image classifiers. This procedure is called semi-supervised learning (SSL) and is discussed in this `blog post <https://medium.com/decathlondevelopers/improving-performance-of-image-classification-models-using-pretraining-and-a-combination-of-e271c96808d2/>`_.
+The method was also described in a `paper <https://arxiv.org/abs/2108.08362/>`_ and presented at a conference.
 
 Installation
 =============
 
 This library works with python 3.6 and above and it is based on the following dependencies:
 
-- efficientnet
 - tensorflow 2
 - matplotlib
 - scikit-optimize
