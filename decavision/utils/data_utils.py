@@ -118,7 +118,7 @@ def split_train(path='data/image_dataset', split=0.1, with_test=False):
             # Create the folder in the val subdirectory
             create_dir(path + '/test/' + i)
 
-            for j in range(int(split * len(images)), 2*int(split * len(images))):
+            for j in range(int(split * len(images)), 2 * int(split * len(images))):
                 os.rename(path + '/train/' + i + '/' + images[j], path + '/test/' + i + '/' + images[j])
     print('Training dataset has been split.')
 

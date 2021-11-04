@@ -245,20 +245,20 @@ class ImageClassifier:
             base_model_last_block = 155  # last block 165, two blocks 155
         elif self.transfer_model == 'B0':
             base_model = tf.keras.applications.EfficientNetB0(weights='imagenet', include_top=False,
-                                        input_shape=(*self.target_size, 3))
+                                                              input_shape=(*self.target_size, 3))
             base_model_last_block = 213  # last block 229, two blocks 213
         elif self.transfer_model == 'B3':
             base_model = tf.keras.applications.EfficientNetB3(weights='imagenet', include_top=False,
-                                        input_shape=(*self.target_size, 3))
+                                                              input_shape=(*self.target_size, 3))
             base_model_last_block = 354  # last block 370, two blocks 354
         elif self.transfer_model == 'B5':
             base_model = tf.keras.applications.EfficientNetB5(weights='imagenet', include_top=False,
-                                        input_shape=(*self.target_size, 3))
+                                                              input_shape=(*self.target_size, 3))
             base_model_last_block = 417  # last block 559, two blocks 417
 
         elif self.transfer_model == 'B7':
             base_model = tf.keras.applications.EfficientNetB7(weights='imagenet', include_top=False,
-                                        input_shape=(*self.target_size, 3))
+                                                              input_shape=(*self.target_size, 3))
             base_model_last_block = None  # all layers trainable
         elif self.transfer_model in ['V2-S', 'V2-M', 'V2-L', 'V2-XL']:
             print("Downloading model from tensorflow hub")
@@ -269,7 +269,7 @@ class ImageClassifier:
                            'V2-XL': 'https://tfhub.dev/google/imagenet/efficientnet_v2_imagenet21k_xl/feature_vector/2'}
             url = tfhub_links[self.transfer_model]
             layer = hub.KerasLayer(url, trainable=True, input_shape=self.target_size)
-            input = tf.keras.layers.Input(shape = (*self.target_size, 3))
+            input = tf.keras.layers.Input(shape=(*self.target_size, 3))
             output = layer(input)
             base_model = tf.keras.Model(inputs=input, outputs=output)
             base_model_last_block = None  # all layers trainable

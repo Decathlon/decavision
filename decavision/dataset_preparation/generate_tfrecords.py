@@ -13,7 +13,7 @@ class TfrecordsGenerator:
     saved to google storage or locally. Can't be used with a TPU because local files need to be read.
     Strongly inspired by: https://medium.com/@moritzkrger/speeding-up-keras-with-tfrecord-datasets-5464f9836c36
     """
-    
+
     def __init__(self):
         pass
 
@@ -63,7 +63,7 @@ class TfrecordsGenerator:
         nb_images = len(tf.io.gfile.glob(img_pattern))
         shard_size = math.ceil(1.0 * nb_images / shards)
         print("Pattern matches {} images which will be rewritten as {} .tfrec files containing {} images each.".format(nb_images, shards, shard_size))
-        
+
         def decode_jpeg_and_label(filename):
             bits = tf.io.read_file(filename)
             image = tf.image.decode_jpeg(bits, channels=3)
@@ -78,19 +78,19 @@ class TfrecordsGenerator:
 
         def recompress_image(image, label):
             image = tf.cast(image, tf.uint8)
-            image = tf.image.encode_jpeg(image, quality=100, format = 'rgb',
+            image = tf.image.encode_jpeg(image, quality=100, format='rgb',
                                          optimize_size=True, chroma_downsampling=False)
             return image, label
 
-        AUTO = tf.data.experimental.AUTOTUNE 
-        
+        AUTO = tf.data.experimental.AUTOTUNE
+
         filenames = tf.data.Dataset.list_files(img_pattern)  # This also shuffles the images
         dataset = filenames.map(decode_jpeg_and_label, num_parallel_calls=AUTO)
         if target_size:
             dataset = dataset.map(resize_image, num_parallel_calls=AUTO)
         dataset = dataset.map(recompress_image, num_parallel_calls=AUTO)
         dataset = dataset.batch(shard_size)  # sharding: there will be one "batch" of images per file
-        
+
         print("Writing TFRecords")
         for shard_num, shard in enumerate(dataset):
             images, labels = shard
@@ -100,14 +100,14 @@ class TfrecordsGenerator:
             shard_size = images.shape[0]
             # good practice to have the number of records in the filename
             filename = os.path.join(output_folder, "{:02d}-{}.tfrec".format(shard_num, shard_size))
-  
+
             with tf.io.TFRecordWriter(filename) as out_file:
                 for i in range(shard_size):
                     example = self._to_tfrecord(images[i],  # re-compressed image: already a byte string
                                                 classes.index(labels[i].decode('utf8')))
                     out_file.write(example.SerializeToString())
                 print("Wrote file {} containing {} records".format(filename, shard_size))
-            
+
         # save classes locally or on gcs depending on the output folder
         if utils.is_gcs(output_folder):
             with open("classes.csv", "w", newline="") as myfile:
