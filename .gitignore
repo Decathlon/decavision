@@ -9,3 +9,7 @@ __pycache__/*
 .idea/
 notebooks/.ipynb_checkpoints
 notebooks/.ipynb_checkpoints/*
+build/
+dist/
+decavision.egg-info/
+*.ipynb
