@@ -1,4 +1,3 @@
-from efficientnet.tfkeras import EfficientNetB0, EfficientNetB3, EfficientNetB5
 import numpy as np
 import tensorflow as tf
 
@@ -20,7 +19,7 @@ class ProgressiveLearner(ImageClassifier):
             folders train and val, filenames of the form filenumber-numberofimages.tfrec
         model_path (str): path to .h5 model trained with this library on the old classes
         transfer_model (str): pretrained model that was used to train the old model, can be one of Inception,
-            Xception, Inception_Resnet, Resnet, B0, B3 or B5
+            Xception, Inception_Resnet, Resnet, B0, B3, B5, B7, V2-S, V2-M, V2-L or V2-XL
         batch_size (int): size of batches of data used for training
     """
 
@@ -29,7 +28,7 @@ class ProgressiveLearner(ImageClassifier):
         self.distil = False
         self.temp = 5
         self.L = 5
-        self.old_model = utils.load_model(model_path)
+        self.old_model = utils.load_model_clear(model_path)
         self.logits = self.old_model.layers[-2].output
 
     def _update_model(self):
@@ -82,6 +81,10 @@ class ProgressiveLearner(ImageClassifier):
             base_model_last_block = 354  # last block 370, two blocks 354
         elif self.transfer_model == 'B5':
             base_model_last_block = 417  # last block 559, two blocks 417
+        elif self.transfer_model == 'B7':
+            base_model_last_block = None  # all layers trainable
+        elif self.transfer_model in ['V2-S', 'V2-M', 'V2-L', 'V2-XL']:
+            base_model_last_block = None  # all layers trainable
         else:
             base_model_last_block = 249  # last block 280, two blocks 249
 
@@ -98,7 +101,7 @@ class ProgressiveLearner(ImageClassifier):
 
     def fit(self, learning_rate=1e-3, learning_rate_fine_tuning=1e-4,
             epochs=5, save_model=False, verbose=True,
-            fine_tuning=True, min_accuracy=None, logs=None):
+            fine_tuning=True, logs=None):
         """
         Train an image classification model based on a model trained with a smaller number of classes.
         The whole model is trained, unless there is some fine tuning, in which case a second round of
@@ -118,7 +121,7 @@ class ProgressiveLearner(ImageClassifier):
         """
         super().fit(learning_rate=learning_rate, learning_rate_fine_tuning=learning_rate_fine_tuning,
                     epochs=epochs, save_model=save_model, verbose=verbose,
-                    fine_tuning=fine_tuning, min_accuracy=min_accuracy, logs=logs)
+                    fine_tuning=fine_tuning, logs=logs)
 
     def hyperparameter_optimization(self):
         """

@@ -9,6 +9,7 @@ import seaborn as sn
 from sklearn.metrics import confusion_matrix, classification_report
 import tensorflow as tf
 from tensorflow.keras.models import load_model
+import tensorflow_hub as hub
 
 from decavision.utils import data_utils
 from decavision.utils import utils
@@ -29,7 +30,12 @@ class ModelTester:
             # necessary because keras generators don'T work with TPUs...
             tf.compat.v1.disable_eager_execution()
         try:
-            self.model = load_model(model)
+            self.model = load_model(model, custom_objects={"KerasLayer": hub.KerasLayer})
+            # efficientnets have the scaling included in them so no need to rescale the images when loading
+            if self.model.name[0] == 'B':
+                self.rescaling = 1
+            else:
+                self.rescaling = 255
             print('Model loaded correctly')
         except Exception as e:
             print('There was a problem when trying to load your model: {}'.format(e))
@@ -47,7 +53,7 @@ class ModelTester:
         Returns:
             generator: images plus information about them (labels, paths, etc)
         """
-        datagen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1 / 255)
+        datagen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1 / self.rescaling)
         generator = datagen.flow_from_directory(directory=path,
                                                 target_size=self.input_shape,
                                                 shuffle=False,
@@ -197,7 +203,7 @@ class ModelTester:
         images = glob.glob(os.path.join(image_path, '*.jpg'))
         for image_path in images:
             # prepare the image
-            image_tensor = data_utils.prepare_image(image_path, self.input_shape)
+            image_tensor = data_utils.prepare_image(image_path, self.input_shape, self.rescaling)
             # make and decode the prediction
             result = self.model.predict(image_tensor)[0]
             # print image and top predictions

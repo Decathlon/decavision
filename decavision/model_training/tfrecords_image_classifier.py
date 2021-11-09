@@ -6,7 +6,7 @@ import os
 import dill
 import skopt
 import tensorflow as tf
-from efficientnet.tfkeras import EfficientNetB0, EfficientNetB3, EfficientNetB5, EfficientNetB7
+import tensorflow_hub as hub
 
 from decavision.utils import training_utils
 from decavision.utils import utils
@@ -25,11 +25,12 @@ class ImageClassifier:
             folders train and val, filenames of the form filenumber-numberofimages.tfrec
         batch_size (int): size of batches of data used for training
         transfer_model (str): pretrained model to use for transfer learning, can be one of Inception,
-            Xception, Inception_Resnet, Resnet, (EfficientNet) B0, B3, B5 or B7
+            Xception, Inception_Resnet, Resnet, (EfficientNet) B0, B3, B5, B7 or (EfficientnetV2) V2-S, V2-M, V2-L, V2-XL
         augment (boolean): Whether to augment the training data, default is True
+        input_shape (tuple(int,int)): shape of the input images for the model, if not specified, recommended sizes are used for each one
     """
 
-    def __init__(self, tfrecords_folder, batch_size=128, transfer_model='Inception', augment=True):
+    def __init__(self, tfrecords_folder, batch_size=128, transfer_model='Inception', augment=True, input_shape=None):
 
         self.tfrecords_folder = tfrecords_folder
         self.use_TPU, self.use_GPU = utils.check_PU()
@@ -84,10 +85,26 @@ class ImageClassifier:
         self.validation_steps = int(nb_val_images / self.batch_size)
         print('Val steps per epochs = ' + str(self.validation_steps))
 
-        if transfer_model in ['Inception', 'Xception', 'Inception_Resnet', 'B3', 'B5', 'B7']:
-            self.target_size = (299, 299)
+        input_dims = {'Inception': 299,
+                      'Xception': 299,
+                      'Inception Resnet': 299,
+                      'B0': 224,
+                      'B3': 300,
+                      'B5': 456,
+                      'B7': 600,
+                      'V2-S': 384,
+                      'V2-M': 480,
+                      'V2-L': 480,
+                      'V2-XL': 512}
+        if transfer_model in ['B0', 'B3', 'B5', 'B7']:
+            self.scale = 255.
         else:
-            self.target_size = (224, 224)
+            self.scale = 1.
+
+        if input_shape:
+            self.target_size = input_shape
+        else:
+            self.target_size = (input_dims.get(self.transfer_model, 224), input_dims.get(self.transfer_model, 224))
 
         print("Data augmentation during training: " + str(augment))
 
@@ -115,7 +132,9 @@ class ImageClassifier:
             example = tf.io.parse_single_example(example, features)
 
             image = tf.image.decode_jpeg(example['image'], channels=3)
-            image = tf.image.convert_image_dtype(image, dtype=tf.float32)
+            # normalization of pixels is already done in TF EfficientNets
+            if self.transfer_model not in ['B0', 'B3', 'B5', 'B7']:
+                image = tf.image.convert_image_dtype(image, dtype=tf.float32)
             feature = tf.image.resize(image, [*self.target_size])
             label = tf.cast([example['label']], tf.int32)
             return feature, label
@@ -166,7 +185,7 @@ class ImageClassifier:
         image = tf.image.random_brightness(image, max_delta=32.0 / 255.0)
         image = tf.image.random_saturation(image, lower=0.5, upper=1.5)
         # Make sure the image is still in [0, 1] range, after augmentation
-        image = tf.clip_by_value(image, 0.0, 1.0)
+        image = tf.clip_by_value(image, 0.0, self.scale)
         return image, label
 
     def get_training_dataset(self):
@@ -225,21 +244,34 @@ class ImageClassifier:
                                                         include_top=False, input_shape=(*self.target_size, 3))
             base_model_last_block = 155  # last block 165, two blocks 155
         elif self.transfer_model == 'B0':
-            base_model = EfficientNetB0(weights='imagenet', include_top=False,
-                                        input_shape=(*self.target_size, 3))
+            base_model = tf.keras.applications.EfficientNetB0(weights='imagenet', include_top=False,
+                                                              input_shape=(*self.target_size, 3))
             base_model_last_block = 213  # last block 229, two blocks 213
         elif self.transfer_model == 'B3':
-            base_model = EfficientNetB3(weights='imagenet', include_top=False,
-                                        input_shape=(*self.target_size, 3))
+            base_model = tf.keras.applications.EfficientNetB3(weights='imagenet', include_top=False,
+                                                              input_shape=(*self.target_size, 3))
             base_model_last_block = 354  # last block 370, two blocks 354
         elif self.transfer_model == 'B5':
-            base_model = EfficientNetB5(weights='imagenet', include_top=False,
-                                        input_shape=(*self.target_size, 3))
+            base_model = tf.keras.applications.EfficientNetB5(weights='imagenet', include_top=False,
+                                                              input_shape=(*self.target_size, 3))
             base_model_last_block = 417  # last block 559, two blocks 417
 
         elif self.transfer_model == 'B7':
-            base_model = EfficientNetB7(weights='imagenet', include_top=False,
-                                        input_shape=(*self.target_size, 3))
+            base_model = tf.keras.applications.EfficientNetB7(weights='imagenet', include_top=False,
+                                                              input_shape=(*self.target_size, 3))
+            base_model_last_block = None  # all layers trainable
+        elif self.transfer_model in ['V2-S', 'V2-M', 'V2-L', 'V2-XL']:
+            print("Downloading model from tensorflow hub")
+            os.environ["TFHUB_MODEL_LOAD_FORMAT"] = "UNCOMPRESSED"
+            tfhub_links = {'V2-S': 'https://tfhub.dev/google/imagenet/efficientnet_v2_imagenet21k_s/feature_vector/2',
+                           'V2-M': 'https://tfhub.dev/google/imagenet/efficientnet_v2_imagenet21k_m/feature_vector/2',
+                           'V2-L': 'https://tfhub.dev/google/imagenet/efficientnet_v2_imagenet21k_l/feature_vector/2',
+                           'V2-XL': 'https://tfhub.dev/google/imagenet/efficientnet_v2_imagenet21k_xl/feature_vector/2'}
+            url = tfhub_links[self.transfer_model]
+            layer = hub.KerasLayer(url, trainable=True, input_shape=self.target_size)
+            input = tf.keras.layers.Input(shape=(*self.target_size, 3))
+            output = layer(input)
+            base_model = tf.keras.Model(inputs=input, outputs=output)
             base_model_last_block = None  # all layers trainable
         else:
             base_model = tf.keras.applications.InceptionV3(weights='imagenet',
@@ -252,7 +284,8 @@ class ImageClassifier:
 
         # Add the classification layers using Keras functional API
         x = base_model.output
-        x = tf.keras.layers.GlobalAveragePooling2D()(x)
+        if self.transfer_model not in ['V2-S', 'V2-M', 'V2-L', 'V2-XL']:
+            x = tf.keras.layers.GlobalAveragePooling2D()(x)
         # Hidden layer for classification
         if hidden_size == 0:
             x = tf.keras.layers.Dropout(rate=dropout)(x)
@@ -273,7 +306,7 @@ class ImageClassifier:
         loss = 'sparse_categorical_crossentropy'
         metrics = ['sparse_categorical_accuracy']
 
-        return tf.keras.Model(inputs=base_model.input, outputs=predictions), base_model_last_block, loss, metrics
+        return tf.keras.Model(inputs=base_model.input, outputs=predictions, name=self.transfer_model), base_model_last_block, loss, metrics
 
     def fit(self, save_model=None, export_model=None, patience=0,
             epochs=5, hidden_size=1024, learning_rate=1e-3, learning_rate_fine_tuning=1e-4,
@@ -285,6 +318,9 @@ class ImageClassifier:
         Only added layers are trained, unless there is some fine tuning, in which case a second round of
         training is done with the last block of the pretrained model unfrozen. Training can be stopped if
         no sufficient improvement in accuracy.
+
+        If one of the Efficientnet Bs is used, the model includes a layer that normalizes the pixels. This processing
+        step is not included in the other models so it has to be done on the data separately.
 
         Arguments:
             learning_rate (float): learning rate used when training extra layers

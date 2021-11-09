@@ -4,9 +4,10 @@ import sys
 
 from google.cloud import storage
 import tensorflow as tf
+import tensorflow_hub as hub
 
 
-def load_model(path, include_top=True):
+def load_model_clear(path, include_top=True):
     """
     Clear tensorflow session and load keras .h5 model.
 
@@ -18,7 +19,7 @@ def load_model(path, include_top=True):
         tf.keras model: loaded model
     """
     tf.keras.backend.clear_session()
-    model = tf.keras.models.load_model(path, compile=include_top)
+    model = tf.keras.models.load_model(path, compile=include_top, custom_objects={"KerasLayer": hub.KerasLayer})
     print('Model loaded !')
     if not include_top:
         model = tf.keras.Model(inputs=model.input, outputs=model.layers[-2].output)
@@ -28,7 +29,7 @@ def load_model(path, include_top=True):
 def check_PU():
     """
     Check if machine is running on TPU, GPU or CPU.
-    
+
     Returns:
         bool: whether or not the machine runs on a TPU
         bool: whether or not the machine runs on a GPU
@@ -36,9 +37,9 @@ def check_PU():
     use_tpu = False
     use_gpu = False
     try:
-        tpu = tf.distribute.cluster_resolver.TPUClusterResolver() # TPU detection
+        tpu = tf.distribute.cluster_resolver.TPUClusterResolver()  # TPU detection
         use_tpu = True
-        print('Running on TPU ', tpu.cluster_spec().as_dict()['worker'])  
+        print('Running on TPU ', tpu.cluster_spec().as_dict()['worker'])
     except ValueError:
         if tf.test.is_built_with_cuda():
             use_gpu = True

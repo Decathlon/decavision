@@ -1,70 +1,34 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>Preparing datasets &mdash; decavision 1.2.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+  <title>Preparing datasets &mdash; decavision 1.3.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Train models" href="train.html" />
     <link rel="prev" title="Welcome to DecaVision’s documentation!" href="index.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> decavision
-          
-
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -72,19 +36,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Functions</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Functions</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Preparing datasets</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#module-decavision.dataset_preparation.data_augmentation">Data augmentation</a></li>
@@ -96,88 +49,47 @@
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Model testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Examples</span></p>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="data_example.html">Build a dataset from scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="train_example.html">Train and optimize model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ssl_example.html">Improve a model using unlabelled images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssl_example.html">Improve a classification model using unlabelled images</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">decavision</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>Preparing datasets</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="_sources/data.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="preparing-datasets">
-<h1>Preparing datasets<a class="headerlink" href="#preparing-datasets" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="preparing-datasets">
+<h1>Preparing datasets<a class="headerlink" href="#preparing-datasets" title="Permalink to this headline"></a></h1>
 <p>The following code details the functions and classes that are available to build a dataset of images and prepare it for
 training. Functions to label unlabelled data to use for semi-supervised learning are also presented.</p>
-<p>Examples of how to use these functions can be found in <a class="reference internal" href="data_example.html"><span class="doc">Build a dataset from scratch</span></a> and in <a class="reference internal" href="ssl_example.html"><span class="doc">Improve a model using unlabelled images</span></a>.</p>
-<div class="section" id="module-decavision.dataset_preparation.data_augmentation">
-<span id="data-augmentation"></span><h2>Data augmentation<a class="headerlink" href="#module-decavision.dataset_preparation.data_augmentation" title="Permalink to this headline">¶</a></h2>
+<p>Examples of how to use these functions can be found in <a class="reference internal" href="data_example.html"><span class="doc">Build a dataset from scratch</span></a> and in <a class="reference internal" href="ssl_example.html"><span class="doc">Improve a classification model using unlabelled images</span></a>.</p>
+<section id="module-decavision.dataset_preparation.data_augmentation">
+<span id="data-augmentation"></span><h2>Data augmentation<a class="headerlink" href="#module-decavision.dataset_preparation.data_augmentation" title="Permalink to this headline"></a></h2>
 <dl class="py class">
-<dt id="decavision.dataset_preparation.data_augmentation.DataAugmentor">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">decavision.dataset_preparation.data_augmentation.</span></code><code class="sig-name descname"><span class="pre">DataAugmentor</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distortion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flip_horizontal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flip_vertical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_crop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_erasing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skew</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">brightness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contrast</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">299</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">299</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.dataset_preparation.data_augmentation.DataAugmentor" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.dataset_preparation.data_augmentation.DataAugmentor">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">decavision.dataset_preparation.data_augmentation.</span></span><span class="sig-name descname"><span class="pre">DataAugmentor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distortion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flip_horizontal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flip_vertical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_crop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_erasing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skew</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">brightness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contrast</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">299</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">299</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.dataset_preparation.data_augmentation.DataAugmentor" title="Permalink to this definition"></a></dt>
 <dd><p>Class to generate augmented images for classification purposes. Images must be located in a folder with
 subfolders for each category.</p>
 <dl class="field-list simple">
@@ -193,8 +105,8 @@ contrast and color (options described at <a class="reference external" href="htt
 </dd>
 </dl>
 <dl class="py method">
-<dt id="decavision.dataset_preparation.data_augmentation.DataAugmentor.generate_images">
-<code class="sig-name descname"><span class="pre">generate_images</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">class_size_approximation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.dataset_preparation.data_augmentation.DataAugmentor.generate_images" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.dataset_preparation.data_augmentation.DataAugmentor.generate_images">
+<span class="sig-name descname"><span class="pre">generate_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">class_size_approximation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.dataset_preparation.data_augmentation.DataAugmentor.generate_images" title="Permalink to this definition"></a></dt>
 <dd><p>Generate augmented images for all categories in the main folder according to the specified options. Images
 are generated until the desired size is reached and they are saved in the same subfolder as the original
 images.</p>
@@ -206,8 +118,8 @@ images.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="decavision.dataset_preparation.data_augmentation.DataAugmentor.generate_images_single_class">
-<code class="sig-name descname"><span class="pre">generate_images_single_class</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">class_size_approximation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.dataset_preparation.data_augmentation.DataAugmentor.generate_images_single_class" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.dataset_preparation.data_augmentation.DataAugmentor.generate_images_single_class">
+<span class="sig-name descname"><span class="pre">generate_images_single_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">class_size_approximation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.dataset_preparation.data_augmentation.DataAugmentor.generate_images_single_class" title="Permalink to this definition"></a></dt>
 <dd><p>Generate augmented images for a single category according to the specified options. Images are generated
 until the desired size is reached and they are saved in an outputs folder at the location of the original
 images.</p>
@@ -223,18 +135,18 @@ images.</p>
 
 </dd></dl>
 
-</div>
-<div class="section" id="module-decavision.dataset_preparation.generate_tfrecords">
-<span id="make-tfrecords"></span><h2>Make tfrecords<a class="headerlink" href="#module-decavision.dataset_preparation.generate_tfrecords" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-decavision.dataset_preparation.generate_tfrecords">
+<span id="make-tfrecords"></span><h2>Make tfrecords<a class="headerlink" href="#module-decavision.dataset_preparation.generate_tfrecords" title="Permalink to this headline"></a></h2>
 <dl class="py class">
-<dt id="decavision.dataset_preparation.generate_tfrecords.TfrecordsGenerator">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">decavision.dataset_preparation.generate_tfrecords.</span></code><code class="sig-name descname"><span class="pre">TfrecordsGenerator</span></code><a class="headerlink" href="#decavision.dataset_preparation.generate_tfrecords.TfrecordsGenerator" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.dataset_preparation.generate_tfrecords.TfrecordsGenerator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">decavision.dataset_preparation.generate_tfrecords.</span></span><span class="sig-name descname"><span class="pre">TfrecordsGenerator</span></span><a class="headerlink" href="#decavision.dataset_preparation.generate_tfrecords.TfrecordsGenerator" title="Permalink to this definition"></a></dt>
 <dd><p>Class to transform images into tfrecords format to train neural networks. Resulting files can be
 saved to google storage or locally. Can’t be used with a TPU because local files need to be read.
 Strongly inspired by: <a class="reference external" href="https://medium.com/&#64;moritzkrger/speeding-up-keras-with-tfrecord-datasets-5464f9836c36">https://medium.com/&#64;moritzkrger/speeding-up-keras-with-tfrecord-datasets-5464f9836c36</a></p>
 <dl class="py method">
-<dt id="decavision.dataset_preparation.generate_tfrecords.TfrecordsGenerator.convert_image_folder">
-<code class="sig-name descname"><span class="pre">convert_image_folder</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data/image_dataset/train'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data/image_dataset/train'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_folder_new</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shards</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(299,</span> <span class="pre">299)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.dataset_preparation.generate_tfrecords.TfrecordsGenerator.convert_image_folder" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.dataset_preparation.generate_tfrecords.TfrecordsGenerator.convert_image_folder">
+<span class="sig-name descname"><span class="pre">convert_image_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data/image_dataset/train'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data/image_dataset/train'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_folder_new</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shards</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.dataset_preparation.generate_tfrecords.TfrecordsGenerator.convert_image_folder" title="Permalink to this definition"></a></dt>
 <dd><p>Convert all images in a folder (like train or val) to tfrecords. Folder must contain subfolders for each category.
 Possibility to combine data from two folders to perform progressive learning. Tfrecords can be saved
 locally or on google storage. A csv file containing the names of the classes is also saved.</p>
@@ -246,7 +158,7 @@ locally or on google storage. A csv file containing the names of the classes is 
 <li><p><strong>img_folder_new</strong> (<em>str</em>) – if specified, images from this folder are included in the tfrecords as
 new categories for the purpose of progressive learning</p></li>
 <li><p><strong>shards</strong> (<em>int</em>) – number of files to create</p></li>
-<li><p><strong>target_size</strong> (<em>tuple</em><em>(</em><em>int</em><em>,</em><em>int</em><em>)</em>) – size to reshape the images</p></li>
+<li><p><strong>target_size</strong> (<em>tuple</em><em>(</em><em>int</em><em>,</em><em>int</em><em>)</em>) – size to reshape the images if desired</p></li>
 </ul>
 </dd>
 </dl>
@@ -254,12 +166,12 @@ new categories for the purpose of progressive learning</p></li>
 
 </dd></dl>
 
-</div>
-<div class="section" id="module-decavision.dataset_preparation.generate_pseudolabels">
-<span id="generate-pseudo-labels-for-unlabelled-data"></span><h2>Generate pseudo labels for unlabelled data<a class="headerlink" href="#module-decavision.dataset_preparation.generate_pseudolabels" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-decavision.dataset_preparation.generate_pseudolabels">
+<span id="generate-pseudo-labels-for-unlabelled-data"></span><h2>Generate pseudo labels for unlabelled data<a class="headerlink" href="#module-decavision.dataset_preparation.generate_pseudolabels" title="Permalink to this headline"></a></h2>
 <dl class="py class">
-<dt id="decavision.dataset_preparation.generate_pseudolabels.PseudoLabelGenerator">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">decavision.dataset_preparation.generate_pseudolabels.</span></code><code class="sig-name descname"><span class="pre">PseudoLabelGenerator</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'model.h5'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_data_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data/image_dataset/train'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unlabeled_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data/unlabeled'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pseudo_data_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data/train_ssl'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'outputs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csv_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data.csv'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.dataset_preparation.generate_pseudolabels.PseudoLabelGenerator" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.dataset_preparation.generate_pseudolabels.PseudoLabelGenerator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">decavision.dataset_preparation.generate_pseudolabels.</span></span><span class="sig-name descname"><span class="pre">PseudoLabelGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'model.h5'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_data_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data/image_dataset/train'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unlabeled_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data/unlabeled'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pseudo_data_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data/train_ssl'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'outputs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csv_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data.csv'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.dataset_preparation.generate_pseudolabels.PseudoLabelGenerator" title="Permalink to this definition"></a></dt>
 <dd><p>Class to generate pseudo labels for unlabeled images using a trained model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -274,8 +186,8 @@ new categories for the purpose of progressive learning</p></li>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="decavision.dataset_preparation.generate_pseudolabels.PseudoLabelGenerator.generate_pseudolabel_data">
-<code class="sig-name descname"><span class="pre">generate_pseudolabel_data</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plot_confidences</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">move_images</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.dataset_preparation.generate_pseudolabels.PseudoLabelGenerator.generate_pseudolabel_data" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.dataset_preparation.generate_pseudolabels.PseudoLabelGenerator.generate_pseudolabel_data">
+<span class="sig-name descname"><span class="pre">generate_pseudolabel_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plot_confidences</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">move_images</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.dataset_preparation.generate_pseudolabels.PseudoLabelGenerator.generate_pseudolabel_data" title="Permalink to this definition"></a></dt>
 <dd><p>Use trained model to make pseudo labels and save them into a csv file. Also possible to plot the results
 and move the unlabeled images directly to the category corresponding to their pseudo label.</p>
 <dl class="field-list simple">
@@ -298,8 +210,8 @@ if move_images is True.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="decavision.dataset_preparation.generate_pseudolabels.PseudoLabelGenerator.move_unlabeled_images">
-<code class="sig-name descname"><span class="pre">move_unlabeled_images</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.dataset_preparation.generate_pseudolabels.PseudoLabelGenerator.move_unlabeled_images" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.dataset_preparation.generate_pseudolabels.PseudoLabelGenerator.move_unlabeled_images">
+<span class="sig-name descname"><span class="pre">move_unlabeled_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.dataset_preparation.generate_pseudolabels.PseudoLabelGenerator.move_unlabeled_images" title="Permalink to this definition"></a></dt>
 <dd><p>Split unlabeled images into folders of the training data based on pseudo labels. A new training dataset is
 created with the labeled and pseudo labeled data.</p>
 <dl class="field-list simple">
@@ -310,8 +222,8 @@ created with the labeled and pseudo labeled data.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="decavision.dataset_preparation.generate_pseudolabels.PseudoLabelGenerator.plot_confidence_scores">
-<code class="sig-name descname"><span class="pre">plot_confidence_scores</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">per_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overall</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.dataset_preparation.generate_pseudolabels.PseudoLabelGenerator.plot_confidence_scores" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.dataset_preparation.generate_pseudolabels.PseudoLabelGenerator.plot_confidence_scores">
+<span class="sig-name descname"><span class="pre">plot_confidence_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">per_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overall</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.dataset_preparation.generate_pseudolabels.PseudoLabelGenerator.plot_confidence_scores" title="Permalink to this definition"></a></dt>
 <dd><p>Generate bar plots for highest confidence predictions per class and overall and save them.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -325,55 +237,38 @@ created with the labeled and pseudo labeled data.</p>
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="train.html" class="btn btn-neutral float-right" title="Train models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="Welcome to DecaVision’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="train.html" class="btn btn-neutral float-right" title="Train models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2020, Decathlon Canada.
-
-    </p>
+    <p>&#169; Copyright 2020, Decathlon Canada.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

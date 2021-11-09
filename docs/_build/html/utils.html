@@ -1,70 +1,34 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>Utils &mdash; decavision 1.2.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+  <title>Utils &mdash; decavision 1.3.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Build a dataset from scratch" href="data_example.html" />
     <link rel="prev" title="Model testing" href="testing.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> decavision
-          
-
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -72,19 +36,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Functions</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Functions</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="data.html">Preparing datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="train.html">Train models</a></li>
@@ -97,88 +50,47 @@
 </ul>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">Examples</span></p>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="data_example.html">Build a dataset from scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="train_example.html">Train and optimize model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ssl_example.html">Improve a model using unlabelled images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssl_example.html">Improve a classification model using unlabelled images</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">decavision</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>Utils</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="_sources/utils.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="utils">
-<h1>Utils<a class="headerlink" href="#utils" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="utils">
+<h1>Utils<a class="headerlink" href="#utils" title="Permalink to this headline"></a></h1>
 <p>The following code details the functions and classes that are used extensively in this library. The colab utils are
 useful when working with a Google Colab notebook. They allow to authenticate and download a dataset from your Drive easily. The rest
 of the functions are provided in case they can be useful to someone.</p>
-<div class="section" id="module-decavision.utils.colab_utils">
-<span id="colab-utils"></span><h2>Colab utils<a class="headerlink" href="#module-decavision.utils.colab_utils" title="Permalink to this headline">¶</a></h2>
+<section id="module-decavision.utils.colab_utils">
+<span id="colab-utils"></span><h2>Colab utils<a class="headerlink" href="#module-decavision.utils.colab_utils" title="Permalink to this headline"></a></h2>
 <dl class="py function">
-<dt id="decavision.utils.colab_utils.authenticate_colab">
-<code class="sig-prename descclassname"><span class="pre">decavision.utils.colab_utils.</span></code><code class="sig-name descname"><span class="pre">authenticate_colab</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.colab_utils.authenticate_colab" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.utils.colab_utils.authenticate_colab">
+<span class="sig-prename descclassname"><span class="pre">decavision.utils.colab_utils.</span></span><span class="sig-name descname"><span class="pre">authenticate_colab</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.colab_utils.authenticate_colab" title="Permalink to this definition"></a></dt>
 <dd><p>Ask the user to connect to his google account to access google drive and google storage.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -188,8 +100,8 @@ of the functions are provided in case they can be useful to someone.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="decavision.utils.colab_utils.download_dataset">
-<code class="sig-prename descclassname"><span class="pre">decavision.utils.colab_utils.</span></code><code class="sig-name descname"><span class="pre">download_dataset</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drive</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.colab_utils.download_dataset" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.utils.colab_utils.download_dataset">
+<span class="sig-prename descclassname"><span class="pre">decavision.utils.colab_utils.</span></span><span class="sig-name descname"><span class="pre">download_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drive</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.colab_utils.download_dataset" title="Permalink to this definition"></a></dt>
 <dd><p>Download compressed dataset (zip or 7z format) from google drive and extract it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -202,12 +114,12 @@ of the functions are provided in case they can be useful to someone.</p>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="module-decavision.utils.training_utils">
-<span id="training-utils"></span><h2>Training utils<a class="headerlink" href="#module-decavision.utils.training_utils" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-decavision.utils.training_utils">
+<span id="training-utils"></span><h2>Training utils<a class="headerlink" href="#module-decavision.utils.training_utils" title="Permalink to this headline"></a></h2>
 <dl class="py class">
-<dt id="decavision.utils.training_utils.CheckpointDownloader">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">decavision.utils.training_utils.</span></code><code class="sig-name descname"><span class="pre">CheckpointDownloader</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">checkpoint_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.training_utils.CheckpointDownloader" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.utils.training_utils.CheckpointDownloader">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">decavision.utils.training_utils.</span></span><span class="sig-name descname"><span class="pre">CheckpointDownloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">checkpoint_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.training_utils.CheckpointDownloader" title="Permalink to this definition"></a></dt>
 <dd><p>Class to download current state to Google Drive after each iteration of hyperparameter optimization.
 To be used as callback for scikit-optimize routine. Files are saved in a folder called Checkpoints.</p>
 <dl class="field-list simple">
@@ -216,8 +128,8 @@ To be used as callback for scikit-optimize routine. Files are saved in a folder 
 </dd>
 </dl>
 <dl class="py method">
-<dt id="decavision.utils.training_utils.CheckpointDownloader.__call__">
-<code class="sig-name descname"><span class="pre">__call__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.training_utils.CheckpointDownloader.__call__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.utils.training_utils.CheckpointDownloader.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.training_utils.CheckpointDownloader.__call__" title="Permalink to this definition"></a></dt>
 <dd><p>If working on colab, upload checkpoint file to google drive.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -229,8 +141,8 @@ To be used as callback for scikit-optimize routine. Files are saved in a folder 
 </dd></dl>
 
 <dl class="py function">
-<dt id="decavision.utils.training_utils.custom_loss">
-<code class="sig-prename descclassname"><span class="pre">decavision.utils.training_utils.</span></code><code class="sig-name descname"><span class="pre">custom_loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old_logits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_logits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_classes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.training_utils.custom_loss" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.utils.training_utils.custom_loss">
+<span class="sig-prename descclassname"><span class="pre">decavision.utils.training_utils.</span></span><span class="sig-name descname"><span class="pre">custom_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old_logits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_logits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_classes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.training_utils.custom_loss" title="Permalink to this definition"></a></dt>
 <dd><p>Distilling loss used when updating a model with new classes.
 It forces the model to remember what it learned about the old classes.
 Increasing the parameter L forces the model to remember more.
@@ -254,12 +166,12 @@ High temperature puts more importance on the dominant classes and low temperatur
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="module-decavision.utils.data_utils">
-<span id="data-utils"></span><h2>Data utils<a class="headerlink" href="#module-decavision.utils.data_utils" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-decavision.utils.data_utils">
+<span id="data-utils"></span><h2>Data utils<a class="headerlink" href="#module-decavision.utils.data_utils" title="Permalink to this headline"></a></h2>
 <dl class="py function">
-<dt id="decavision.utils.data_utils.check_RGB">
-<code class="sig-prename descclassname"><span class="pre">decavision.utils.data_utils.</span></code><code class="sig-name descname"><span class="pre">check_RGB</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.data_utils.check_RGB" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.utils.data_utils.check_RGB">
+<span class="sig-prename descclassname"><span class="pre">decavision.utils.data_utils.</span></span><span class="sig-name descname"><span class="pre">check_RGB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.data_utils.check_RGB" title="Permalink to this definition"></a></dt>
 <dd><p>Convert all images in a folder into RGB format and resize them if desired. Images that
 can’t be opened are deleted. Folder must contain a subfolder for each category.</p>
 <dl class="field-list simple">
@@ -273,8 +185,8 @@ can’t be opened are deleted. Folder must contain a subfolder for each category
 </dd></dl>
 
 <dl class="py function">
-<dt id="decavision.utils.data_utils.create_dir">
-<code class="sig-prename descclassname"><span class="pre">decavision.utils.data_utils.</span></code><code class="sig-name descname"><span class="pre">create_dir</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.data_utils.create_dir" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.utils.data_utils.create_dir">
+<span class="sig-prename descclassname"><span class="pre">decavision.utils.data_utils.</span></span><span class="sig-name descname"><span class="pre">create_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.data_utils.create_dir" title="Permalink to this definition"></a></dt>
 <dd><p>Check if directory exists and create it if it does not.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -284,8 +196,8 @@ can’t be opened are deleted. Folder must contain a subfolder for each category
 </dd></dl>
 
 <dl class="py function">
-<dt id="decavision.utils.data_utils.download_dataset">
-<code class="sig-prename descclassname"><span class="pre">decavision.utils.data_utils.</span></code><code class="sig-name descname"><span class="pre">download_dataset</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">download_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'http://data.csail.mit.edu/places/places365/places365standard_easyformat.tar'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.data_utils.download_dataset" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.utils.data_utils.download_dataset">
+<span class="sig-prename descclassname"><span class="pre">decavision.utils.data_utils.</span></span><span class="sig-name descname"><span class="pre">download_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">download_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'http://data.csail.mit.edu/places/places365/places365standard_easyformat.tar'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.data_utils.download_dataset" title="Permalink to this definition"></a></dt>
 <dd><p>Download a dataset in format .zip, .tar, .tar.gz or .tgz and extract the data.
 Inspired by: <a class="reference external" href="https://github.com/Hvass-Labs/TensorFlow-Tutorials/blob/master/download.py">https://github.com/Hvass-Labs/TensorFlow-Tutorials/blob/master/download.py</a></p>
 <dl class="field-list simple">
@@ -299,15 +211,16 @@ Inspired by: <a class="reference external" href="https://github.com/Hvass-Labs/T
 </dd></dl>
 
 <dl class="py function">
-<dt id="decavision.utils.data_utils.prepare_image">
-<code class="sig-prename descclassname"><span class="pre">decavision.utils.data_utils.</span></code><code class="sig-name descname"><span class="pre">prepare_image</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.data_utils.prepare_image" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.utils.data_utils.prepare_image">
+<span class="sig-prename descclassname"><span class="pre">decavision.utils.data_utils.</span></span><span class="sig-name descname"><span class="pre">prepare_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rescaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">255</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.data_utils.prepare_image" title="Permalink to this definition"></a></dt>
 <dd><p>Load and convert image to numpy array to feed it to a neural network. Image is resized, converted to RGB
-and its pixels are normalized. An extra dimension is added to the array.</p>
+and its pixels are normalized if required. An extra dimension is added to the array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>image_path</strong> (<em>str</em>) – path to image to be converted</p></li>
 <li><p><strong>target_size</strong> (<em>tuple</em><em>(</em><em>int</em><em>,</em><em>int</em><em>)</em>) – desired size for the image</p></li>
+<li><p><strong>rescaling</strong> (<em>int</em>) – divide all the pixels of the image by this number</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -320,15 +233,15 @@ and its pixels are normalized. An extra dimension is added to the array.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="decavision.utils.data_utils.print_download_progress">
-<code class="sig-prename descclassname"><span class="pre">decavision.utils.data_utils.</span></code><code class="sig-name descname"><span class="pre">print_download_progress</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.data_utils.print_download_progress" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.utils.data_utils.print_download_progress">
+<span class="sig-prename descclassname"><span class="pre">decavision.utils.data_utils.</span></span><span class="sig-name descname"><span class="pre">print_download_progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.data_utils.print_download_progress" title="Permalink to this definition"></a></dt>
 <dd><p>Function used for printing the download progress. Inspired by:
 <a class="reference external" href="https://github.com/Hvass-Labs/TensorFlow-Tutorials/blob/master/download.py">https://github.com/Hvass-Labs/TensorFlow-Tutorials/blob/master/download.py</a></p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="decavision.utils.data_utils.split_train">
-<code class="sig-prename descclassname"><span class="pre">decavision.utils.data_utils.</span></code><code class="sig-name descname"><span class="pre">split_train</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data/image_dataset'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.data_utils.split_train" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.utils.data_utils.split_train">
+<span class="sig-prename descclassname"><span class="pre">decavision.utils.data_utils.</span></span><span class="sig-name descname"><span class="pre">split_train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data/image_dataset'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.data_utils.split_train" title="Permalink to this definition"></a></dt>
 <dd><p>Separate images randomly into a training, a validation and potentially a test dataset.
 Images must be located in a folder called train, which contains a subfolder per category.
 Val and potentially test folders will be created amd images moved into it from train.</p>
@@ -343,12 +256,12 @@ Val and potentially test folders will be created amd images moved into it from t
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="id1">
-<h2>Utils<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="id1">
+<h2>Utils<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
 <span class="target" id="module-decavision.utils.utils"></span><dl class="py function">
-<dt id="decavision.utils.utils.check_PU">
-<code class="sig-prename descclassname"><span class="pre">decavision.utils.utils.</span></code><code class="sig-name descname"><span class="pre">check_PU</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.utils.check_PU" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.utils.utils.check_PU">
+<span class="sig-prename descclassname"><span class="pre">decavision.utils.utils.</span></span><span class="sig-name descname"><span class="pre">check_PU</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.utils.check_PU" title="Permalink to this definition"></a></dt>
 <dd><p>Check if machine is running on TPU, GPU or CPU.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -362,8 +275,8 @@ bool: whether or not the machine runs on a GPU</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="decavision.utils.utils.check_sep">
-<code class="sig-prename descclassname"><span class="pre">decavision.utils.utils.</span></code><code class="sig-name descname"><span class="pre">check_sep</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.utils.check_sep" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.utils.utils.check_sep">
+<span class="sig-prename descclassname"><span class="pre">decavision.utils.utils.</span></span><span class="sig-name descname"><span class="pre">check_sep</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.utils.check_sep" title="Permalink to this definition"></a></dt>
 <dd><p>Check if the OS is windows or anything else to return the right separator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -376,8 +289,8 @@ bool: whether or not the machine runs on a GPU</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="decavision.utils.utils.empty_folder">
-<code class="sig-prename descclassname"><span class="pre">decavision.utils.utils.</span></code><code class="sig-name descname"><span class="pre">empty_folder</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.utils.empty_folder" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.utils.utils.empty_folder">
+<span class="sig-prename descclassname"><span class="pre">decavision.utils.utils.</span></span><span class="sig-name descname"><span class="pre">empty_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.utils.empty_folder" title="Permalink to this definition"></a></dt>
 <dd><p>Delete all files in a given folder. First try to delete
 locally and if it fails try to delete in google cloud
 storage. If folder is in GCS, the link must include the
@@ -390,8 +303,8 @@ gs:// part and the folder will be deleted as well.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="decavision.utils.utils.gcs_bucket">
-<code class="sig-prename descclassname"><span class="pre">decavision.utils.utils.</span></code><code class="sig-name descname"><span class="pre">gcs_bucket</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.utils.gcs_bucket" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.utils.utils.gcs_bucket">
+<span class="sig-prename descclassname"><span class="pre">decavision.utils.utils.</span></span><span class="sig-name descname"><span class="pre">gcs_bucket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.utils.gcs_bucket" title="Permalink to this definition"></a></dt>
 <dd><p>Create bucket object to be used to access files in google could storage bucket.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -408,8 +321,8 @@ string: prefix of the bucket, to be used to access files</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="decavision.utils.utils.is_gcs">
-<code class="sig-prename descclassname"><span class="pre">decavision.utils.utils.</span></code><code class="sig-name descname"><span class="pre">is_gcs</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.utils.is_gcs" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.utils.utils.is_gcs">
+<span class="sig-prename descclassname"><span class="pre">decavision.utils.utils.</span></span><span class="sig-name descname"><span class="pre">is_gcs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.utils.is_gcs" title="Permalink to this definition"></a></dt>
 <dd><p>Check if path is to a google cloud storage directory or a local one. Determined from the presence of ‘gs’
 at the beginning of the path.</p>
 <dl class="field-list simple">
@@ -426,8 +339,8 @@ at the beginning of the path.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="decavision.utils.utils.load_classes">
-<code class="sig-prename descclassname"><span class="pre">decavision.utils.utils.</span></code><code class="sig-name descname"><span class="pre">load_classes</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'classes'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.utils.load_classes" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.utils.utils.load_classes">
+<span class="sig-prename descclassname"><span class="pre">decavision.utils.utils.</span></span><span class="sig-name descname"><span class="pre">load_classes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'classes'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.utils.load_classes" title="Permalink to this definition"></a></dt>
 <dd><p>Open csv and create list from its content. If csv is on google cloud storage,
 the file is downloaded into working directory and then opened.</p>
 <dl class="field-list simple">
@@ -447,8 +360,8 @@ the file is downloaded into working directory and then opened.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="decavision.utils.utils.load_model">
-<code class="sig-prename descclassname"><span class="pre">decavision.utils.utils.</span></code><code class="sig-name descname"><span class="pre">load_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_top</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.utils.load_model" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.utils.utils.load_model_clear">
+<span class="sig-prename descclassname"><span class="pre">decavision.utils.utils.</span></span><span class="sig-name descname"><span class="pre">load_model_clear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_top</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.utils.load_model_clear" title="Permalink to this definition"></a></dt>
 <dd><p>Clear tensorflow session and load keras .h5 model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -467,8 +380,8 @@ the file is downloaded into working directory and then opened.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="decavision.utils.utils.upload_file_gcs">
-<code class="sig-prename descclassname"><span class="pre">decavision.utils.utils.</span></code><code class="sig-name descname"><span class="pre">upload_file_gcs</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gcp_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.utils.upload_file_gcs" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="decavision.utils.utils.upload_file_gcs">
+<span class="sig-prename descclassname"><span class="pre">decavision.utils.utils.</span></span><span class="sig-name descname"><span class="pre">upload_file_gcs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gcp_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.utils.upload_file_gcs" title="Permalink to this definition"></a></dt>
 <dd><p>Copy local file to a folder in google cloud storage and call it classes.csv.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -480,55 +393,38 @@ the file is downloaded into working directory and then opened.</p>
 </dl>
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="data_example.html" class="btn btn-neutral float-right" title="Build a dataset from scratch" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="testing.html" class="btn btn-neutral float-left" title="Model testing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="data_example.html" class="btn btn-neutral float-right" title="Build a dataset from scratch" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2020, Decathlon Canada.
-
-    </p>
+    <p>&#169; Copyright 2020, Decathlon Canada.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

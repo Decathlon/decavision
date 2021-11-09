@@ -11,14 +11,15 @@ from PIL import Image
 import tensorflow as tf
 
 
-def prepare_image(image_path, target_size):
+def prepare_image(image_path, target_size, rescaling=255):
     """
     Load and convert image to numpy array to feed it to a neural network. Image is resized, converted to RGB
-    and its pixels are normalized. An extra dimension is added to the array.
+    and its pixels are normalized if required. An extra dimension is added to the array.
 
     Arguments:
         image_path (str): path to image to be converted
         target_size (tuple(int,int)): desired size for the image
+        rescaling (int): divide all the pixels of the image by this number
 
     Returns:
         numpy array: processed image, with shape (1,target_size,3)
@@ -30,7 +31,7 @@ def prepare_image(image_path, target_size):
     image = tf.keras.preprocessing.image.img_to_array(image)
     image = np.expand_dims(image, axis=0)
     # rescale the pixels to a 0-1 range
-    image = image.astype(np.float32) / 255
+    image = image.astype(np.float32) / rescaling
     return image
 
 
@@ -117,7 +118,7 @@ def split_train(path='data/image_dataset', split=0.1, with_test=False):
             # Create the folder in the val subdirectory
             create_dir(path + '/test/' + i)
 
-            for j in range(int(split * len(images)), 2*int(split * len(images))):
+            for j in range(int(split * len(images)), 2 * int(split * len(images))):
                 os.rename(path + '/train/' + i + '/' + images[j], path + '/test/' + i + '/' + images[j])
     print('Training dataset has been split.')
 
