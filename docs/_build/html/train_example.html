@@ -1,70 +1,34 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>Train and optimize model &mdash; decavision 1.2.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+  <title>Train and optimize model &mdash; decavision 1.3.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Improve a model using unlabelled images" href="ssl_example.html" />
+    <link rel="next" title="Improve a classification model using unlabelled images" href="ssl_example.html" />
     <link rel="prev" title="Build a dataset from scratch" href="data_example.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> decavision
-          
-
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -72,26 +36,15 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Functions</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Functions</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="data.html">Preparing datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="train.html">Train models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Model testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Examples</span></p>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="data_example.html">Build a dataset from scratch</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Train and optimize model</a><ul>
@@ -100,80 +53,39 @@
 <li class="toctree-l2"><a class="reference internal" href="#optimization-of-the-hyperparameters">Optimization of the hyperparameters</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="ssl_example.html">Improve a model using unlabelled images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssl_example.html">Improve a classification model using unlabelled images</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">decavision</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>Train and optimize model</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="_sources/train_example.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="train-and-optimize-model">
-<h1>Train and optimize model<a class="headerlink" href="#train-and-optimize-model" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="train-and-optimize-model">
+<h1>Train and optimize model<a class="headerlink" href="#train-and-optimize-model" title="Permalink to this headline"></a></h1>
 <p>This code example shows how to use this library to train an image classification model from scratch, using a dataset saved in tfrecords format.
 You will also perform an optimization of the hyperparameters of the model to achieve the best accuracy possible.</p>
-<div class="section" id="training-the-classification-model">
-<h2>Training the classification model<a class="headerlink" href="#training-the-classification-model" title="Permalink to this headline">¶</a></h2>
+<section id="training-the-classification-model">
+<h2>Training the classification model<a class="headerlink" href="#training-the-classification-model" title="Permalink to this headline"></a></h2>
 <p>To train an image classification model, you need to have your training and validation data saved in tfrecords format, as is explained in
 <a class="reference internal" href="data_example.html"><span class="doc">Build a dataset from scratch</span></a>. We will continue working with this example. The data is in a directory with the following structure:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">/</span>
@@ -192,8 +104,9 @@ You will also perform an optimization of the hyperparameters of the model to ach
 <span class="n">classifier</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>You can decide the transfer model between Xception, Inception_Resnet, Resnet and B0, B3, B5 or B7 (all EffecientNets). Their respective
-sizes and performance metrics can be found in the keras <a class="reference external" href="https://keras.io/api/applications/">documentation</a>. Also, note that on the fly data augmentation is done by default so if you already generated new images manually be sure to set augment to False.</p>
+<p>You can decide the transfer model between Xception, Inception_Resnet, Resnet, the EffcientNet models B0, B3, B5 and B7, and the EfficientNetV2 models V2-S, V2-M, V2-L and V2-XL. Their respective
+sizes and performance metrics can be found in the keras <a class="reference external" href="https://keras.io/api/applications/">documentation</a>. Many of the models use different image sizes so it is better to not resize the images prior to training. The library does it already.</p>
+<p>Also, note that on the fly data augmentation is done by default so if you already generated new images manually be sure to set augment to False.</p>
 <p>The parameters that can be specified when training are:</p>
 <ul class="simple">
 <li><p>hyperparameters (learning_rate, learning_rate_fine_tuning, epochs, hidden_size, dropout, activation, l2_lambda)</p></li>
@@ -202,9 +115,9 @@ sizes and performance metrics can be found in the keras <a class="reference exte
 <li><p>verbose</p></li>
 </ul>
 <p>This function trains an extra layer on top of the pretrained model and then fine tunes a few of the last layers of the pretrained model.</p>
-</div>
-<div class="section" id="saving-and-exporting-the-keras-model">
-<h2>Saving and exporting the keras model<a class="headerlink" href="#saving-and-exporting-the-keras-model" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="saving-and-exporting-the-keras-model">
+<h2>Saving and exporting the keras model<a class="headerlink" href="#saving-and-exporting-the-keras-model" title="Permalink to this headline"></a></h2>
 <p>Once you are satisfied with your results, you can save your trained model using any of the following two methods:</p>
 <ul>
 <li><p>Specify either the save_model (for .h5 format) or export_model (for .pb format, to use with tfserving) argument when training.
@@ -217,9 +130,9 @@ The value of the argument will be the name of the file saved after training.</p>
 it is only possible to export a model to a google cloud bucket.</p>
 </li>
 </ul>
-</div>
-<div class="section" id="optimization-of-the-hyperparameters">
-<h2>Optimization of the hyperparameters<a class="headerlink" href="#optimization-of-the-hyperparameters" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="optimization-of-the-hyperparameters">
+<h2>Optimization of the hyperparameters<a class="headerlink" href="#optimization-of-the-hyperparameters" title="Permalink to this headline"></a></h2>
 <p>There is no specific rule to select the values of the many hyperparameters so you have to try a variation and find the best.
 This can be done automatically using the following code:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">classifier</span> <span class="o">=</span> <span class="n">decavision</span><span class="o">.</span><span class="n">model_training</span><span class="o">.</span><span class="n">tfrecords_image_classifier</span><span class="o">.</span><span class="n">ImageClassifier</span><span class="p">(</span><span class="n">tfrecords_folder</span><span class="o">=</span><span class="s1">&#39;tfrecords&#39;</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">transfer_model</span><span class="o">=</span><span class="s1">&#39;B3&#39;</span><span class="p">)</span>
@@ -232,55 +145,38 @@ the algorithm is done with the random tries, it starts to learn from the past tr
 scikit-optimize. Every iteration, a checkpoint.pkl file is saved and uploaded to your drive so you don’t lose your progress in
 Google Colab (if you are using it). If you want to restart from a previous checkpoint.pkl, the file must be in your working directory.
 During optimization, the results of all the tries are saved in a log file for future reference.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="ssl_example.html" class="btn btn-neutral float-right" title="Improve a model using unlabelled images" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="data_example.html" class="btn btn-neutral float-left" title="Build a dataset from scratch" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ssl_example.html" class="btn btn-neutral float-right" title="Improve a classification model using unlabelled images" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2020, Decathlon Canada.
-
-    </p>
+    <p>&#169; Copyright 2020, Decathlon Canada.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

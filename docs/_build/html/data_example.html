@@ -1,70 +1,34 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>Build a dataset from scratch &mdash; decavision 1.2.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+  <title>Build a dataset from scratch &mdash; decavision 1.3.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Train and optimize model" href="train_example.html" />
     <link rel="prev" title="Utils" href="utils.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> decavision
-          
-
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -72,26 +36,15 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Functions</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Functions</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="data.html">Preparing datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="train.html">Train models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Model testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Examples</span></p>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Build a dataset from scratch</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#splitting-a-set-of-images-into-a-training-and-a-validation-set">Splitting a set of images into a training and a validation set</a></li>
@@ -103,78 +56,37 @@
 <li class="toctree-l1"><a class="reference internal" href="ssl_example.html">Improve a classification model using unlabelled images</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">decavision</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>Build a dataset from scratch</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="_sources/data_example.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="build-a-dataset-from-scratch">
-<h1>Build a dataset from scratch<a class="headerlink" href="#build-a-dataset-from-scratch" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="build-a-dataset-from-scratch">
+<h1>Build a dataset from scratch<a class="headerlink" href="#build-a-dataset-from-scratch" title="Permalink to this headline"></a></h1>
 <p>This code example shows how you can use this library to prepare a dataset of images for training. You can
 perform data augmentation on your images and transform the dataset into tfrecords to be used to train a classification model.
 The data can come from any source and the only requirement is that the images are saved in separate folders for each class.</p>
-<div class="section" id="splitting-a-set-of-images-into-a-training-and-a-validation-set">
-<h2>Splitting a set of images into a training and a validation set<a class="headerlink" href="#splitting-a-set-of-images-into-a-training-and-a-validation-set" title="Permalink to this headline">¶</a></h2>
+<section id="splitting-a-set-of-images-into-a-training-and-a-validation-set">
+<h2>Splitting a set of images into a training and a validation set<a class="headerlink" href="#splitting-a-set-of-images-into-a-training-and-a-validation-set" title="Permalink to this headline"></a></h2>
 <p>If you have a single set of images, but would like to split it into a training and a validation set, first place your images in
 a train folder located in ‘data/image_dataset’ for this example. Using hockey and soccer players as examples
 of classes, your dataset should be organized in the directory as follows:</p>
@@ -197,9 +109,9 @@ of classes, your dataset should be organized in the directory as follows:</p>
 </div>
 <p>This will go through all the classes in the training set, randomly pick a fraction (<em>split</em> argument) of the images, and
 move them from the train/ directory to a newly created val/ directory.</p>
-</div>
-<div class="section" id="make-data-augmentation-on-training-images">
-<h2>Make data augmentation on training images<a class="headerlink" href="#make-data-augmentation-on-training-images" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="make-data-augmentation-on-training-images">
+<h2>Make data augmentation on training images<a class="headerlink" href="#make-data-augmentation-on-training-images" title="Permalink to this headline"></a></h2>
 <p>You can increase the training dataset by using data augmentation. You can choose between all these options : distortion,
 flip_horizontal, flip_vertical, random_crop, random_erasing, rotate, resize, skew, shear, brightness, contrast, color. All the images
 in the specified folder will have a combination of the desired augmentations. Then you need to specify a desired number of images for all the classes, and it will generate new images to get as close as possible
@@ -209,9 +121,9 @@ to that number:</p>
 </pre></div>
 </div>
 <p>If you don’t want to generate new images there is an option to do data augmentation during training by modifying the training data online.</p>
-</div>
-<div class="section" id="generate-tfrecord-files">
-<h2>Generate Tfrecord files<a class="headerlink" href="#generate-tfrecord-files" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="generate-tfrecord-files">
+<h2>Generate Tfrecord files<a class="headerlink" href="#generate-tfrecord-files" title="Permalink to this headline"></a></h2>
 <p>Once this is done you can generate Tfrecords, which is hardly recommended if you want to use TPU, or just to get better performance
 from your GPU. It is recommended that you create 100 Mb file using multiple shards. Also, you can save the generated files in a
 GCS Bucket (gs://) as the output folder (only if you are on colab and have authenticated your account):</p>
@@ -221,55 +133,39 @@ GCS Bucket (gs://) as the output folder (only if you are on colab and have authe
 </div>
 <p>You need to use this code once for your train, val (and test folders if you have one). This will delete the old records in the folders and create
 a csv file with the names of your classes.</p>
-</div>
-</div>
+<p>The images are not resized by default because different models use different sizes during training. There is an option to specify a target size if desired.</p>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="train_example.html" class="btn btn-neutral float-right" title="Train and optimize model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="utils.html" class="btn btn-neutral float-left" title="Utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="train_example.html" class="btn btn-neutral float-right" title="Train and optimize model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2020, Decathlon Canada.
-
-    </p>
+    <p>&#169; Copyright 2020, Decathlon Canada.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

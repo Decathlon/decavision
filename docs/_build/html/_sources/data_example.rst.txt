@@ -60,5 +60,7 @@ GCS Bucket (gs://) as the output folder (only if you are on colab and have authe
 You need to use this code once for your train, val (and test folders if you have one). This will delete the old records in the folders and create 
 a csv file with the names of your classes.
 
+The images are not resized by default because different models use different sizes during training. There is an option to specify a target size if desired.
+
   
   
