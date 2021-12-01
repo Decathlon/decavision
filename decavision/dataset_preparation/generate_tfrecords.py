@@ -79,7 +79,10 @@ class TfrecordsGenerator:
             bits = tf.io.read_file(filename)
             image = tf.image.decode_jpeg(bits, channels=3)
             label = tf.strings.split(tf.expand_dims(filename, axis=-1), sep=utils.check_sep())
-            label = label.values[-2]
+            if multilabel:
+                label = label.values[-1]
+            else:
+                label = label.values[-2]
             return image, label
 
         def resize_image(image, label):
@@ -115,7 +118,7 @@ class TfrecordsGenerator:
             with tf.io.TFRecordWriter(filename) as out_file:
                 for i in range(shard_size):
                     example = self._to_tfrecord(images[i],  # re-compressed image: already a byte string
-                                                [classes.index(labels[i].decode('utf8'))])
+                                                [classes.index(x) for x in labels[i].decode('utf8').split('.')[0].split('|')])
                     out_file.write(example.SerializeToString())
                 print("Wrote file {} containing {} records".format(filename, shard_size))
 
