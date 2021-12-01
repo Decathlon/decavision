@@ -81,7 +81,10 @@ def create_dir(path):
         os.mkdir(path)
 
 
-def split_train(path='data/image_dataset', split=0.1, with_test=False):
+def split_train(path='data/image_dataset', 
+                split=0.1, 
+                multilabel=False,
+                with_test=False):
     """
     Separate images randomly into a training, a validation and potentially a test dataset.
     Images must be located in a folder called train, which contains a subfolder per category.
@@ -90,6 +93,7 @@ def split_train(path='data/image_dataset', split=0.1, with_test=False):
     Arguments:
         path (str): path to the image_dataset directory
         split (float): fraction of each category that we move to the validation (val) subdirectory
+        multilabel (bool): if we are in a multilabel setting, as such not labels in the image names
         with_test (bool): determine if one image of each category is moved to test dataset
     """
 
@@ -100,7 +104,11 @@ def split_train(path='data/image_dataset', split=0.1, with_test=False):
         create_dir(path + '/test')
 
     # Loop through all the categories in the train directory
-    for i in os.listdir(path + '/train'):
+    if multilabel:
+        list_labels = ['']
+    else:
+        list_labels = os.listdir(path + '/train')
+    for i in list_labels:
 
         # Create the folder in the val subdirectory
         create_dir(path + '/val/' + i)
@@ -111,7 +119,10 @@ def split_train(path='data/image_dataset', split=0.1, with_test=False):
 
         # Move a fraction of the images to the val directory
         for j in range(int(split * len(images))):
-            os.rename(path + '/train/' + i + '/' + images[j], path + '/val/' + i + '/' + images[j])
+            if i != '':
+                os.rename(path + '/train/' + i + '/' + images[j], path + '/val/' + i + '/' + images[j])
+            else:
+                os.rename(path + '/train/' + images[j], path + '/val/' + images[j])
 
         # Move one of the images to the test directory
         if with_test:
@@ -119,7 +130,10 @@ def split_train(path='data/image_dataset', split=0.1, with_test=False):
             create_dir(path + '/test/' + i)
 
             for j in range(int(split * len(images)), 2 * int(split * len(images))):
-                os.rename(path + '/train/' + i + '/' + images[j], path + '/test/' + i + '/' + images[j])
+                if i != '':
+                    os.rename(path + '/train/' + i + '/' + images[j], path + '/test/' + i + '/' + images[j])
+                else:
+                    os.rename(path + '/train/' + images[j], path + '/val/' + images[j])
     print('Training dataset has been split.')
 
 
