@@ -21,13 +21,15 @@ class TfrecordsGenerator:
         """ Convert image and label to tfrecord example. """
         example = tf.train.Example(features=tf.train.Features(feature={
             'image': tf.train.Feature(bytes_list=tf.train.BytesList(value=[img_bytes])),
-            'label': tf.train.Feature(int64_list=tf.train.Int64List(value=[label]))
+            'label': tf.train.Feature(int64_list=tf.train.Int64List(value=label))
         }))
         return example
 
     def convert_image_folder(self, img_folder='data/image_dataset/train',
                              output_folder='data/image_dataset/train',
-                             img_folder_new=None, target_size=None,
+                             multilabel=False,
+                             img_folder_new=None, 
+                             target_size=None,
                              shards=16):
         """
         Convert all images in a folder (like train or val) to tfrecords. Folder must contain subfolders for each category.
@@ -39,6 +41,7 @@ class TfrecordsGenerator:
             output_folder (str): folder to save the results, content of folder is deleted to save new data
             img_folder_new (str): if specified, images from this folder are included in the tfrecords as
                 new categories for the purpose of progressive learning
+            multilabel (bool): True if it is a multilabel problem
             shards (int): number of files to create
             target_size (tuple(int,int)): size to reshape the images if desired
         """
@@ -51,17 +54,25 @@ class TfrecordsGenerator:
             utils.empty_folder(output_folder)
 
         # Get all file names of images present in folder
-        classes = sorted(os.listdir(img_folder))
-        if img_folder_new:
-            new_classes = sorted(os.listdir(img_folder_new))
-            classes = classes + new_classes
-        print(classes)
-        img_pattern = os.path.join(img_folder, '*/*')
-        if img_folder_new:
-            img_pattern_new = os.path.join(img_folder_new, '*/*')
-            img_pattern = [img_pattern, img_pattern_new]
-        nb_images = len(tf.io.gfile.glob(img_pattern))
-        shard_size = math.ceil(1.0 * nb_images / shards)
+        if multilabel:
+          classes = [i.split('.')[0].split('|') for i in os.listdir(img_folder)]
+          classes = [item for sublist in classes for item in sublist]
+          classes = list(set(classes))
+          img_pattern = os.path.join(img_folder, '*')
+          nb_images = len(tf.io.gfile.glob(img_pattern))
+          shard_size = math.ceil(1.0 * nb_images / shards)
+        else:
+          classes = sorted(os.listdir(img_folder))
+          if img_folder_new:
+              new_classes = sorted(os.listdir(img_folder_new))
+              classes = classes + new_classes
+          print(classes)
+          img_pattern = os.path.join(img_folder, '*/*')
+          if img_folder_new:
+              img_pattern_new = os.path.join(img_folder_new, '*/*')
+              img_pattern = [img_pattern, img_pattern_new]
+          nb_images = len(tf.io.gfile.glob(img_pattern))
+          shard_size = math.ceil(1.0 * nb_images / shards)
         print("Pattern matches {} images which will be rewritten as {} .tfrec files containing {} images each.".format(nb_images, shards, shard_size))
 
         def decode_jpeg_and_label(filename):
@@ -104,7 +115,7 @@ class TfrecordsGenerator:
             with tf.io.TFRecordWriter(filename) as out_file:
                 for i in range(shard_size):
                     example = self._to_tfrecord(images[i],  # re-compressed image: already a byte string
-                                                classes.index(labels[i].decode('utf8')))
+                                                [classes.index(labels[i].decode('utf8'))])
                     out_file.write(example.SerializeToString())
                 print("Wrote file {} containing {} records".format(filename, shard_size))
 
