@@ -55,7 +55,7 @@ class TfrecordsGenerator:
 
         # Get all file names of images present in folder
         if multilabel:
-          classes = [i.split('.')[0].split('|') for i in os.listdir(img_folder)]
+          classes = [i.split('.')[0].split('__') for i in os.listdir(img_folder)]
           classes = [item for sublist in classes for item in sublist]
           classes = list(set(classes))
           img_pattern = os.path.join(img_folder, '*')
@@ -118,7 +118,7 @@ class TfrecordsGenerator:
             with tf.io.TFRecordWriter(filename) as out_file:
                 for i in range(shard_size):
                     example = self._to_tfrecord(images[i],  # re-compressed image: already a byte string
-                                                [classes.index(x) for x in labels[i].decode('utf8').split('.')[0].split('|')])
+                                                [classes.index(x) for x in labels[i].decode('utf8').split('.')[0].split('__')])
                     out_file.write(example.SerializeToString())
                 print("Wrote file {} containing {} records".format(filename, shard_size))
 
