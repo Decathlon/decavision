@@ -28,12 +28,20 @@ class ImageClassifier:
             Xception, Inception_Resnet, Resnet, (EfficientNet) B0, B3, B5, B7 or (EfficientnetV2) V2-S, V2-M, V2-L, V2-XL
         augment (boolean): Whether to augment the training data, default is True
         input_shape (tuple(int,int)): shape of the input images for the model, if not specified, recommended sizes are used for each one
+        multilable (boolean): if each image is attached to multiple classes
     """
 
-    def __init__(self, tfrecords_folder, batch_size=128, transfer_model='Inception', augment=True, input_shape=None):
+    def __init__(self, 
+                 tfrecords_folder, 
+                 batch_size=128, 
+                 transfer_model='Inception', 
+                 augment=True, 
+                 input_shape=None,
+                 multilabel=False):
 
         self.tfrecords_folder = tfrecords_folder
         self.use_TPU, self.use_GPU = utils.check_PU()
+        self.multilabel = multilabel
         if self.use_TPU and batch_size % 8:
             print(
                 'Batch size {} is not multiple of 8, required for TPU'.format(batch_size))
@@ -138,6 +146,22 @@ class ImageClassifier:
             feature = tf.image.resize(image, [*self.target_size])
             label = tf.cast([example['label']], tf.int32)
             return feature, label
+        
+        def _read_tfrecord_multilabel(example):
+            """ Extract image and label from single tfrecords example."""
+            features = {
+                'image': tf.io.FixedLenFeature((), tf.string),
+                'label': tf.io.FixedLenSequenceFeature((), tf.int64, allow_missing=True),
+            }
+            example = tf.io.parse_single_example(example, features)
+
+            image = tf.image.decode_jpeg(example['image'], channels=3)
+            # normalization of pixels is already done in TF EfficientNets
+            if self.transfer_model not in ['B0', 'B3', 'B5', 'B7']:
+                image = tf.image.convert_image_dtype(image, dtype=tf.float32)
+            feature = tf.image.resize(image, [*self.target_size])
+            label = tf.cast([example['label']], tf.int32)
+            return feature, label
 
         def _load_dataset(filenames):
             """ Load the tfrecords files in a tf.data object."""
@@ -161,7 +185,10 @@ class ImageClassifier:
             dataset = dataset.shuffle(buffer_size=math.ceil(
                 self.training_shard_size * self.nb_train_shards / 4))
         dataset = dataset.repeat()
-        dataset = dataset.map(_read_tfrecord, num_parallel_calls=AUTO)
+        if self.multilabel:
+            dataset = dataset.map(_read_tfrecord_multilabel, num_parallel_calls=AUTO)
+        else:
+            dataset = dataset.map(_read_tfrecord, num_parallel_calls=AUTO)
         dataset = dataset.batch(
             batch_size=self.batch_size, drop_remainder=self.use_TPU)
         dataset = dataset.prefetch(AUTO)
