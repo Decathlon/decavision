@@ -160,7 +160,8 @@ class ImageClassifier:
             if self.transfer_model not in ['B0', 'B3', 'B5', 'B7']:
                 image = tf.image.convert_image_dtype(image, dtype=tf.float32)
             feature = tf.image.resize(image, [*self.target_size])
-            label = tf.cast([example['label']], tf.int32)
+            label = tf.one_hot(example['label'], depth=len(self.categories), on_value=1.0, off_value=0.0)
+            #label = tf.cast([example['label']], tf.int32)
             return feature, label
 
         def _load_dataset(filenames):
