@@ -328,10 +328,16 @@ class ImageClassifier:
 
         x = tf.keras.layers.Dense(
             len(self.categories), name='logs')(x)  # Output layer
-        predictions = tf.keras.layers.Activation(
-            'softmax', name='preds')(x)  # Output activation
-        loss = 'sparse_categorical_crossentropy'
-        metrics = ['sparse_categorical_accuracy']
+        if self.multilabel:
+            predictions = tf.keras.layers.Activation(
+                'sigmoid', name='preds')(x)  # Output activation
+            loss = 'binary_crossentropy'
+            metrics = ['accuracy']
+        else:
+            predictions = tf.keras.layers.Activation(
+                'softmax', name='preds')(x)  # Output activation
+            loss = 'sparse_categorical_crossentropy'
+            metrics = ['sparse_categorical_accuracy']
 
         return tf.keras.Model(inputs=base_model.input, outputs=predictions, name=self.transfer_model), base_model_last_block, loss, metrics
 
