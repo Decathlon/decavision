@@ -8,12 +8,14 @@ import skopt
 import tensorflow as tf
 import tensorflow_hub as hub
 
+from keras import backend as K
+
 from decavision.utils import training_utils
 from decavision.utils import utils
 
 AUTO = tf.data.experimental.AUTOTUNE
 
-
+#metric for multilable classification
 class ImageClassifier:
     """
     Class to train an image classification model by using transfer learning.
@@ -119,6 +121,27 @@ class ImageClassifier:
             self.target_size = (input_dims.get(self.transfer_model, 224), input_dims.get(self.transfer_model, 224))
 
         print("Data augmentation during training: " + str(augment))
+
+    @staticmethod
+    def _f1_score(y_true, y_pred):
+        """
+        Computer F1-score metric
+
+        Arguments:
+            y_true (tensor): True labels
+            y_pred (tensor): Predicted labels
+        """
+        #recall
+        true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+        possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
+        recall = true_positives / (possible_positives + K.epsilon())
+
+        #precision
+        true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+        predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
+        precision = true_positives / (predicted_positives + K.epsilon())
+
+        return 2*((precision*recall)/(precision+recall+K.epsilon()))
 
     def _get_dataset(self, is_training, nb_readers):
         """
@@ -336,11 +359,12 @@ class ImageClassifier:
             predictions = tf.keras.layers.Activation(
                 'sigmoid', name='preds')(x)  # Output activation
             loss = 'binary_crossentropy'
+            metrics = [self.metric, self._f1_score]
         else:
             predictions = tf.keras.layers.Activation(
                 'softmax', name='preds')(x)  # Output activation
             loss = 'sparse_categorical_crossentropy'
-        metrics=[self.metric]
+            metrics=[self.metric]
 
         return tf.keras.Model(inputs=base_model.input, outputs=predictions, name=self.transfer_model), base_model_last_block, loss, metrics
 
