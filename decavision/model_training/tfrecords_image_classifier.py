@@ -42,6 +42,10 @@ class ImageClassifier:
         self.tfrecords_folder = tfrecords_folder
         self.use_TPU, self.use_GPU = utils.check_PU()
         self.multilabel = multilabel
+        if self.multilabel:
+            self.metric = 'accuracy'
+        else:
+            self.metric = 'sparse_categorical_accuracy'
         if self.use_TPU and batch_size % 8:
             print(
                 'Batch size {} is not multiple of 8, required for TPU'.format(batch_size))
@@ -332,12 +336,11 @@ class ImageClassifier:
             predictions = tf.keras.layers.Activation(
                 'sigmoid', name='preds')(x)  # Output activation
             loss = 'binary_crossentropy'
-            metrics = ['accuracy']
         else:
             predictions = tf.keras.layers.Activation(
                 'softmax', name='preds')(x)  # Output activation
             loss = 'sparse_categorical_crossentropy'
-            metrics = ['sparse_categorical_accuracy']
+        metrics=[self.metric]
 
         return tf.keras.Model(inputs=base_model.input, outputs=predictions, name=self.transfer_model), base_model_last_block, loss, metrics
 
@@ -372,7 +375,7 @@ class ImageClassifier:
         """
 
         # use reduce learning rate and early stopping callbacks
-        reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_sparse_categorical_accuracy',
+        reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_' + self.metric,
                                                          factor=0.1,
                                                          patience=5,
                                                          mode='max')
@@ -387,7 +390,7 @@ class ImageClassifier:
 
         # if we want to stop training when no sufficient improvement in validation metric has been achieved
         if patience:
-            early_stop = tf.keras.callbacks.EarlyStopping(monitor='val_sparse_categorical_accuracy',
+            early_stop = tf.keras.callbacks.EarlyStopping(monitor='val_' + self.metric,
                                                           patience=patience,
                                                           restore_best_weights=True)
             callbacks.append(early_stop)
@@ -449,7 +452,7 @@ class ImageClassifier:
                                 verbose=verbose, callbacks=callbacks, initial_epoch=epochs)
 
         # Evaluate the model, just to be sure
-        self.fitness = history.history['val_sparse_categorical_accuracy'][-1]
+        self.fitness = history.history['val_' + self.metric][-1]
         self.model = model
         del history
         del model
