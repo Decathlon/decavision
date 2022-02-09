@@ -26,7 +26,7 @@ class TfrecordsGenerator:
         return example
 
     def convert_image_folder(self, img_folder='data/image_dataset/train',
-                             output_folder='data/image_dataset/train',
+                             output_folder='data/tfrecords_dataset/train',
                              multilabel=False,
                              img_folder_new=None, 
                              target_size=None,
@@ -35,6 +35,9 @@ class TfrecordsGenerator:
         Convert all images in a folder (like train or val) to tfrecords. Folder must contain subfolders for each category.
         Possibility to combine data from two folders to perform progressive learning. Tfrecords can be saved
         locally or on google storage. A csv file containing the names of the classes is also saved.
+
+        For multilabel all the images must be in a single folder and their name should be of the form class1__class2__...__imagename.jpg
+        so the classes will be extracted from the file names. To make sure no class is missed, all images in train/val/test are checked.
 
         Arguments:
             img_folder (str): location of the images
@@ -55,24 +58,29 @@ class TfrecordsGenerator:
 
         # Get all file names of images present in folder
         if multilabel:
-          classes = [i.split('.')[0].split('__')[:-1] for i in os.listdir(img_folder)]
-          classes = [item for sublist in classes for item in sublist]
-          classes = list(set(classes))
-          img_pattern = os.path.join(img_folder, '*')
-          nb_images = len(tf.io.gfile.glob(img_pattern))
-          shard_size = math.ceil(1.0 * nb_images / shards)
+            classes = []
+            for folder_name in ['train', 'val', 'test']:
+                folder = os.path.join(os.path.dirname(img_folder), folder_name)
+                if os.path.isdir(folder):
+                    cls = [i.split('.')[0].split('__')[:-1] for i in os.listdir(folder)]
+                    cls = [item for sublist in cls for item in sublist]
+                    classes = classes + cls
+            classes = sorted(list(set(classes)))
+            img_pattern = os.path.join(img_folder, '*')
+            nb_images = len(tf.io.gfile.glob(img_pattern))
+            shard_size = math.ceil(1.0 * nb_images / shards)
         else:
-          classes = sorted(os.listdir(img_folder))
-          if img_folder_new:
-              new_classes = sorted(os.listdir(img_folder_new))
-              classes = classes + new_classes
-          print(classes)
-          img_pattern = os.path.join(img_folder, '*/*')
-          if img_folder_new:
-              img_pattern_new = os.path.join(img_folder_new, '*/*')
-              img_pattern = [img_pattern, img_pattern_new]
-          nb_images = len(tf.io.gfile.glob(img_pattern))
-          shard_size = math.ceil(1.0 * nb_images / shards)
+            classes = sorted(os.listdir(img_folder))
+            if img_folder_new:
+                new_classes = sorted(os.listdir(img_folder_new))
+                classes = classes + new_classes
+            print(classes)
+            img_pattern = os.path.join(img_folder, '*/*')
+            if img_folder_new:
+                img_pattern_new = os.path.join(img_folder_new, '*/*')
+                img_pattern = [img_pattern, img_pattern_new]
+            nb_images = len(tf.io.gfile.glob(img_pattern))
+            shard_size = math.ceil(1.0 * nb_images / shards)
         print("Pattern matches {} images which will be rewritten as {} .tfrec files containing {} images each.".format(nb_images, shards, shard_size))
 
         def decode_jpeg_and_label(filename):
