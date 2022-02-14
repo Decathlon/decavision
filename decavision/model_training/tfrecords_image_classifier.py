@@ -6,9 +6,8 @@ import os
 import dill
 import skopt
 import tensorflow as tf
+import tensorflow.keras.backend as K
 import tensorflow_hub as hub
-
-from keras import backend as K
 
 from decavision.utils import training_utils
 from decavision.utils import utils
@@ -171,23 +170,11 @@ class ImageClassifier:
             if self.transfer_model not in ['B0', 'B3', 'B5', 'B7']:
                 image = tf.image.convert_image_dtype(image, dtype=tf.float32)
             feature = tf.image.resize(image, [*self.target_size])
-            label = tf.cast([example['label']], tf.int32)
-            return feature, label
-        
-        def _read_tfrecord_multilabel(example):
-            """ Extract image and label from single tfrecords example."""
-            features = {
-                'image': tf.io.FixedLenFeature((), tf.string),
-                'label': tf.io.FixedLenSequenceFeature((), tf.int64, allow_missing=True),
-            }
-            example = tf.io.parse_single_example(example, features)
-            image = tf.image.decode_jpeg(example['image'], channels=3)
-            # normalization of pixels is already done in TF EfficientNets
-            if self.transfer_model not in ['B0', 'B3', 'B5', 'B7']:
-                image = tf.image.convert_image_dtype(image, dtype=tf.float32)
-            feature = tf.image.resize(image, [*self.target_size])
-            label = tf.one_hot(example['label'], depth=len(self.categories), on_value=1.0, off_value=0.0)
-            label = tf.reduce_sum(label, 0)
+            if self.multilabel:
+                label = tf.one_hot(example['label'], depth=len(self.categories), on_value=1.0, off_value=0.0)
+                label = tf.reduce_sum(label, 0)
+            else:
+                label = tf.cast([example['label']], tf.int32)
             return feature, label
 
         def _load_dataset(filenames):
@@ -212,10 +199,7 @@ class ImageClassifier:
             dataset = dataset.shuffle(buffer_size=math.ceil(
                 self.training_shard_size * self.nb_train_shards / 4))
         dataset = dataset.repeat()
-        if self.multilabel:
-            dataset = dataset.map(_read_tfrecord_multilabel, num_parallel_calls=AUTO)
-        else:
-            dataset = dataset.map(_read_tfrecord, num_parallel_calls=AUTO)
+        dataset = dataset.map(_read_tfrecord, num_parallel_calls=AUTO)
         dataset = dataset.batch(
             batch_size=self.batch_size, drop_remainder=self.use_TPU)
         dataset = dataset.prefetch(AUTO)
