@@ -161,7 +161,7 @@ class ImageClassifier:
             """ Extract image and label from single tfrecords example."""
             features = {
                 'image': tf.io.FixedLenFeature((), tf.string),
-                'label': tf.io.FixedLenFeature((), tf.int64),
+                'label': tf.io.FixedLenSequenceFeature((), tf.int64, allow_missing=True),
             }
             example = tf.io.parse_single_example(example, features)
 
