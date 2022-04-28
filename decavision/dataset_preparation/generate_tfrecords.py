@@ -125,8 +125,12 @@ class TfrecordsGenerator:
 
             with tf.io.TFRecordWriter(filename) as out_file:
                 for i in range(shard_size):
+                    if multilabel:
+                        label_list = [classes.index(x) for x in labels[i].decode('utf8').split('.')[0].split('__')[:-1]]
+                    else:
+                        label_list = [classes.index(labels[i].decode('utf8'))]
                     example = self._to_tfrecord(images[i],  # re-compressed image: already a byte string
-                                                [classes.index(x) for x in labels[i].decode('utf8').split('.')[0].split('__')[:-1]])
+                                                label_list)
                     out_file.write(example.SerializeToString())
                 print("Wrote file {} containing {} records".format(filename, shard_size))
 

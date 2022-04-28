@@ -42,10 +42,7 @@ class ImageClassifier:
         self.tfrecords_folder = tfrecords_folder
         self.use_TPU, self.use_GPU = utils.check_PU()
         self.multilabel = multilabel
-        if self.multilabel:
-            self.metric = 'accuracy'
-        else:
-            self.metric = 'sparse_categorical_accuracy'
+        self.metric = 'accuracy'
         if self.use_TPU and batch_size % 8:
             print(
                 'Batch size {} is not multiple of 8, required for TPU'.format(batch_size))
@@ -168,11 +165,7 @@ class ImageClassifier:
             if self.transfer_model not in ['B0', 'B3', 'B5', 'B7', 'V2-S', 'V2-M', 'V2-L']:
                 image = tf.image.convert_image_dtype(image, dtype=tf.float32)
             feature = tf.image.resize(image, [*self.target_size])
-            if self.multilabel:
-                label = tf.one_hot(example['label'], depth=len(self.categories), on_value=1.0, off_value=0.0)
-                label = tf.reduce_sum(label, 0)
-            else:
-                label = tf.cast([example['label']], tf.int32)
+            label = tf.reduce_sum(label, 0)
             return feature, label
 
         def _load_dataset(filenames):
@@ -343,7 +336,7 @@ class ImageClassifier:
         else:
             predictions = tf.keras.layers.Activation(
                 'softmax', name='preds')(x)  # Output activation
-            loss = 'sparse_categorical_crossentropy'
+            loss = 'categorical_crossentropy'
             metrics=[self.metric]
 
         return tf.keras.Model(inputs=base_model.input, outputs=predictions, name=self.transfer_model), base_model_last_block, loss, metrics
