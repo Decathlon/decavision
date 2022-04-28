@@ -7,7 +7,6 @@ import dill
 import skopt
 import tensorflow as tf
 import tensorflow.keras.backend as K
-import tensorflow_hub as hub
 
 from decavision.utils import training_utils
 from decavision.utils import utils
@@ -26,7 +25,7 @@ class ImageClassifier:
             folders train and val, filenames of the form filenumber-numberofimages.tfrec
         batch_size (int): size of batches of data used for training
         transfer_model (str): pretrained model to use for transfer learning, can be one of Inception,
-            Xception, Inception_Resnet, Resnet, (EfficientNet) B0, B3, B5, B7 or (EfficientnetV2) V2-S, V2-M, V2-L, V2-XL
+            Xception, Inception_Resnet, Resnet, (EfficientNet) B0, B3, B5, B7 or (EfficientnetV2) V2-S, V2-M, V2-L
         augment (boolean): Whether to augment the training data, default is True
         input_shape (tuple(int,int)): shape of the input images for the model, if not specified, recommended sizes are used for each one
         multilable (boolean): if each image is attached to multiple classes
@@ -107,9 +106,8 @@ class ImageClassifier:
                       'B7': 600,
                       'V2-S': 384,
                       'V2-M': 480,
-                      'V2-L': 480,
-                      'V2-XL': 512}
-        if transfer_model in ['B0', 'B3', 'B5', 'B7']:
+                      'V2-L': 480}
+        if transfer_model in ['B0', 'B3', 'B5', 'B7', 'V2-S', 'V2-M', 'V2-L']:
             self.scale = 255.
         else:
             self.scale = 1.
@@ -167,7 +165,7 @@ class ImageClassifier:
 
             image = tf.image.decode_jpeg(example['image'], channels=3)
             # normalization of pixels is already done in TF EfficientNets
-            if self.transfer_model not in ['B0', 'B3', 'B5', 'B7']:
+            if self.transfer_model not in ['B0', 'B3', 'B5', 'B7', 'V2-S', 'V2-M', 'V2-L']:
                 image = tf.image.convert_image_dtype(image, dtype=tf.float32)
             feature = tf.image.resize(image, [*self.target_size])
             if self.multilabel:
@@ -298,18 +296,17 @@ class ImageClassifier:
             base_model = tf.keras.applications.EfficientNetB7(weights='imagenet', include_top=False,
                                                               input_shape=(*self.target_size, 3))
             base_model_last_block = None  # all layers trainable
-        elif self.transfer_model in ['V2-S', 'V2-M', 'V2-L', 'V2-XL']:
-            print("Downloading model from tensorflow hub")
-            os.environ["TFHUB_MODEL_LOAD_FORMAT"] = "UNCOMPRESSED"
-            tfhub_links = {'V2-S': 'https://tfhub.dev/google/imagenet/efficientnet_v2_imagenet21k_s/feature_vector/2',
-                           'V2-M': 'https://tfhub.dev/google/imagenet/efficientnet_v2_imagenet21k_m/feature_vector/2',
-                           'V2-L': 'https://tfhub.dev/google/imagenet/efficientnet_v2_imagenet21k_l/feature_vector/2',
-                           'V2-XL': 'https://tfhub.dev/google/imagenet/efficientnet_v2_imagenet21k_xl/feature_vector/2'}
-            url = tfhub_links[self.transfer_model]
-            layer = hub.KerasLayer(url, trainable=True, input_shape=self.target_size)
-            input = tf.keras.layers.Input(shape=(*self.target_size, 3))
-            output = layer(input)
-            base_model = tf.keras.Model(inputs=input, outputs=output)
+        elif self.transfer_model == 'V2-S':
+            base_model = tf.keras.applications.EfficientNetV2S(weights='imagenet', include_top=False,
+                                                               input_shape=(*self.target_size, 3))
+            base_model_last_block = None  # all layers trainable
+        elif self.transfer_model == 'V2-M':
+            base_model = tf.keras.applications.EfficientNetV2M(weights='imagenet', include_top=False,
+                                                               input_shape=(*self.target_size, 3))
+            base_model_last_block = None  # all layers trainable
+        elif self.transfer_model == 'V2-L':
+            base_model = tf.keras.applications.EfficientNetV2L(weights='imagenet', include_top=False,
+                                                               input_shape=(*self.target_size, 3))
             base_model_last_block = None  # all layers trainable
         else:
             base_model = tf.keras.applications.InceptionV3(weights='imagenet',
@@ -322,8 +319,7 @@ class ImageClassifier:
 
         # Add the classification layers using Keras functional API
         x = base_model.output
-        if self.transfer_model not in ['V2-S', 'V2-M', 'V2-L', 'V2-XL']:
-            x = tf.keras.layers.GlobalAveragePooling2D()(x)
+        x = tf.keras.layers.GlobalAveragePooling2D()(x)
         # Hidden layer for classification
         if hidden_size == 0:
             x = tf.keras.layers.Dropout(rate=dropout)(x)
