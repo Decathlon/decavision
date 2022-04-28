@@ -299,15 +299,15 @@ class ImageClassifier:
         elif self.transfer_model == 'V2-S':
             base_model = tf.keras.applications.EfficientNetV2S(weights='imagenet', include_top=False,
                                                                input_shape=(*self.target_size, 3))
-            base_model_last_block = None  # all layers trainable
+            base_model_last_block = 448  # last block 462, two blocks 448
         elif self.transfer_model == 'V2-M':
             base_model = tf.keras.applications.EfficientNetV2M(weights='imagenet', include_top=False,
                                                                input_shape=(*self.target_size, 3))
-            base_model_last_block = None  # all layers trainable
+            base_model_last_block = 659  # last block 673, two blocks 659
         elif self.transfer_model == 'V2-L':
             base_model = tf.keras.applications.EfficientNetV2L(weights='imagenet', include_top=False,
                                                                input_shape=(*self.target_size, 3))
-            base_model_last_block = None  # all layers trainable
+            base_model_last_block = 925  # last block 939, two blocks 925
         else:
             base_model = tf.keras.applications.InceptionV3(weights='imagenet',
                                                            include_top=False, input_shape=(*self.target_size, 3))
