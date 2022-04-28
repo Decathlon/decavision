@@ -50,7 +50,9 @@ This library is available through the Python Package Installer (PyPI) by typing:
 
 ``pip install decavision``
 
-All the dependencies are installed along with the library, so it is safer to perform the installation in a fresh virtual environment.
+All the dependencies are installed along with the library, so it is safer to perform the installation in a fresh virtual environment. If you are not working in colab you also need to install tensorflow.
+
+``pip install tensorflow>=2.5.0``
 
 Contents
 ========
