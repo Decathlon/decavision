@@ -13,6 +13,7 @@ from decavision.utils import utils
 
 AUTO = tf.data.experimental.AUTOTUNE
 
+
 #metric for multilable classification
 class ImageClassifier:
     """
@@ -125,17 +126,17 @@ class ImageClassifier:
             y_true (tensor): True labels
             y_pred (tensor): Predicted labels
         """
-        #recall
+        # recall
         true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
         possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
         recall = true_positives / (possible_positives + K.epsilon())
 
-        #precision
+        # precision
         true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
         predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
         precision = true_positives / (predicted_positives + K.epsilon())
 
-        return 2*((precision*recall)/(precision+recall+K.epsilon()))
+        return 2 * ((precision * recall) / (precision + recall + K.epsilon()))
 
     def _get_dataset(self, is_training, nb_readers):
         """
@@ -165,6 +166,7 @@ class ImageClassifier:
             if self.transfer_model not in ['B0', 'B3', 'B5', 'B7', 'V2-S', 'V2-M', 'V2-L']:
                 image = tf.image.convert_image_dtype(image, dtype=tf.float32)
             feature = tf.image.resize(image, [*self.target_size])
+            label = tf.one_hot(example['label'], depth=len(self.categories), on_value=1.0, off_value=0.0)
             label = tf.reduce_sum(label, 0)
             return feature, label
 
@@ -337,7 +339,7 @@ class ImageClassifier:
             predictions = tf.keras.layers.Activation(
                 'softmax', name='preds')(x)  # Output activation
             loss = 'categorical_crossentropy'
-            metrics=[self.metric]
+            metrics = [self.metric]
 
         return tf.keras.Model(inputs=base_model.input, outputs=predictions, name=self.transfer_model), base_model_last_block, loss, metrics
 
