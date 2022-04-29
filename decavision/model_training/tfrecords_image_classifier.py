@@ -6,7 +6,6 @@ import os
 import dill
 import skopt
 import tensorflow as tf
-import tensorflow.keras.backend as K
 
 from decavision.utils import training_utils
 from decavision.utils import utils
@@ -116,27 +115,6 @@ class ImageClassifier:
             self.target_size = (input_dims.get(self.transfer_model, 224), input_dims.get(self.transfer_model, 224))
 
         print("Data augmentation during training: " + str(augment))
-
-    @staticmethod
-    def _f1_score(y_true, y_pred):
-        """
-        Computer F1-score metric
-
-        Arguments:
-            y_true (tensor): True labels
-            y_pred (tensor): Predicted labels
-        """
-        # recall
-        true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
-        possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
-        recall = true_positives / (possible_positives + K.epsilon())
-
-        # precision
-        true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
-        predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
-        precision = true_positives / (predicted_positives + K.epsilon())
-
-        return 2 * ((precision * recall) / (precision + recall + K.epsilon()))
 
     def _get_dataset(self, is_training, nb_readers):
         """
@@ -334,7 +312,7 @@ class ImageClassifier:
             predictions = tf.keras.layers.Activation(
                 'sigmoid', name='preds')(x)  # Output activation
             loss = 'binary_crossentropy'
-            metrics = [self.metric, self._f1_score]
+            metrics = [self.metric, training_utils.f1_score]
         else:
             predictions = tf.keras.layers.Activation(
                 'softmax', name='preds')(x)  # Output activation

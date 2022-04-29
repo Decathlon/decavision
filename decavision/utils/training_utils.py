@@ -77,3 +77,24 @@ def custom_loss(old_logits, new_logits, old_classes, L=5, temp=5):
         return sparselogloss(y_true, y_pred) + L * logloss(y_soft, y_pred_soft)
 
     return loss
+
+
+def f1_score(y_true, y_pred):
+    """
+    Computer F1-score metric
+
+    Arguments:
+        y_true (tensor): True labels
+        y_pred (tensor): Predicted labels
+    """
+    # recall
+    true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+    possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
+    recall = true_positives / (possible_positives + K.epsilon())
+
+    # precision
+    true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+    predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
+    precision = true_positives / (predicted_positives + K.epsilon())
+
+    return 2 * ((precision * recall) / (precision + recall + K.epsilon()))

@@ -12,6 +12,7 @@ from tensorflow.keras.models import load_model
 
 from decavision.utils import data_utils
 from decavision.utils import utils
+from decavision.utils.training_utils import f1_score
 
 
 class ModelTester:
@@ -29,7 +30,7 @@ class ModelTester:
             # necessary because keras generators don'T work with TPUs...
             tf.compat.v1.disable_eager_execution()
         try:
-            self.model = load_model(model)
+            self.model = load_model(model, custom_objects={"_f1_score": f1_score, "f1_score": f1_score})
             # efficientnets have the scaling included in them so no need to rescale the images when loading
             if self.model.name[0] in ['B', 'V']:
                 self.rescaling = 1
