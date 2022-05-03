@@ -1,4 +1,5 @@
 import csv
+import json
 import math
 import os
 
@@ -30,14 +31,15 @@ class TfrecordsGenerator:
                              multilabel=False,
                              img_folder_new=None, 
                              target_size=None,
-                             shards=16):
+                             shards=16,
+                             json_path=None):
         """
         Convert all images in a folder (like train or val) to tfrecords. Folder must contain subfolders for each category.
         Possibility to combine data from two folders to perform progressive learning. Tfrecords can be saved
         locally or on google storage. A csv file containing the names of the classes is also saved.
 
-        For multilabel all the images must be in a single folder and their name should be of the form class1__class2__...__imagename.jpg
-        so the classes will be extracted from the file names. To make sure no class is missed, all images in train/val/test are checked.
+        For multilabel all the images must be in a single folder and there must exist a json file with the keys
+        being the filenames and the values being lists of labels.
 
         Arguments:
             img_folder (str): location of the images
@@ -47,6 +49,7 @@ class TfrecordsGenerator:
             multilabel (bool): True if it is a multilabel problem
             shards (int): number of files to create
             target_size (tuple(int,int)): size to reshape the images if desired
+            json_path (str): location of the json file, only used for multilabel
         """
         # Create output directory if it does not exists
         if not os.path.exists(output_folder):
@@ -58,13 +61,11 @@ class TfrecordsGenerator:
 
         # Get all file names of images present in folder
         if multilabel:
+            with open(json_path, 'rb') as f:
+                labels_dict = json.load(f)
             classes = []
-            for folder_name in ['train', 'val', 'test']:
-                folder = os.path.join(os.path.dirname(img_folder), folder_name)
-                if os.path.isdir(folder):
-                    cls = [i.split('.')[0].split('__')[:-1] for i in os.listdir(folder)]
-                    cls = [item for sublist in cls for item in sublist]
-                    classes = classes + cls
+            for values in labels_dict.values():
+                classes += values
             classes = sorted(list(set(classes)))
             img_pattern = os.path.join(img_folder, '*')
             nb_images = len(tf.io.gfile.glob(img_pattern))
@@ -126,7 +127,7 @@ class TfrecordsGenerator:
             with tf.io.TFRecordWriter(filename) as out_file:
                 for i in range(shard_size):
                     if multilabel:
-                        label_list = [classes.index(x) for x in labels[i].decode('utf8').split('.')[0].split('__')[:-1]]
+                        label_list = [classes.index(x) for x in labels_dict[labels[i].decode('utf8')]]
                     else:
                         label_list = [classes.index(labels[i].decode('utf8'))]
                     example = self._to_tfrecord(images[i],  # re-compressed image: already a byte string
