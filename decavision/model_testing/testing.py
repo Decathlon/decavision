@@ -381,4 +381,6 @@ class ModelTesterMultilabel:
         print('f1-score of', round(results[-1] * 100,3), '%')
         
         
+        
+        
   
