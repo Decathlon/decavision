@@ -379,4 +379,6 @@ class ModelTesterMultilabel:
         generator = self._load_dataset(path)
         results = self.model.evaluate(generator)
         print('f1-score of', round(results[-1] * 100,3), '%')
+        
+        
   
