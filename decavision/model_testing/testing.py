@@ -3,6 +3,7 @@ import math
 import os
 import random
 import json
+import cv2
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -339,6 +340,8 @@ class ModelTesterMultilabel:
             plot (bool): plot or not the images, if False, only results are printed
         """
         
+        utils.create_dir("predicated_images") 
+        
         images = glob.glob(os.path.join(path, '*.jpg'))
         for image_path in images:
             # prepare the image
@@ -353,19 +356,22 @@ class ModelTesterMultilabel:
             cls_pred_perc = result[top_pred] * 100
             cls_true = self.values[os.path.basename(image_path)]
             if plot:
-                plt.imshow(image_tensor[0].astype('uint8'), interpolation='nearest')
+                fig, ax = plt.subplots()
+                ax.imshow(image_tensor[0].astype('uint8'), interpolation='nearest')
                 xlabel = 'Prediction :\n'
                 for (x, y) in zip(cls_pred_name, cls_pred_perc):
                     xlabel += '{0}, {1:.2f}%\n'.format(x, y)
-                    plt.xlabel(xlabel)
-                    plt.xticks([])
-                    plt.yticks([])
-                    plt.show()
+                ax.set_xlabel(xlabel)
+                ax.set_xticks([])
+                ax.set_yticks([]) 
+                plt.tight_layout() 
+                plt.show()
+                fig.savefig("predicated_images/" + os.path.basename(image_path))                
             else:
                 print('\nImage: ', image_path)
-                print("\nTrue label:", cls_true)
+                print("True label:", cls_true)
                 for i in range(len(cls_pred_perc)):
-                    print('\nPrediction: {} (probability {}%)'.format(cls_pred_name[i], round(cls_pred_perc[i])))
+                    print('Prediction: {} (probability {}%)'.format(cls_pred_name[i], round(cls_pred_perc[i])))
 
     def evaluate(self, path):
         """
@@ -379,6 +385,28 @@ class ModelTesterMultilabel:
         generator = self._load_dataset(path)
         results = self.model.evaluate(generator)
         print('f1-score of', round(results[-1] * 100,3), '%')
+        
+    def create_movie(self, image_path):
+        """
+        Create a movie from classified images.
+
+        Arguments:
+            image_path (str): location of the classified images
+        """
+        image_folder = image_path
+        video_name = 'video.avi'
+
+        images = [img for img in os.listdir(image_folder) if img.endswith(".jpg")]
+        frame = cv2.imread(os.path.join(image_folder, images[0]))
+        height, width, layers = frame.shape
+
+        video = cv2.VideoWriter(video_name, 0, 1, (width,height))
+
+        for image in images:
+            video.write(cv2.imread(os.path.join(image_folder, image)))
+
+        cv2.destroyAllWindows()
+        video.release()
         
         
         
