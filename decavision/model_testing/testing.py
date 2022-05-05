@@ -340,7 +340,7 @@ class ModelTesterMultilabel:
             plot (bool): plot or not the images, if False, only results are printed
         """
         
-        utils.create_dir("predicated_images") 
+        data_utils.create_dir("predicated_images") 
         
         images = glob.glob(os.path.join(path, '*.jpg'))
         for image_path in images:
