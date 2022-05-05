@@ -331,7 +331,7 @@ class ModelTesterMultilabel:
 
     def classify_images(self, path, categories, threshold = 0.5, plot=True):
         """
-        Classify images located directly in a folder. Plots the images and the first three predictions.
+        Classify images located directly in a folder. Plots and saves the images with the specified threshold.
 
         Arguments:
             path (str): location of the images
