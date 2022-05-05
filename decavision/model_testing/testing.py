@@ -303,7 +303,7 @@ class ModelTesterMultilabel:
         folders for each class. A dataframe is required with 2 columns: original 
         image name and image labels as a list separated by comma. i.e.
         
-        Filenames                |    labels
+        filenames                |    labels
         -------------------------|-----------------
         sun_abifwwwgjnomvfda.jpg | [asphalt,clouds,natural_light,man-made,open_area,far-away_horizon,sky,barn,airfield]
         sun_aciuvbhvntkgdhhk.jpg | [grass,asphalt,natural_light,natural,man-made,open_area,far-away_horizon,sky,dirt/soil,airfield]
@@ -344,7 +344,7 @@ class ModelTesterMultilabel:
             # prepare the image
             image_tensor = data_utils.prepare_image(image_path, self.input_shape, self.rescaling)
             # make and decode the prediction
-            result = model.predict(image_tensor)[0]
+            result = self.model.predict(image_tensor)[0]
             # print image and top predictions
             ##top_pred = np.argsort(result)[::-1][:5] # GET PREDS > THRESHOLD (0.50) KEEP IT AS A USER ARGUMENT. 
             top_pred = result > threshold
