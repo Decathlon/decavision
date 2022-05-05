@@ -2,18 +2,19 @@ import glob
 import math
 import os
 import random
+import json
 
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sn
-from sklearn.metrics import confusion_matrix, classification_report
+import pandas as pd
+from sklearn.metrics import confusion_matrix, classification_report, multilabel_confusion_matrix
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 
 from decavision.utils import data_utils
 from decavision.utils import utils
 from decavision.utils.training_utils import f1_score
-
 
 class ModelTester:
     """
@@ -253,3 +254,129 @@ class ModelTester:
         print('Labels loaded')
         # Show classification report
         print(classification_report(cls_true, cls_pred, target_names=labels, digits=4))
+
+
+
+class ModelTesterMultilabel:
+    """
+    Class to use a trained multilabel image classification model on some images. Using this
+    when working with a TPU disables eager execution.
+
+    Arguments:
+        model (str): path to trained model
+        json_file (str): path to json file containing image ids and their associated labels
+        categories (list[str]): list of potential categories that the model can return
+    """    
+    
+    def __init__(self, model, json_file, categories):
+        use_tpu, use_gpu = utils.check_PU()
+        if use_tpu:
+            # necessary because keras generators don'T work with TPUs...
+            tf.compat.v1.disable_eager_execution()
+        try:
+            self.model = load_model(model, custom_objects={"_f1_score": f1_score, "f1_score": f1_score})
+            # efficientnets have the scaling included in them so no need to rescale the images when loading
+            if self.model.name[0] in ['B', 'V']:
+                self.rescaling = 1
+            else:
+                self.rescaling = 255
+            print('Model loaded correctly')
+        except Exception as e:
+            print('There was a problem when trying to load your model: {}'.format(e))
+
+        data = []
+        with open(json_file, 'r') as file:
+            values = json.load(file)
+            for f, l in values.items():
+                data.append({"filenames": f, "labels": l})
+
+        self.input_shape = self.model.input_shape[1:3]
+        self.df = pd.DataFrame(data)
+        self.values = values
+        self.json_file = json_file
+        self.categories = categories
+
+
+    def _load_dataset(self, path):
+        """
+        Load dataset into a keras generator. Images must be contained in single
+        folders for each class. A dataframe is required with 2 columns: original 
+        image name and image labels as a list separated by comma. i.e.
+        
+        Filenames                |    labels
+        -------------------------|-----------------
+        sun_abifwwwgjnomvfda.jpg | [asphalt,clouds,natural_light,man-made,open_area,far-away_horizon,sky,barn,airfield]
+        sun_aciuvbhvntkgdhhk.jpg | [grass,asphalt,natural_light,natural,man-made,open_area,far-away_horizon,sky,dirt/soil,airfield]
+
+        Arguments:
+            path (str): location of the dataset
+
+        Returns:
+            generator: images plus information about them (labels, paths, etc)
+        """
+                   
+        datagen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1 / self.rescaling)
+        generator = datagen.flow_from_dataframe(directory=path,
+                                                dataframe=self.df,
+                                                x_col="filenames",
+                                                y_col="labels",
+                                                target_size=self.input_shape,
+                                                shuffle=False,
+                                                color_mode='rgb',
+                                                class_mode='categorical',
+                                                classes=self.categories,
+                                                batch_size=1)    
+        return generator
+
+    def classify_images(self, path, categories, threshold = 0.5, plot=True):
+        """
+        Classify images located directly in a folder. Plots the images and the first three predictions.
+
+        Arguments:
+            path (str): location of the images
+            categories (list[str]): list of potential categories that the model can return
+            threshold (int): threshold for prediction default to 0.5
+            plot (bool): plot or not the images, if False, only results are printed
+        """
+        
+        images = glob.glob(os.path.join(path, '*.jpg'))
+        for image_path in images:
+            # prepare the image
+            image_tensor = data_utils.prepare_image(image_path, self.input_shape, self.rescaling)
+            # make and decode the prediction
+            result = model.predict(image_tensor)[0]
+            # print image and top predictions
+            ##top_pred = np.argsort(result)[::-1][:5] # GET PREDS > THRESHOLD (0.50) KEEP IT AS A USER ARGUMENT. 
+            top_pred = result > threshold
+            # Name of the true class.
+            cls_pred_name = np.array(categories)[top_pred]
+            cls_pred_perc = result[top_pred] * 100
+            cls_true = self.values[os.path.basename(image_path)]
+            if plot:
+                plt.imshow(image_tensor[0].astype('uint8'), interpolation='nearest')
+                xlabel = 'Prediction :\n'
+                for (x, y) in zip(cls_pred_name, cls_pred_perc):
+                    xlabel += '{0}, {1:.2f}%\n'.format(x, y)
+                    plt.xlabel(xlabel)
+                    plt.xticks([])
+                    plt.yticks([])
+                    plt.show()
+            else:
+                print('\nImage: ', image_path)
+                print("\nTrue label:", cls_true)
+                for i in range(len(cls_pred_perc)):
+                    print('\nPrediction: {} (probability {}%)'.format(cls_pred_name[i], round(cls_pred_perc[i])))
+
+    def evaluate(self, path):
+        """
+        Calculate the f1-score of the model on a dataset of images. The images must be
+        in single folders for each class.
+
+        Arguments:
+            path (str): location of the dataset
+        """
+        
+        generator = self._load_dataset(path)
+        results = self.model.evaluate(generator)
+        print('f1-score of', round(results[-1] * 100,3), '%')
+  
