@@ -357,7 +357,10 @@ class ModelTesterMultilabel:
             cls_true = self.values[os.path.basename(image_path)]
             if plot:
                 fig, ax = plt.subplots()
-                ax.imshow(image_tensor[0].astype('uint8'), interpolation='nearest')
+                if "Inception" in self.model:
+                    ax.imshow(image_tensor[0], interpolation='nearest')
+                else:
+                    ax.imshow(image_tensor[0].astype('uint8'), interpolation='nearest')
                 xlabel = 'Prediction :\n'
                 for (x, y) in zip(cls_pred_name, cls_pred_perc):
                     xlabel += '{0}, {1:.2f}%\n'.format(x, y)
