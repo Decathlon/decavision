@@ -357,7 +357,7 @@ class ModelTesterMultilabel:
             cls_true = self.values[os.path.basename(image_path)]
             if plot:
                 fig, ax = plt.subplots()
-                if "Inception" in self.model:
+                if self.model in ["model_Inception.h5", "model_Xception.h5"]:
                     ax.imshow(image_tensor[0], interpolation='nearest')
                 else:
                     ax.imshow(image_tensor[0].astype('uint8'), interpolation='nearest')
