@@ -10,6 +10,7 @@ import numpy as np
 import seaborn as sn
 import pandas as pd
 from sklearn.metrics import confusion_matrix, classification_report, multilabel_confusion_matrix
+from sklearn.preprocessing import MultiLabelBinarizer
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 
@@ -302,7 +303,7 @@ class ModelTesterMultilabel:
     def _load_dataset(self, path):
         """
         Load dataset into a keras generator. Images must be contained in single
-        folders for each class. A dataframe is required with 2 columns: original 
+        folder for each class. A dataframe is required with 2 columns: original 
         image name and image labels as a list separated by comma. i.e.
         
         filenames                |    labels
@@ -337,7 +338,7 @@ class ModelTesterMultilabel:
         Arguments:
             path (str): location of the images
             categories (list[str]): list of potential categories that the model can return
-            threshold (int): threshold for prediction default to 0.5
+            threshold (int): threshold for prediction (default to 0.5)
             plot (bool): plot or not the images, if False, only results are printed
         """
         
@@ -380,7 +381,7 @@ class ModelTesterMultilabel:
     def evaluate(self, path):
         """
         Calculate the f1-score of the model on a dataset of images. The images must be
-        in single folders for each class.
+        in single folder for each class.
 
         Arguments:
             path (str): location of the dataset
@@ -390,6 +391,40 @@ class ModelTesterMultilabel:
         results = self.model.evaluate(generator)
         print('f1-score of', round(results[-1] * 100,3), '%')
         
+    def generate_metrics(self, path, threshold=0.5):
+        """
+        Computes classification report and confusion matrix resulting from predictions on 
+        a dataset of images and prints the results. Images must be located in a single folder 
+        for each class. 
+        
+        Arguments:
+            path (str): location of the images
+            threshold (int): threshold for prediction (default to 0.5)
+        """
+    
+        # getting list of true and predicted labels
+        generator = self._load_dataset(path)
+        cls_true = generator.classes #true label for each image
+        labels = list(generator.class_indices.keys()) # list of total classes
+        cls_pred = self.model.predict(generator)
+        cls_pred = cls_pred > threshold
+        cls_true = [list(np.array(labels)[l]) for l in cls_true]
+        cls_pred_name = [list(np.array(labels)[l]) for l in cls_pred]
+        print('Labels & Predictions loaded for reports')
+
+        # binarizer
+        mlb = MultiLabelBinarizer(classes = labels)
+        y = mlb.fit_transform(cls_true) 
+        y_hat = mlb.fit_transform(cls_pred_name)
+
+        # classification report
+        print("\nClassification report")
+        print(classification_report(y, y_hat, target_names=labels, digits=4))
+
+        # confusion matrix
+        print("\n Confusion matrix")
+        print(multilabel_confusion_matrix(y, y_hat))
+            
     def create_movie(self, image_path):
         """
         Create a movie from classified images.
