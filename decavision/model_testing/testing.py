@@ -303,7 +303,7 @@ class ModelTesterMultilabel:
     def _load_dataset(self, path):
         """
         Load dataset into a keras generator. Images must be contained in single
-        folder for each class. A dataframe is required with 2 columns: original 
+        folder. A dataframe is required with 2 columns: original 
         image name and image labels as a list separated by comma. i.e.
         
         filenames                |    labels
@@ -331,18 +331,16 @@ class ModelTesterMultilabel:
                                                 batch_size=1)    
         return generator
 
-    def classify_images(self, path, categories, threshold = 0.5, plot=True):
+    def classify_images(self, path, threshold = 0.5, plot=False, save_img=False):
         """
         Classify images located directly in a folder. Plots and saves the images with the specified threshold.
 
         Arguments:
             path (str): location of the images
-            categories (list[str]): list of potential categories that the model can return
             threshold (int): threshold for prediction (default to 0.5)
             plot (bool): plot or not the images, if False, only results are printed
+            save_img (bool): save classified images or not in a new folder
         """
-        
-        data_utils.create_dir("predicated_images") 
         
         images = glob.glob(os.path.join(path, '*.jpg'))
         for image_path in images:
@@ -354,7 +352,7 @@ class ModelTesterMultilabel:
             ##top_pred = np.argsort(result)[::-1][:5] # GET PREDS > THRESHOLD (0.50) KEEP IT AS A USER ARGUMENT. 
             top_pred = result > threshold
             # Name of the true class.
-            cls_pred_name = np.array(categories)[top_pred]
+            cls_pred_name = np.array(self.categories)[top_pred]
             cls_pred_perc = result[top_pred] * 100
             cls_true = self.values[os.path.basename(image_path)]
             if plot:
@@ -371,7 +369,9 @@ class ModelTesterMultilabel:
                 ax.set_yticks([]) 
                 plt.tight_layout() 
                 plt.show()
-                fig.savefig("predicated_images/" + os.path.basename(image_path))                
+                if save_img:
+                    data_utils.create_dir("predicated_images") 
+                    fig.savefig("predicated_images/" + os.path.basename(image_path))                
             else:
                 print('\nImage: ', image_path)
                 print("True label:", cls_true)
@@ -381,7 +381,7 @@ class ModelTesterMultilabel:
     def evaluate(self, path):
         """
         Calculate the f1-score of the model on a dataset of images. The images must be
-        in single folder for each class.
+        in single folder.
 
         Arguments:
             path (str): location of the dataset
@@ -394,8 +394,7 @@ class ModelTesterMultilabel:
     def generate_metrics(self, path, threshold=0.5):
         """
         Computes classification report and confusion matrix resulting from predictions on 
-        a dataset of images and prints the results. Images must be located in a single folder 
-        for each class. 
+        a dataset of images and prints the results. Images must be located in a single folder. 
         
         Arguments:
             path (str): location of the images
@@ -405,21 +404,20 @@ class ModelTesterMultilabel:
         # getting list of true and predicted labels
         generator = self._load_dataset(path)
         cls_true = generator.classes #true label for each image
-        labels = list(generator.class_indices.keys()) # list of total classes
         cls_pred = self.model.predict(generator)
         cls_pred = cls_pred > threshold
-        cls_true = [list(np.array(labels)[l]) for l in cls_true]
-        cls_pred_name = [list(np.array(labels)[l]) for l in cls_pred]
+        cls_true = [list(np.array(self.categories)[l]) for l in cls_true]
+        cls_pred_name = [list(np.array(self.categories)[l]) for l in cls_pred]
         print('Labels & Predictions loaded for reports')
 
         # binarizer
-        mlb = MultiLabelBinarizer(classes = labels)
+        mlb = MultiLabelBinarizer(classes = self.categories)
         y = mlb.fit_transform(cls_true) 
         y_hat = mlb.fit_transform(cls_pred_name)
 
         # classification report
         print("\nClassification report")
-        print(classification_report(y, y_hat, target_names=labels, digits=4))
+        print(classification_report(y, y_hat, target_names=self.categories, digits=4))
 
         # confusion matrix
         print("\n Confusion matrix")
@@ -439,15 +437,10 @@ class ModelTesterMultilabel:
         frame = cv2.imread(os.path.join(image_folder, images[0]))
         height, width, layers = frame.shape
 
-        video = cv2.VideoWriter(video_name, 0, 1, (width,height))
+        video = cv2.VideoWriter(video_name, 0, 1, (width, height))
 
         for image in images:
             video.write(cv2.imread(os.path.join(image_folder, image)))
 
         cv2.destroyAllWindows()
         video.release()
-        
-        
-        
-        
-  
