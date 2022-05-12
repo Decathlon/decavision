@@ -57,11 +57,12 @@ def check_RGB(path, target_size=None):
             # try to open it
             try:
                 if target_size is not None:
-                    jpg = Image.open(img).resize(target_size, PIL.Image.BILINEAR).convert('RGB')
+                    jpg = Image.open(img).resize(
+                        target_size, PIL.Image.BILINEAR).convert('RGB')
                 else:
                     jpg = Image.open(img).convert('RGB')
                 jpg.save(str(img))
-            except:
+            except BaseException:
                 # delete the file
                 print('Deleting', img)
                 os.remove(img)
@@ -81,8 +82,8 @@ def create_dir(path):
         os.mkdir(path)
 
 
-def split_train(path='data/image_dataset', 
-                split=0.1, 
+def split_train(path='data/image_dataset',
+                split=0.1,
                 multilabel=False,
                 with_test=False):
     """
@@ -120,20 +121,29 @@ def split_train(path='data/image_dataset',
         # Move a fraction of the images to the val directory
         for j in range(int(split * len(images))):
             if i != '':
-                os.rename(path + '/train/' + i + '/' + images[j], path + '/val/' + i + '/' + images[j])
+                os.rename(
+                    path + '/train/' + i + '/' + images[j],
+                    path + '/val/' + i + '/' + images[j])
             else:
-                os.rename(path + '/train/' + images[j], path + '/val/' + images[j])
+                os.rename(
+                    path + '/train/' + images[j],
+                    path + '/val/' + images[j])
 
         # Move one of the images to the test directory
         if with_test:
             # Create the folder in the val subdirectory
             create_dir(path + '/test/' + i)
 
-            for j in range(int(split * len(images)), 2 * int(split * len(images))):
+            for j in range(int(split * len(images)),
+                           2 * int(split * len(images))):
                 if i != '':
-                    os.rename(path + '/train/' + i + '/' + images[j], path + '/test/' + i + '/' + images[j])
+                    os.rename(
+                        path + '/train/' + i + '/' + images[j],
+                        path + '/test/' + i + '/' + images[j])
                 else:
-                    os.rename(path + '/train/' + images[j], path + '/val/' + images[j])
+                    os.rename(
+                        path + '/train/' + images[j],
+                        path + '/val/' + images[j])
     print('Training dataset has been split.')
 
 
@@ -156,8 +166,9 @@ def print_download_progress(count, block_size, total_size):
     sys.stdout.flush()
 
 
-def download_dataset(download_dir='data/',
-                     url='http://data.csail.mit.edu/places/places365/places365standard_easyformat.tar'):
+def download_dataset(
+        download_dir='data/',
+        url='http://data.csail.mit.edu/places/places365/places365standard_easyformat.tar'):
     """
     Download a dataset in format .zip, .tar, .tar.gz or .tgz and extract the data.
     Inspired by: https://github.com/Hvass-Labs/TensorFlow-Tutorials/blob/master/download.py
@@ -180,9 +191,8 @@ def download_dataset(download_dir='data/',
             os.makedirs(download_dir)
 
         # Download the file from the internet.
-        file_path, _ = urllib.request.urlretrieve(url=url,
-                                                  filename=file_path,
-                                                  reporthook=print_download_progress)
+        file_path, _ = urllib.request.urlretrieve(
+            url=url, filename=file_path, reporthook=print_download_progress)
 
         print("\n Download finished. Extracting files. \n")
 

@@ -7,7 +7,7 @@ from tensorflow.keras.losses import sparse_categorical_crossentropy as sparselog
 
 try:
     from decavision.utils.colab_utils import authenticate_colab
-except:
+except BaseException:
     pass
 
 
@@ -30,23 +30,31 @@ class CheckpointDownloader(object):
         Arguments:
             res (scipy object): The optimization as a OptimizeResult object.
         """
-        if 'google.colab' in sys.modules and os.path.exists(self.checkpoint_path):
-            print('Uploading checkpoint ' + self.checkpoint_path + ' to Google Drive')
+        if 'google.colab' in sys.modules and os.path.exists(
+                self.checkpoint_path):
+            print(
+                'Uploading checkpoint ' +
+                self.checkpoint_path +
+                ' to Google Drive')
             drive = authenticate_colab()
             file_id = None
-            # get the id of the Checkpoints folder and create it if it doesn't exist already
-            file_list = drive.ListFile({'q': "'root' in parents and trashed=false"}).GetList()
+            # get the id of the Checkpoints folder and create it if it doesn't
+            # exist already
+            file_list = drive.ListFile(
+                {'q': "'root' in parents and trashed=false"}).GetList()
             for file in file_list:
                 if file['title'] == "Checkpoints":
                     file_id = file['id']
             if not file_id:
-                folder_metadata = {'title': 'Checkpoints', 'mimeType': 'application/vnd.google-apps.folder'}
+                folder_metadata = {
+                    'title': 'Checkpoints',
+                    'mimeType': 'application/vnd.google-apps.folder'}
                 folder = drive.CreateFile(folder_metadata)
                 folder.Upload()
                 file_id = folder['id']
 
-            file1 = drive.CreateFile({"title": "checkpoint.pkl",
-                                      "parents": [{"kind": "drive#fileLink", "id": file_id}]})
+            file1 = drive.CreateFile({"title": "checkpoint.pkl", "parents": [
+                                     {"kind": "drive#fileLink", "id": file_id}]})
             file1.SetContentFile(self.checkpoint_path)
             file1.Upload()
 

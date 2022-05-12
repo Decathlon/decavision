@@ -13,7 +13,7 @@ from decavision.utils import utils
 AUTO = tf.data.experimental.AUTOTUNE
 
 
-#metric for multilable classification
+# metric for multilable classification
 class ImageClassifier:
     """
     Class to train an image classification model by using transfer learning.
@@ -31,11 +31,11 @@ class ImageClassifier:
         multilable (boolean): if each image is attached to multiple classes
     """
 
-    def __init__(self, 
-                 tfrecords_folder, 
-                 batch_size=128, 
-                 transfer_model='Inception', 
-                 augment=True, 
+    def __init__(self,
+                 tfrecords_folder,
+                 batch_size=128,
+                 transfer_model='Inception',
+                 augment=True,
                  input_shape=None,
                  multilabel=False):
 
@@ -52,7 +52,8 @@ class ImageClassifier:
         self.transfer_model = transfer_model
         self.augment = augment
 
-        # We expect the classes to be saved in the same folder where tfrecords are
+        # We expect the classes to be saved in the same folder where tfrecords
+        # are
         self.categories = utils.load_classes(tfrecords_folder)
         print('Classes ({}) :'.format(len(self.categories)))
         print(self.categories)
@@ -67,7 +68,8 @@ class ImageClassifier:
         self.nb_val_shards = len(val_tfrecords)
         print('Val tfrecords = {}'.format(self.nb_val_shards))
 
-        # Expected tfrecord file name : filenumber-numberofimages.tfrec (02-2223.tfrec)
+        # Expected tfrecord file name : filenumber-numberofimages.tfrec
+        # (02-2223.tfrec)
         self.nb_train_images = 0
         for train_tfrecord in train_tfrecords:
             self.nb_train_images += int(train_tfrecord.split('.')
@@ -112,7 +114,10 @@ class ImageClassifier:
         if input_shape:
             self.target_size = input_shape
         else:
-            self.target_size = (input_dims.get(self.transfer_model, 224), input_dims.get(self.transfer_model, 224))
+            self.target_size = (
+                input_dims.get(
+                    self.transfer_model, 224), input_dims.get(
+                    self.transfer_model, 224))
 
         print("Data augmentation during training: " + str(augment))
 
@@ -141,10 +146,16 @@ class ImageClassifier:
 
             image = tf.image.decode_jpeg(example['image'], channels=3)
             # normalization of pixels is already done in TF EfficientNets
-            if self.transfer_model not in ['B0', 'B3', 'B5', 'B7', 'V2-S', 'V2-M', 'V2-L']:
+            if self.transfer_model not in [
+                    'B0', 'B3', 'B5', 'B7', 'V2-S', 'V2-M', 'V2-L']:
                 image = tf.image.convert_image_dtype(image, dtype=tf.float32)
             feature = tf.image.resize(image, [*self.target_size])
-            label = tf.one_hot(example['label'], depth=len(self.categories), on_value=1.0, off_value=0.0)
+            label = tf.one_hot(
+                example['label'],
+                depth=len(
+                    self.categories),
+                on_value=1.0,
+                off_value=0.0)
             label = tf.reduce_sum(label, 0)
             return feature, label
 
@@ -241,49 +252,52 @@ class ImageClassifier:
         print('Creating model')
         # load the pretrained model, without the classification (top) layers
         if self.transfer_model == 'Xception':
-            base_model = tf.keras.applications.Xception(weights='imagenet',
-                                                        include_top=False, input_shape=(*self.target_size, 3))
+            base_model = tf.keras.applications.Xception(
+                weights='imagenet', include_top=False, input_shape=(
+                    *self.target_size, 3))
             base_model_last_block = 116  # last block 126, two blocks 116
         elif self.transfer_model == 'Inception_Resnet':
             base_model = tf.keras.applications.InceptionResNetV2(
                 weights='imagenet', include_top=False, input_shape=(*self.target_size, 3))
             base_model_last_block = 287  # last block 630, two blocks 287
         elif self.transfer_model == 'Resnet':
-            base_model = tf.keras.applications.ResNet50(weights='imagenet',
-                                                        include_top=False, input_shape=(*self.target_size, 3))
+            base_model = tf.keras.applications.ResNet50(
+                weights='imagenet', include_top=False, input_shape=(
+                    *self.target_size, 3))
             base_model_last_block = 155  # last block 165, two blocks 155
         elif self.transfer_model == 'B0':
-            base_model = tf.keras.applications.EfficientNetB0(weights='imagenet', include_top=False,
-                                                              input_shape=(*self.target_size, 3))
+            base_model = tf.keras.applications.EfficientNetB0(
+                weights='imagenet', include_top=False, input_shape=(*self.target_size, 3))
             base_model_last_block = 213  # last block 229, two blocks 213
         elif self.transfer_model == 'B3':
-            base_model = tf.keras.applications.EfficientNetB3(weights='imagenet', include_top=False,
-                                                              input_shape=(*self.target_size, 3))
+            base_model = tf.keras.applications.EfficientNetB3(
+                weights='imagenet', include_top=False, input_shape=(*self.target_size, 3))
             base_model_last_block = 354  # last block 370, two blocks 354
         elif self.transfer_model == 'B5':
-            base_model = tf.keras.applications.EfficientNetB5(weights='imagenet', include_top=False,
-                                                              input_shape=(*self.target_size, 3))
+            base_model = tf.keras.applications.EfficientNetB5(
+                weights='imagenet', include_top=False, input_shape=(*self.target_size, 3))
             base_model_last_block = 417  # last block 559, two blocks 417
 
         elif self.transfer_model == 'B7':
-            base_model = tf.keras.applications.EfficientNetB7(weights='imagenet', include_top=False,
-                                                              input_shape=(*self.target_size, 3))
+            base_model = tf.keras.applications.EfficientNetB7(
+                weights='imagenet', include_top=False, input_shape=(*self.target_size, 3))
             base_model_last_block = None  # all layers trainable
         elif self.transfer_model == 'V2-S':
-            base_model = tf.keras.applications.EfficientNetV2S(weights='imagenet', include_top=False,
-                                                               input_shape=(*self.target_size, 3))
+            base_model = tf.keras.applications.EfficientNetV2S(
+                weights='imagenet', include_top=False, input_shape=(*self.target_size, 3))
             base_model_last_block = 448  # last block 462, two blocks 448
         elif self.transfer_model == 'V2-M':
-            base_model = tf.keras.applications.EfficientNetV2M(weights='imagenet', include_top=False,
-                                                               input_shape=(*self.target_size, 3))
+            base_model = tf.keras.applications.EfficientNetV2M(
+                weights='imagenet', include_top=False, input_shape=(*self.target_size, 3))
             base_model_last_block = 659  # last block 673, two blocks 659
         elif self.transfer_model == 'V2-L':
-            base_model = tf.keras.applications.EfficientNetV2L(weights='imagenet', include_top=False,
-                                                               input_shape=(*self.target_size, 3))
+            base_model = tf.keras.applications.EfficientNetV2L(
+                weights='imagenet', include_top=False, input_shape=(*self.target_size, 3))
             base_model_last_block = 925  # last block 939, two blocks 925
         else:
-            base_model = tf.keras.applications.InceptionV3(weights='imagenet',
-                                                           include_top=False, input_shape=(*self.target_size, 3))
+            base_model = tf.keras.applications.InceptionV3(
+                weights='imagenet', include_top=False, input_shape=(
+                    *self.target_size, 3))
             base_model_last_block = 249  # last block 280, two blocks 249
 
         # Set only the top layers as trainable (if we want to do fine-tuning,
@@ -297,8 +311,11 @@ class ImageClassifier:
         if hidden_size == 0:
             x = tf.keras.layers.Dropout(rate=dropout)(x)
         else:
-            x = tf.keras.layers.Dense(hidden_size, use_bias=False,
-                                      kernel_regularizer=tf.keras.regularizers.l2(l=l2_lambda))(x)
+            x = tf.keras.layers.Dense(
+                hidden_size,
+                use_bias=False,
+                kernel_regularizer=tf.keras.regularizers.l2(
+                    l=l2_lambda))(x)
             # scale: When the next layer is linear (also e.g. nn.relu), this can be disabled since the
             # scaling can be done by the next layer.
             x = tf.keras.layers.BatchNormalization(
@@ -319,12 +336,24 @@ class ImageClassifier:
             loss = 'categorical_crossentropy'
             metrics = [self.metric]
 
-        return tf.keras.Model(inputs=base_model.input, outputs=predictions, name=self.transfer_model), base_model_last_block, loss, metrics
+        return tf.keras.Model(inputs=base_model.input, outputs=predictions,
+                              name=self.transfer_model), base_model_last_block, loss, metrics
 
-    def fit(self, save_model=None, export_model=None, patience=0,
-            epochs=5, hidden_size=1024, learning_rate=1e-3, learning_rate_fine_tuning=1e-4,
-            dropout=0.5, l2_lambda=5e-4, fine_tuning=True,
-            verbose=True, logs=None, activation='swish'):
+    def fit(
+            self,
+            save_model=None,
+            export_model=None,
+            patience=0,
+            epochs=5,
+            hidden_size=1024,
+            learning_rate=1e-3,
+            learning_rate_fine_tuning=1e-4,
+            dropout=0.5,
+            l2_lambda=5e-4,
+            fine_tuning=True,
+            verbose=True,
+            logs=None,
+            activation='swish'):
         """
         Train an image classification model based on a pretrained model. A classification layer is added
         to the pretrained model, with potentially an extra combination of Dense, Dropout and Batchnorm.
@@ -352,10 +381,8 @@ class ImageClassifier:
         """
 
         # use reduce learning rate and early stopping callbacks
-        reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_' + self.metric,
-                                                         factor=0.1,
-                                                         patience=5,
-                                                         mode='max')
+        reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(
+            monitor='val_' + self.metric, factor=0.1, patience=5, mode='max')
         callbacks = [reduce_lr]
 
         if logs:
@@ -365,11 +392,11 @@ class ImageClassifier:
             tensorboard_callback = tf.keras.callbacks.TensorBoard(logdir)
             callbacks.append(tensorboard_callback)
 
-        # if we want to stop training when no sufficient improvement in validation metric has been achieved
+        # if we want to stop training when no sufficient improvement in
+        # validation metric has been achieved
         if patience:
-            early_stop = tf.keras.callbacks.EarlyStopping(monitor='val_' + self.metric,
-                                                          patience=patience,
-                                                          restore_best_weights=True)
+            early_stop = tf.keras.callbacks.EarlyStopping(
+                monitor='val_' + self.metric, patience=patience, restore_best_weights=True)
             callbacks.append(early_stop)
 
         # compile the model and fit the model
@@ -384,7 +411,8 @@ class ImageClassifier:
                 model, base_model_last_block, loss, metrics = self._create_model(
                     activation, hidden_size, dropout, l2_lambda)
                 print('Compiling for TPU')
-                optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
+                optimizer = tf.keras.optimizers.Adam(
+                    learning_rate=learning_rate)
                 model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
 
         else:
@@ -396,9 +424,14 @@ class ImageClassifier:
             model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
 
         print('Fitting')
-        history = model.fit(self.get_training_dataset(), steps_per_epoch=self.steps_per_epoch, epochs=epochs,
-                            validation_data=self.get_validation_dataset(), validation_steps=self.validation_steps,
-                            verbose=verbose, callbacks=callbacks)
+        history = model.fit(
+            self.get_training_dataset(),
+            steps_per_epoch=self.steps_per_epoch,
+            epochs=epochs,
+            validation_data=self.get_validation_dataset(),
+            validation_steps=self.validation_steps,
+            verbose=verbose,
+            callbacks=callbacks)
 
         # Fine-tune the model, if we wish so
         if fine_tuning and not model.stop_training:
@@ -412,21 +445,30 @@ class ImageClassifier:
             print('Unfreezing last block of layers from the base model')
             for layer in model.layers[:base_model_last_block]:
                 layer.trainable = False
-            # don't unfreeze batchnorm (see https://keras.io/examples/vision/image_classification_efficientnet_fine_tuning/)
+            # don't unfreeze batchnorm (see
+            # https://keras.io/examples/vision/image_classification_efficientnet_fine_tuning/)
             for layer in model.layers[base_model_last_block:]:
                 if not isinstance(layer, tf.keras.layers.BatchNormalization):
                     layer.trainable = True
 
             # Fit the model
-            # we need to recompile the model for these modifications to take effect with a low learning rate
+            # we need to recompile the model for these modifications to take
+            # effect with a low learning rate
             print('Recompiling model')
-            optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate_fine_tuning)
+            optimizer = tf.keras.optimizers.Adam(
+                learning_rate=learning_rate_fine_tuning)
             model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
 
             print('Fine tunning')
-            history = model.fit(self.get_training_dataset(), steps_per_epoch=self.steps_per_epoch, epochs=total_epochs,
-                                validation_data=self.get_validation_dataset(), validation_steps=self.validation_steps,
-                                verbose=verbose, callbacks=callbacks, initial_epoch=epochs)
+            history = model.fit(
+                self.get_training_dataset(),
+                steps_per_epoch=self.steps_per_epoch,
+                epochs=total_epochs,
+                validation_data=self.get_validation_dataset(),
+                validation_steps=self.validation_steps,
+                verbose=verbose,
+                callbacks=callbacks,
+                initial_epoch=epochs)
 
         # Evaluate the model, just to be sure
         self.fitness = history.history['val_' + self.metric][-1]
@@ -441,7 +483,12 @@ class ImageClassifier:
             self.model.save(export_model)
             print('Model exported')
 
-    def hyperparameter_optimization(self, num_iterations=20, n_random_starts=10, patience=0, save_results=False):
+    def hyperparameter_optimization(
+            self,
+            num_iterations=20,
+            n_random_starts=10,
+            patience=0,
+            save_results=False):
         """
         Try different combinations of hyperparameters to find the best model possible. Start by trying random
         combinations and after some time learn from th previous tries. Scikit-optimize checkoint is saved
@@ -470,13 +517,13 @@ class ImageClassifier:
         dim_epochs = skopt.space.Integer(low=1, high=6, name='epochs')
         dim_hidden_size = skopt.space.Integer(
             low=512, high=2048, name='hidden_size')
-        dim_learning_rate = skopt.space.Real(low=1e-6, high=1e-2, prior='log-uniform',
-                                             name='learning_rate')
-        dim_learning_rate_fine_tuning = skopt.space.Real(low=1e-6, high=1e-2, prior='log-uniform',
-                                                         name='learning_rate_fine_tuning')
+        dim_learning_rate = skopt.space.Real(
+            low=1e-6, high=1e-2, prior='log-uniform', name='learning_rate')
+        dim_learning_rate_fine_tuning = skopt.space.Real(
+            low=1e-6, high=1e-2, prior='log-uniform', name='learning_rate_fine_tuning')
         dim_dropout = skopt.space.Real(low=0, high=0.9, name='dropout')
-        dim_l2_lambda = skopt.space.Real(low=1e-6, high=1e-2, prior='log-uniform',
-                                         name='l2_lambda')
+        dim_l2_lambda = skopt.space.Real(
+            low=1e-6, high=1e-2, prior='log-uniform', name='l2_lambda')
         dim_fine_tuning = skopt.space.Categorical(categories=[True, False],
                                                   name='fine_tuning')
 
@@ -495,7 +542,7 @@ class ImageClassifier:
             y0 = res.func_vals
             start_from_checkpoint = True
             print('Parameters of previous optimization loaded!')
-        except:
+        except BaseException:
             # fall back default values
             default_parameters = [2, 1024, 5e-4, 6e-4, 0.9, 1e-3, True]
             start_from_checkpoint = False
@@ -507,7 +554,14 @@ class ImageClassifier:
         verbose = skopt.callbacks.VerboseCallback(n_total=num_iterations)
 
         @skopt.utils.use_named_args(dimensions=dimensions)
-        def fitness(epochs, hidden_size, learning_rate, learning_rate_fine_tuning, dropout, l2_lambda, fine_tuning):
+        def fitness(
+                epochs,
+                hidden_size,
+                learning_rate,
+                learning_rate_fine_tuning,
+                dropout,
+                l2_lambda,
+                fine_tuning):
             """
             Function to be minimized by the optimization. Trains a model using the fit method and the given
             hyperparameters to return the final (negative) value of the validation accuracy.
@@ -524,10 +578,15 @@ class ImageClassifier:
             logging.info(f'fine_tuning:{fine_tuning}')
 
             # fit the model
-            self.fit(epochs=epochs, hidden_size=hidden_size, learning_rate=learning_rate,
-                     learning_rate_fine_tuning=learning_rate_fine_tuning,
-                     dropout=dropout, l2_lambda=l2_lambda, fine_tuning=fine_tuning,
-                     patience=patience)
+            self.fit(
+                epochs=epochs,
+                hidden_size=hidden_size,
+                learning_rate=learning_rate,
+                learning_rate_fine_tuning=learning_rate_fine_tuning,
+                dropout=dropout,
+                l2_lambda=l2_lambda,
+                fine_tuning=fine_tuning,
+                patience=patience)
 
             # extract fitness
             fitness = self.fitness

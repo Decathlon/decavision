@@ -352,7 +352,7 @@ class ModelTesterMultilabel:
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             rescale=1 / self.rescaling)
         generator = datagen.flow_from_dataframe(directory=path,
-                                                dataframe=df,
+                                                dataframe=self.df,
                                                 x_col="filenames",
                                                 y_col="labels",
                                                 target_size=self.input_shape,
@@ -447,8 +447,8 @@ class ModelTesterMultilabel:
         cls_true = generator.classes  # true label for each image
         cls_pred = self.model.predict(generator)
         cls_pred = cls_pred > threshold
-        cls_true = [list(np.array(self.categories)[l]) for l in cls_true]
-        cls_pred_name = [list(np.array(self.categories)[l]) for l in cls_pred]
+        cls_true = [list(np.array(self.categories)[label]) for label in cls_true]
+        cls_pred_name = [list(np.array(self.categories)[label]) for label in cls_pred]
         print('Labels & Predictions loaded for reports')
 
         # binarizer
