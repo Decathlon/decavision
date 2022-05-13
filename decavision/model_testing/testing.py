@@ -18,6 +18,7 @@ from decavision.utils import data_utils
 from decavision.utils import utils
 from decavision.utils.training_utils import f1_score
 
+
 class ModelTester:
     """
     Class to use a trained image classification model on some images. Using this
@@ -33,8 +34,13 @@ class ModelTester:
             # necessary because keras generators don'T work with TPUs...
             tf.compat.v1.disable_eager_execution()
         try:
-            self.model = load_model(model, custom_objects={"_f1_score": f1_score, "f1_score": f1_score})
-            # efficientnets have the scaling included in them so no need to rescale the images when loading
+            self.model = load_model(
+                model,
+                custom_objects={
+                    "_f1_score": f1_score,
+                    "f1_score": f1_score})
+            # efficientnets have the scaling included in them so no need to
+            # rescale the images when loading
             if self.model.name[0] in ['B', 'V']:
                 self.rescaling = 1
             else:
@@ -56,7 +62,8 @@ class ModelTester:
         Returns:
             generator: images plus information about them (labels, paths, etc)
         """
-        datagen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1 / self.rescaling)
+        datagen = tf.keras.preprocessing.image.ImageDataGenerator(
+            rescale=1 / self.rescaling)
         generator = datagen.flow_from_directory(directory=path,
                                                 target_size=self.input_shape,
                                                 shuffle=False,
@@ -97,7 +104,13 @@ class ModelTester:
         ax.xaxis.set_ticklabels(labels)
         ax.yaxis.set_ticklabels(labels)
 
-    def _plot_images(self, images, categories, cls_true, cls_pred=None, smooth=True):
+    def _plot_images(
+            self,
+            images,
+            categories,
+            cls_true,
+            cls_pred=None,
+            smooth=True):
         """
         Plot images along with their true and optionally predicted labels.
         Inspired by https://github.com/Hvass-Labs/TensorFlow-Tutorials/blob/master/10_Fine-Tuning.ipynb.
@@ -189,10 +202,16 @@ class ModelTester:
         random_errors = sorted(random.sample(errors, num_pictures))
 
         # Plot the images we have loaded and their corresponding classes.
-        self._plot_images(images=[data_utils.prepare_image(image_paths[i], self.input_shape)[0] for i in random_errors],
-                          categories=labels,
-                          cls_true=[cls_true[i] for i in random_errors],
-                          cls_pred=[cls_pred[i] for i in random_errors])
+        self._plot_images(
+            images=[
+                data_utils.prepare_image(
+                    image_paths[i],
+                    self.input_shape)[0] for i in random_errors],
+            categories=labels,
+            cls_true=[
+                cls_true[i] for i in random_errors],
+            cls_pred=[
+                cls_pred[i] for i in random_errors])
 
     def classify_images(self, image_path, categories, plot=True):
         """
@@ -206,7 +225,8 @@ class ModelTester:
         images = glob.glob(os.path.join(image_path, '*.jpg'))
         for image_path in images:
             # prepare the image
-            image_tensor = data_utils.prepare_image(image_path, self.input_shape, self.rescaling)
+            image_tensor = data_utils.prepare_image(
+                image_path, self.input_shape, self.rescaling)
             # make and decode the prediction
             result = self.model.predict(image_tensor)[0]
             # print image and top predictions
@@ -226,7 +246,10 @@ class ModelTester:
             else:
                 print('\nImage: ', image_path)
                 for i in range(len(top_pred)):
-                    print('Prediction: {} (probability {}%)'.format(cls_pred_name[i], round(cls_pred_perc[i])))
+                    print(
+                        'Prediction: {} (probability {}%)'.format(
+                            cls_pred_name[i], round(
+                                cls_pred_perc[i])))
 
     def evaluate(self, path):
         """
@@ -255,8 +278,12 @@ class ModelTester:
         cls_pred = np.argmax(cls_pred, axis=1)
         print('Labels loaded')
         # Show classification report
-        print(classification_report(cls_true, cls_pred, target_names=labels, digits=4))
-
+        print(
+            classification_report(
+                cls_true,
+                cls_pred,
+                target_names=labels,
+                digits=4))
 
 
 class ModelTesterMultilabel:
@@ -275,8 +302,13 @@ class ModelTesterMultilabel:
             # necessary because keras generators don'T work with TPUs...
             tf.compat.v1.disable_eager_execution()
         try:
-            self.model = load_model(model, custom_objects={"_f1_score": f1_score, "f1_score": f1_score})
-            # efficientnets have the scaling included in them so no need to rescale the images when loading
+            self.model = load_model(
+                model,
+                custom_objects={
+                    "_f1_score": f1_score,
+                    "f1_score": f1_score})
+            # efficientnets have the scaling included in them so no need to
+            # rescale the images when loading
             if self.model.name[0] in ['B', 'V']:
                 self.rescaling = 1
             else:
@@ -287,15 +319,14 @@ class ModelTesterMultilabel:
 
         self.input_shape = self.model.input_shape[1:3]
         self.categories = categories
-        print("Model name: ",self.model.name)
-
+        print("Model name: ", self.model.name)
 
     def _load_dataset(self, path, json_file):
         """
         Load dataset into a keras generator. Images must be contained in single
-        folder. A dataframe is required with 2 columns: original 
+        folder. A dataframe is required with 2 columns: original
         image name and image labels as a list separated by comma. i.e.
-        
+
         filenames                |    labels
         -------------------------|-----------------
         sun_abifwwwgjnomvfda.jpg | [asphalt,clouds,natural_light,man-made,open_area,far-away_horizon,sky,barn,airfield]
@@ -326,7 +357,7 @@ class ModelTesterMultilabel:
                                                 color_mode='rgb',
                                                 class_mode='categorical',
                                                 classes=self.categories,
-                                                batch_size=1)    
+                                                batch_size=1)
         return generator
 
     def classify_images(self, path, json_file, threshold = 0.5, plot=False, save_img=False):
@@ -346,11 +377,13 @@ class ModelTesterMultilabel:
         images = glob.glob(os.path.join(path, '*.jpg'))
         for image_path in images:
             # prepare the image
-            image_tensor = data_utils.prepare_image(image_path, self.input_shape, self.rescaling)
+            image_tensor = data_utils.prepare_image(
+                image_path, self.input_shape, self.rescaling)
             # make and decode the prediction
             result = self.model.predict(image_tensor)[0]
             # print image and top predictions
-            ##top_pred = np.argsort(result)[::-1][:5] # GET PREDS > THRESHOLD (0.50) KEEP IT AS A USER ARGUMENT. 
+            # top_pred = np.argsort(result)[::-1][:5] # GET PREDS > THRESHOLD
+            # (0.50) KEEP IT AS A USER ARGUMENT.
             top_pred = result > threshold
             # Name of the true class.
             cls_pred_name = np.array(self.categories)[top_pred]
@@ -362,7 +395,9 @@ class ModelTesterMultilabel:
                 if self.model.name in ["Inception", "Xception"]:
                     ax.imshow(image_tensor[0], interpolation='nearest')
                 else:
-                    ax.imshow(image_tensor[0].astype('uint8'), interpolation='nearest')
+                    ax.imshow(
+                        image_tensor[0].astype('uint8'),
+                        interpolation='nearest')
                 xlabel = 'Prediction :\n'
                 for (x, y) in zip(cls_pred_name, cls_pred_perc):
                     xlabel += '{0}, {1:.2f}%\n'.format(x, y)
@@ -377,7 +412,10 @@ class ModelTesterMultilabel:
                 print('\nImage: ', image_path)
                 print("True label:", cls_true)
                 for i in range(len(cls_pred_perc)):
-                    print('Prediction: {} (probability {}%)'.format(cls_pred_name[i], round(cls_pred_perc[i])))
+                    print(
+                        'Prediction: {} (probability {}%)'.format(
+                            cls_pred_name[i], round(
+                                cls_pred_perc[i])))
 
     def evaluate(self, path, json_file):
         """
@@ -395,15 +433,15 @@ class ModelTesterMultilabel:
         
     def generate_metrics(self, path, json_file, threshold=0.5):
         """
-        Computes classification report and confusion matrix resulting from predictions on 
-        a dataset of images and prints the results. Images must be located in a single folder. 
-        
+        Computes classification report and confusion matrix resulting from predictions on
+        a dataset of images and prints the results. Images must be located in a single folder.
+
         Arguments:
             path (str): location of the images
             json_file (str): path to json file containing image ids and their associated labels
             threshold (int): threshold for prediction (default to 0.5)
         """
-    
+
         # getting list of true and predicted labels
         generator = self._load_dataset(path, json_file)
         cls_true = generator.classes #true label for each image
@@ -433,7 +471,8 @@ class ModelTesterMultilabel:
         image_folder = image_path
         video_name = 'video.avi'
 
-        images = [img for img in os.listdir(image_folder) if img.endswith(".jpg")]
+        images = [img for img in os.listdir(
+            image_folder) if img.endswith(".jpg")]
         frame = cv2.imread(os.path.join(image_folder, images[0]))
         height, width, layers = frame.shape
 
