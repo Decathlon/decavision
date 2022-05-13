@@ -360,7 +360,7 @@ class ModelTesterMultilabel:
             # Name of the true class.
             cls_pred_name = np.array(self.categories)[top_pred]
             cls_pred_perc = result[top_pred] * 100
-            cls_true = self.values[os.path.basename(image_path)]
+            cls_true = values[os.path.basename(image_path)]
             
             if plot:
                 fig, ax = plt.subplots()
