@@ -36,9 +36,7 @@ class ModelTester:
         try:
             self.model = load_model(
                 model,
-                custom_objects={
-                    "_f1_score": f1_score,
-                    "f1_score": f1_score})
+                custom_objects={"_f1_score": f1_score, "f1_score": f1_score})
             # efficientnets have the scaling included in them so no need to
             # rescale the images when loading
             if self.model.name[0] in ['B', 'V']:
@@ -104,13 +102,7 @@ class ModelTester:
         ax.xaxis.set_ticklabels(labels)
         ax.yaxis.set_ticklabels(labels)
 
-    def _plot_images(
-            self,
-            images,
-            categories,
-            cls_true,
-            cls_pred=None,
-            smooth=True):
+    def _plot_images(self, images, categories, cls_true, cls_pred=None, smooth=True):
         """
         Plot images along with their true and optionally predicted labels.
         Inspired by https://github.com/Hvass-Labs/TensorFlow-Tutorials/blob/master/10_Fine-Tuning.ipynb.
@@ -203,15 +195,11 @@ class ModelTester:
 
         # Plot the images we have loaded and their corresponding classes.
         self._plot_images(
-            images=[
-                data_utils.prepare_image(
-                    image_paths[i],
-                    self.input_shape)[0] for i in random_errors],
+            images=[data_utils.prepare_image(image_paths[i], self.input_shape)[0] for i in random_errors],
             categories=labels,
-            cls_true=[
-                cls_true[i] for i in random_errors],
-            cls_pred=[
-                cls_pred[i] for i in random_errors])
+            cls_true=[cls_true[i] for i in random_errors],
+            cls_pred=[cls_pred[i] for i in random_errors]
+            )
 
     def classify_images(self, image_path, categories, plot=True):
         """
@@ -246,10 +234,7 @@ class ModelTester:
             else:
                 print('\nImage: ', image_path)
                 for i in range(len(top_pred)):
-                    print(
-                        'Prediction: {} (probability {}%)'.format(
-                            cls_pred_name[i], round(
-                                cls_pred_perc[i])))
+                    print('Prediction: {} (probability {}%)'.format(cls_pred_name[i], round(cls_pred_perc[i])))
 
     def evaluate(self, path):
         """
@@ -278,12 +263,7 @@ class ModelTester:
         cls_pred = np.argmax(cls_pred, axis=1)
         print('Labels loaded')
         # Show classification report
-        print(
-            classification_report(
-                cls_true,
-                cls_pred,
-                target_names=labels,
-                digits=4))
+        print(classification_report(cls_true, cls_pred, target_names=labels, digits=4))
 
 
 class ModelTesterMultilabel:
@@ -304,9 +284,7 @@ class ModelTesterMultilabel:
         try:
             self.model = load_model(
                 model,
-                custom_objects={
-                    "_f1_score": f1_score,
-                    "f1_score": f1_score})
+                custom_objects={"_f1_score": f1_score, "f1_score": f1_score})
             # efficientnets have the scaling included in them so no need to
             # rescale the images when loading
             if self.model.name[0] in ['B', 'V']:
