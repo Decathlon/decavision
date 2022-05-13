@@ -282,9 +282,7 @@ class ModelTesterMultilabel:
             # necessary because keras generators don'T work with TPUs...
             tf.compat.v1.disable_eager_execution()
         try:
-            self.model = load_model(
-                model,
-                custom_objects={"_f1_score": f1_score, "f1_score": f1_score})
+            self.model = load_model(model, custom_objects={"_f1_score": f1_score, "f1_score": f1_score})
             # efficientnets have the scaling included in them so no need to
             # rescale the images when loading
             if self.model.name[0] in ['B', 'V']:
@@ -355,13 +353,9 @@ class ModelTesterMultilabel:
         images = glob.glob(os.path.join(path, '*.jpg'))
         for image_path in images:
             # prepare the image
-            image_tensor = data_utils.prepare_image(
-                image_path, self.input_shape, self.rescaling)
+            image_tensor = data_utils.prepare_image(image_path, self.input_shape, self.rescaling)
             # make and decode the prediction
             result = self.model.predict(image_tensor)[0]
-            # print image and top predictions
-            # top_pred = np.argsort(result)[::-1][:5] # GET PREDS > THRESHOLD
-            # (0.50) KEEP IT AS A USER ARGUMENT.
             top_pred = result > threshold
             # Name of the true class.
             cls_pred_name = np.array(self.categories)[top_pred]
@@ -373,9 +367,7 @@ class ModelTesterMultilabel:
                 if self.model.name in ["Inception", "Xception"]:
                     ax.imshow(image_tensor[0], interpolation='nearest')
                 else:
-                    ax.imshow(
-                        image_tensor[0].astype('uint8'),
-                        interpolation='nearest')
+                    ax.imshow(image_tensor[0].astype('uint8'), interpolation='nearest')
                 xlabel = 'Prediction :\n'
                 for (x, y) in zip(cls_pred_name, cls_pred_perc):
                     xlabel += '{0}, {1:.2f}%\n'.format(x, y)
@@ -390,10 +382,7 @@ class ModelTesterMultilabel:
                 print('\nImage: ', image_path)
                 print("True label:", cls_true)
                 for i in range(len(cls_pred_perc)):
-                    print(
-                        'Prediction: {} (probability {}%)'.format(
-                            cls_pred_name[i], round(
-                                cls_pred_perc[i])))
+                    print('Prediction: {} (probability {}%)'.format(cls_pred_name[i], round(cls_pred_perc[i])))
 
     def evaluate(self, path, json_file):
         """
@@ -434,7 +423,9 @@ class ModelTesterMultilabel:
 
         # confusion matrix
         print("\n Confusion matrix")
-        print(multilabel_confusion_matrix(cls_true, cls_pred))
+        for i, item in enumerate(multilabel_confusion_matrix(cls_true, cls_pred)):
+           print(self.categories[i], '\n', item, '\n')
+
             
     def create_movie(self, path, image_path, json_file, threshold, plot=True, save_img=True):
         """
