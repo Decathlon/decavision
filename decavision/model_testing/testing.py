@@ -266,11 +266,10 @@ class ModelTesterMultilabel:
 
     Arguments:
         model (str): path to trained model
-        json_file (str): path to json file containing image ids and their associated labels
         categories (list[str]): list of potential categories that the model can return
     """    
     
-    def __init__(self, model, json_file, categories):
+    def __init__(self, model, categories):
         use_tpu, use_gpu = utils.check_PU()
         if use_tpu:
             # necessary because keras generators don'T work with TPUs...
@@ -286,21 +285,12 @@ class ModelTesterMultilabel:
         except Exception as e:
             print('There was a problem when trying to load your model: {}'.format(e))
 
-        data = []
-        with open(json_file, 'r') as file:
-            values = json.load(file)
-            for f, l in values.items():
-                data.append({"filenames": f, "labels": l})
-
         self.input_shape = self.model.input_shape[1:3]
-        self.df = pd.DataFrame(data)
-        self.values = values
-        self.json_file = json_file
         self.categories = categories
         print("Model name: ",self.model.name)
 
 
-    def _load_dataset(self, path):
+    def _load_dataset(self, path, json_file):
         """
         Load dataset into a keras generator. Images must be contained in single
         folder. A dataframe is required with 2 columns: original 
@@ -313,14 +303,22 @@ class ModelTesterMultilabel:
 
         Arguments:
             path (str): location of the dataset
+            json_file (str): path to json file containing image ids and their associated labels
 
         Returns:
             generator: images plus information about them (labels, paths, etc)
         """
-                   
+        data = []
+        with open(json_file, 'r') as file:
+            values = json.load(file)
+            for f, l in values.items():
+                data.append({"filenames": f, "labels": l})
+                
+        df = pd.DataFrame(data)
+                           
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1 / self.rescaling)
         generator = datagen.flow_from_dataframe(directory=path,
-                                                dataframe=self.df,
+                                                dataframe=df,
                                                 x_col="filenames",
                                                 y_col="labels",
                                                 target_size=self.input_shape,
@@ -331,17 +329,20 @@ class ModelTesterMultilabel:
                                                 batch_size=1)    
         return generator
 
-    def classify_images(self, path, threshold = 0.5, plot=False, save_img=False):
+    def classify_images(self, path, json_file, threshold = 0.5, plot=False, save_img=False):
         """
         Classify images located directly in a folder. Plots and saves the images with the specified threshold.
 
         Arguments:
             path (str): location of the images
+            json_file (str): path to json file containing image ids and their associated labels
             threshold (int): threshold for prediction (default to 0.5)
             plot (bool): plot or not the images, if False, only results are printed
             save_img (bool): save classified images or not in a new folder
         """
-        
+        with open(json_file, 'r') as file:
+            values = json.load(file)       
+            
         images = glob.glob(os.path.join(path, '*.jpg'))
         for image_path in images:
             # prepare the image
@@ -355,6 +356,7 @@ class ModelTesterMultilabel:
             cls_pred_name = np.array(self.categories)[top_pred]
             cls_pred_perc = result[top_pred] * 100
             cls_true = self.values[os.path.basename(image_path)]
+            
             if plot:
                 fig, ax = plt.subplots()
                 if self.model.name in ["Inception", "Xception"]:
@@ -368,68 +370,66 @@ class ModelTesterMultilabel:
                 ax.set_xticks([])
                 ax.set_yticks([]) 
                 plt.tight_layout() 
-                plt.show()
-                if save_img:
-                    data_utils.create_dir("predicated_images") 
-                    fig.savefig("predicated_images/" + os.path.basename(image_path))                
+            elif save_img:
+                data_utils.create_dir("predicated_images") 
+                fig.savefig("predicated_images/" + os.path.basename(image_path))                
             else:
                 print('\nImage: ', image_path)
                 print("True label:", cls_true)
                 for i in range(len(cls_pred_perc)):
                     print('Prediction: {} (probability {}%)'.format(cls_pred_name[i], round(cls_pred_perc[i])))
 
-    def evaluate(self, path):
+    def evaluate(self, path, json_file):
         """
         Calculate the f1-score of the model on a dataset of images. The images must be
         in single folder.
 
         Arguments:
             path (str): location of the dataset
+            json_file (str): path to json file containing image ids and their associated labels
         """
         
-        generator = self._load_dataset(path)
+        generator = self._load_dataset(path, json_file)
         results = self.model.evaluate(generator)
         print('f1-score of', round(results[-1] * 100,3), '%')
         
-    def generate_metrics(self, path, threshold=0.5):
+    def generate_metrics(self, path, json_file, threshold=0.5):
         """
         Computes classification report and confusion matrix resulting from predictions on 
         a dataset of images and prints the results. Images must be located in a single folder. 
         
         Arguments:
             path (str): location of the images
+            json_file (str): path to json file containing image ids and their associated labels
             threshold (int): threshold for prediction (default to 0.5)
         """
     
         # getting list of true and predicted labels
-        generator = self._load_dataset(path)
+        generator = self._load_dataset(path, json_file)
         cls_true = generator.classes #true label for each image
         cls_pred = self.model.predict(generator)
         cls_pred = cls_pred > threshold
-        cls_true = [list(np.array(self.categories)[l]) for l in cls_true]
-        cls_pred_name = [list(np.array(self.categories)[l]) for l in cls_pred]
+        cls_true = np.array([generator.next()[1][0] for i in range(generator.n)])
         print('Labels & Predictions loaded for reports')
-
-        # binarizer
-        mlb = MultiLabelBinarizer(classes = self.categories)
-        y = mlb.fit_transform(cls_true) 
-        y_hat = mlb.fit_transform(cls_pred_name)
 
         # classification report
         print("\nClassification report")
-        print(classification_report(y, y_hat, target_names=self.categories, digits=4))
+        print(classification_report(cls_true, cls_pred, target_names=self.categories, digits=4))
 
         # confusion matrix
         print("\n Confusion matrix")
-        print(multilabel_confusion_matrix(y, y_hat))
+        print(multilabel_confusion_matrix(cls_true, cls_pred))
             
-    def create_movie(self, image_path):
+    def create_movie(self, path, image_path, json_file, threshold, plot=True, save_img=True):
         """
         Create a movie from classified images.
 
         Arguments:
             image_path (str): location of the classified images
         """
+        
+        self.classify_images(path, json_file, threshold, plot=True, save_img=True)
+        
         image_folder = image_path
         video_name = 'video.avi'
 
