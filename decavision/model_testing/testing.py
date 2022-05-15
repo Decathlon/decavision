@@ -427,17 +427,27 @@ class ModelTesterMultilabel:
            print(self.categories[i], '\n', item, '\n')
 
             
-    def create_movie(self, path, image_path, json_file, threshold, plot=True, save_img=True):
+    def create_movie(self, path, classify_images, json_file, threshold, plot=True, save_img=True, **classified_path):
         """
         Create a movie from classified images.
 
         Arguments:
-            image_path (str): location of the classified images
+            path (str): location of the images
+            classify_images (bool): location of the classified images, set this to False if you have the images already saved 
+            json_file (str): path to json file containing image ids and their associated labels
+            threshold (int): threshold for prediction (default to 0.5)
+            plot (bool): plot or not the images, if False, only results are printed
+            save_img (bool): save classified images or not in a new folder
+            **classified_path: path to saved classified images
         """
         
-        self.classify_images(path, json_file, threshold, plot=True, save_img=True)
+        if classify_images:
+            self.classify_images(path, json_file, threshold, plot=True, save_img=True)
+            image_folder = "classified_images/"
+        else:
+            for k, v in classified_path.items():
+                image_folder = v
         
-        image_folder = image_path
         video_name = 'video.avi'
 
         images = [img for img in os.listdir(
