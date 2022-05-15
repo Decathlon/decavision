@@ -376,8 +376,8 @@ class ModelTesterMultilabel:
                 ax.set_yticks([]) 
                 plt.tight_layout() 
                 if save_img:
-                    data_utils.create_dir("predicated_images") 
-                    fig.savefig("predicated_images/" + os.path.basename(image_path))                
+                    data_utils.create_dir("classified_images") 
+                    fig.savefig("classified_images/" + os.path.basename(image_path))                
             else:
                 print('\nImage: ', image_path)
                 print("True label:", cls_true)
