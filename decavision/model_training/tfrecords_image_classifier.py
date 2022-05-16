@@ -31,7 +31,7 @@ class ImageClassifier:
         multilable (boolean): if each image is attached to multiple classes
     """
 
-    def __init__(self, 
+    def __init__(self,
                  tfrecords_folder,
                  batch_size=128,
                  transfer_model='Inception',

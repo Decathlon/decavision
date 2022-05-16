@@ -27,6 +27,8 @@ The most recent version of this library adds a feature to leverage unlabelled im
 of image classifiers. This procedure is called semi-supervised learning (SSL) and is discussed in this `blog post <https://medium.com/decathlondevelopers/improving-performance-of-image-classification-models-using-pretraining-and-a-combination-of-e271c96808d2/>`_.
 The method was also described in a `paper <https://arxiv.org/abs/2108.08362/>`_ and presented at the ACM MMSports 2021 `conference <http://mmsports.multimedia-computing.de/mmsports2021/program.html>`_.
 
+The library has been updated most recently to also include multilabel image classification. 
+
 Installation
 =============
 
