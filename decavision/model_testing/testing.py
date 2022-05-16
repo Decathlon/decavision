@@ -428,7 +428,7 @@ class ModelTesterMultilabel:
         print("\n Confusion matrix")
         for i, item in enumerate(multilabel_confusion_matrix(cls_true, cls_pred)):
             print(self.categories[i], '\n', item, '\n')
-            
+      
     def create_movie(self, path, classify_images, json_file="", threshold=0.5, image_folder=""):
         """
         Create a movie from classified images.
@@ -442,11 +442,11 @@ class ModelTesterMultilabel:
             save_img (bool): save classified images or not in a new folder
             **classified_path: path to saved classified images
         """
-  
+
         if classify_images:
             self.classify_images(path, json_file, threshold, plot=False, save_img=True)
             image_folder = "classified_images/"
-                
+   
         video_name = 'video.avi'
 
         images = [img for img in os.listdir(image_folder) if img.endswith(".jpg")]
