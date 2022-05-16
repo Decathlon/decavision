@@ -414,7 +414,6 @@ class ModelTesterMultilabel:
 
         # getting list of true and predicted labels
         generator = self._load_dataset(path, json_file)
-        cls_true = generator.classes  # true label for each image
         cls_pred = self.model.predict(generator)
         cls_pred = cls_pred > threshold
         cls_true = np.array([generator.next()[1][0] for i in range(generator.n)])
@@ -429,7 +428,7 @@ class ModelTesterMultilabel:
         for i, item in enumerate(multilabel_confusion_matrix(cls_true, cls_pred)):
             print(self.categories[i], '\n', item, '\n')
         
-    def create_movie(self, path, classify_images, threshold=0.5, json_file="", image_folder=""):
+    def create_movie(self, classify_images, path="", threshold=0.5, json_file="", image_folder=""):
         """
         Create a movie from classified images.
 
@@ -442,7 +441,7 @@ class ModelTesterMultilabel:
         """
 
         if classify_images:
-            self.classify_images(path, json_file, threshold, plot=False, save_img=True)
+            self.classify_images(path, json_file, threshold, plot=True, save_img=True)
             image_folder = "classified_images/"
         
         video_name = 'video.avi'
