@@ -367,7 +367,7 @@ class ModelTesterMultilabel:
 
             if plot:
                 fig, ax = plt.subplots()
-                if self.model.name in ["Inception", "Xception"]:
+                if self.model.name[0] not in ["B", "V"]:
                     ax.imshow(image_tensor[0], interpolation='nearest')
                 else:
                     ax.imshow(image_tensor[0].astype('uint8'), interpolation='nearest')
