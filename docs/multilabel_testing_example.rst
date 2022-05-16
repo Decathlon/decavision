@@ -50,12 +50,12 @@ Create a movie from classified images
 There are two ways to create a movie from classified images: you can directly run the following code by setting :code:`classify_images=True` to 
 make predictions on new images -> save classified images to a folder and create a movie from them:: 
 
-  tester.create_movie(path="image_dataset/val", classify_images=True)
+  tester.create_movie(path="image_dataset/val", json_file="image_dataset/classes.json", classify_images=True)
 
 If you already have classified saved images in a folder, you can set :code:`classify_images=False` and pass an optional argument which will be the path 
 to the classified saved images directory :code:`image_folder=classified_image_path`. Assume the classified images are saved under **image_dataset/classified_images/**, then::
   
-  tester.create_movie(path=path, classify_images=False, image_folder="image_dataset/classified_images")
+  tester.create_movie(path=path, json_file="image_dataset/classes.json", classify_images=False, image_folder="image_dataset/classified_images")
 
 
 Generate Classification report and Confusion matrix
