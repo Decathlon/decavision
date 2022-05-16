@@ -348,7 +348,7 @@ class ModelTesterMultilabel:
             json_file (str): path to json file containing image ids and their associated labels
             threshold (int): threshold for prediction (default to 0.5)
             plot (bool): plot or not the images, if False, only results are printed
-            save_img (bool): save classified images or not in a new folder
+            save_img (bool): save classified images or not in a new folder. To save images, you will need to set plot=True, otherwise no images will be saved. 
         """
         with open(json_file, 'r') as file:
             values = json.load(file)
@@ -429,18 +429,16 @@ class ModelTesterMultilabel:
         for i, item in enumerate(multilabel_confusion_matrix(cls_true, cls_pred)):
             print(self.categories[i], '\n', item, '\n')
         
-    def create_movie(self, path, classify_images, json_file="", threshold=0.5, image_folder=""):
+    def create_movie(self, path, classify_images, threshold=0.5, json_file="", image_folder=""):
         """
         Create a movie from classified images.
 
         Arguments:
             path (str): location of the images
             classify_images (bool): location of the classified images, set this to False if you have the images already saved
-            json_file (str): path to json file containing image ids and their associated labels
             threshold (int): threshold for prediction (default to 0.5)
-            plot (bool): plot or not the images, if False, only results are printed
-            save_img (bool): save classified images or not in a new folder
-            **classified_path: path to saved classified images
+            json_file (str): path to json file containing image ids and their associated labels
+            image_folder (str): if using already classified saved images, provide path to those images. 
         """
 
         if classify_images:
