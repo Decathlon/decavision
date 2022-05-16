@@ -54,6 +54,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="train_example.html">Train and optimize model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ssl_example.html">Improve a classification model using unlabelled images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multilabel_testing_example.html">Testing Multilabel image classification model</a></li>
 </ul>
 
         </div>
@@ -84,7 +85,8 @@
 <h1>Build a dataset from scratch<a class="headerlink" href="#build-a-dataset-from-scratch" title="Permalink to this headline"></a></h1>
 <p>This code example shows how you can use this library to prepare a dataset of images for training. You can
 perform data augmentation on your images and transform the dataset into tfrecords to be used to train a classification model.
-The data can come from any source and the only requirement is that the images are saved in separate folders for each class.</p>
+The data can come from any source and the only requirement is that the images are saved in separate folders for each class. For
+multilabel classification, however, all images need to be stored in a single folder while training and testing.</p>
 <section id="splitting-a-set-of-images-into-a-training-and-a-validation-set">
 <h2>Splitting a set of images into a training and a validation set<a class="headerlink" href="#splitting-a-set-of-images-into-a-training-and-a-validation-set" title="Permalink to this headline"></a></h2>
 <p>If you have a single set of images, but would like to split it into a training and a validation set, first place your images in
@@ -101,6 +103,26 @@ of classes, your dataset should be organized in the directory as follows:</p>
         <span class="n">soccer_player_1</span><span class="o">.</span><span class="n">jpg</span>
         <span class="n">soccer_player_2</span><span class="o">.</span><span class="n">jpg</span>
         <span class="o">...</span>
+</pre></div>
+</div>
+<p>However, for multilabel classification, all the images must be in a single folder and there must exist a JSON file with the keys
+being the filenames and the values being lists of labels. Your dataset should be organized in the directory as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">/</span>
+  <span class="n">image_dataset</span><span class="o">/</span>
+    <span class="n">train</span><span class="o">/</span>
+        <span class="n">sun_aabeeufygtjcsego</span><span class="o">.</span><span class="n">jpg</span>
+        <span class="n">sun_aabmvnjgiecutfpx</span><span class="o">.</span><span class="n">jpg</span>
+        <span class="n">sun_aaclfhnpacadfwfc</span><span class="o">.</span><span class="n">jpg</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+<p>and the json file as code:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="s2">&quot;sun_aabeeufygtjcsego.jpg&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;grass&quot;</span><span class="p">,</span> <span class="s2">&quot;dirt/soil&quot;</span><span class="p">,</span> <span class="s2">&quot;natural_light&quot;</span><span class="p">,</span> <span class="s2">&quot;man-made&quot;</span><span class="p">,</span> <span class="s2">&quot;open_area&quot;</span><span class="p">,</span> <span class="s2">&quot;far-away_horizon&quot;</span><span class="p">,</span> <span class="s2">&quot;sky&quot;</span><span class="p">,</span> <span class="s2">&quot;barn&quot;</span><span class="p">],</span>
+<span class="s2">&quot;sun_aabmvnjgiecutfpx.jpg&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;trees&quot;</span><span class="p">,</span> <span class="s2">&quot;grass&quot;</span><span class="p">,</span> <span class="s2">&quot;asphalt&quot;</span><span class="p">,</span> <span class="s2">&quot;natural_light&quot;</span><span class="p">,</span> <span class="s2">&quot;man-made&quot;</span><span class="p">,</span> <span class="s2">&quot;open_area&quot;</span><span class="p">,</span> <span class="s2">&quot;no_horizon&quot;</span><span class="p">,</span> <span class="s2">&quot;badminton_court&quot;</span><span class="p">],</span>
+<span class="s2">&quot;sun_aaclfhnpacadfwfc.jpg&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;clouds&quot;</span><span class="p">,</span> <span class="s2">&quot;natural_light&quot;</span><span class="p">,</span> <span class="s2">&quot;man-made&quot;</span><span class="p">,</span> <span class="s2">&quot;open_area&quot;</span><span class="p">,</span> <span class="s2">&quot;no_horizon&quot;</span><span class="p">,</span> <span class="s2">&quot;sky&quot;</span><span class="p">,</span> <span class="s2">&quot;buildings&quot;</span><span class="p">],</span>
+<span class="o">...</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>Then, you can run the following code:</p>

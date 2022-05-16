@@ -6,7 +6,6 @@ import os
 import dill
 import skopt
 import tensorflow as tf
-import tensorflow_hub as hub
 
 from decavision.utils import training_utils
 from decavision.utils import utils
@@ -14,6 +13,7 @@ from decavision.utils import utils
 AUTO = tf.data.experimental.AUTOTUNE
 
 
+# metric for multilable classification
 class ImageClassifier:
     """
     Class to train an image classification model by using transfer learning.
@@ -25,15 +25,24 @@ class ImageClassifier:
             folders train and val, filenames of the form filenumber-numberofimages.tfrec
         batch_size (int): size of batches of data used for training
         transfer_model (str): pretrained model to use for transfer learning, can be one of Inception,
-            Xception, Inception_Resnet, Resnet, (EfficientNet) B0, B3, B5, B7 or (EfficientnetV2) V2-S, V2-M, V2-L, V2-XL
+            Xception, Inception_Resnet, Resnet, (EfficientNet) B0, B3, B5, B7 or (EfficientnetV2) V2-S, V2-M, V2-L
         augment (boolean): Whether to augment the training data, default is True
         input_shape (tuple(int,int)): shape of the input images for the model, if not specified, recommended sizes are used for each one
+        multilable (boolean): if each image is attached to multiple classes
     """
 
-    def __init__(self, tfrecords_folder, batch_size=128, transfer_model='Inception', augment=True, input_shape=None):
+    def __init__(self,
+                 tfrecords_folder,
+                 batch_size=128,
+                 transfer_model='Inception',
+                 augment=True,
+                 input_shape=None,
+                 multilabel=False):
 
         self.tfrecords_folder = tfrecords_folder
         self.use_TPU, self.use_GPU = utils.check_PU()
+        self.multilabel = multilabel
+        self.metric = 'accuracy'
         if self.use_TPU and batch_size % 8:
             print(
                 'Batch size {} is not multiple of 8, required for TPU'.format(batch_size))
@@ -94,9 +103,8 @@ class ImageClassifier:
                       'B7': 600,
                       'V2-S': 384,
                       'V2-M': 480,
-                      'V2-L': 480,
-                      'V2-XL': 512}
-        if transfer_model in ['B0', 'B3', 'B5', 'B7']:
+                      'V2-L': 480}
+        if transfer_model in ['B0', 'B3', 'B5', 'B7', 'V2-S', 'V2-M', 'V2-L']:
             self.scale = 255.
         else:
             self.scale = 1.
@@ -127,16 +135,17 @@ class ImageClassifier:
             """ Extract image and label from single tfrecords example."""
             features = {
                 'image': tf.io.FixedLenFeature((), tf.string),
-                'label': tf.io.FixedLenFeature((), tf.int64),
+                'label': tf.io.FixedLenSequenceFeature((), tf.int64, allow_missing=True),
             }
             example = tf.io.parse_single_example(example, features)
 
             image = tf.image.decode_jpeg(example['image'], channels=3)
             # normalization of pixels is already done in TF EfficientNets
-            if self.transfer_model not in ['B0', 'B3', 'B5', 'B7']:
+            if self.transfer_model not in ['B0', 'B3', 'B5', 'B7', 'V2-S', 'V2-M', 'V2-L']:
                 image = tf.image.convert_image_dtype(image, dtype=tf.float32)
             feature = tf.image.resize(image, [*self.target_size])
-            label = tf.cast([example['label']], tf.int32)
+            label = tf.one_hot(example['label'], depth=len(self.categories), on_value=1.0, off_value=0.0)
+            label = tf.reduce_sum(label, 0)
             return feature, label
 
         def _load_dataset(filenames):
@@ -260,19 +269,18 @@ class ImageClassifier:
             base_model = tf.keras.applications.EfficientNetB7(weights='imagenet', include_top=False,
                                                               input_shape=(*self.target_size, 3))
             base_model_last_block = None  # all layers trainable
-        elif self.transfer_model in ['V2-S', 'V2-M', 'V2-L', 'V2-XL']:
-            print("Downloading model from tensorflow hub")
-            os.environ["TFHUB_MODEL_LOAD_FORMAT"] = "UNCOMPRESSED"
-            tfhub_links = {'V2-S': 'https://tfhub.dev/google/imagenet/efficientnet_v2_imagenet21k_s/feature_vector/2',
-                           'V2-M': 'https://tfhub.dev/google/imagenet/efficientnet_v2_imagenet21k_m/feature_vector/2',
-                           'V2-L': 'https://tfhub.dev/google/imagenet/efficientnet_v2_imagenet21k_l/feature_vector/2',
-                           'V2-XL': 'https://tfhub.dev/google/imagenet/efficientnet_v2_imagenet21k_xl/feature_vector/2'}
-            url = tfhub_links[self.transfer_model]
-            layer = hub.KerasLayer(url, trainable=True, input_shape=self.target_size)
-            input = tf.keras.layers.Input(shape=(*self.target_size, 3))
-            output = layer(input)
-            base_model = tf.keras.Model(inputs=input, outputs=output)
-            base_model_last_block = None  # all layers trainable
+        elif self.transfer_model == 'V2-S':
+            base_model = tf.keras.applications.EfficientNetV2S(weights='imagenet', include_top=False,
+                                                               input_shape=(*self.target_size, 3))
+            base_model_last_block = 448  # last block 462, two blocks 448
+        elif self.transfer_model == 'V2-M':
+            base_model = tf.keras.applications.EfficientNetV2M(weights='imagenet', include_top=False,
+                                                               input_shape=(*self.target_size, 3))
+            base_model_last_block = 659  # last block 673, two blocks 659
+        elif self.transfer_model == 'V2-L':
+            base_model = tf.keras.applications.EfficientNetV2L(weights='imagenet', include_top=False,
+                                                               input_shape=(*self.target_size, 3))
+            base_model_last_block = 925  # last block 939, two blocks 925
         else:
             base_model = tf.keras.applications.InceptionV3(weights='imagenet',
                                                            include_top=False, input_shape=(*self.target_size, 3))
@@ -284,8 +292,7 @@ class ImageClassifier:
 
         # Add the classification layers using Keras functional API
         x = base_model.output
-        if self.transfer_model not in ['V2-S', 'V2-M', 'V2-L', 'V2-XL']:
-            x = tf.keras.layers.GlobalAveragePooling2D()(x)
+        x = tf.keras.layers.GlobalAveragePooling2D()(x)
         # Hidden layer for classification
         if hidden_size == 0:
             x = tf.keras.layers.Dropout(rate=dropout)(x)
@@ -301,10 +308,16 @@ class ImageClassifier:
 
         x = tf.keras.layers.Dense(
             len(self.categories), name='logs')(x)  # Output layer
-        predictions = tf.keras.layers.Activation(
-            'softmax', name='preds')(x)  # Output activation
-        loss = 'sparse_categorical_crossentropy'
-        metrics = ['sparse_categorical_accuracy']
+        if self.multilabel:
+            predictions = tf.keras.layers.Activation(
+                'sigmoid', name='preds')(x)  # Output activation
+            loss = 'binary_crossentropy'
+            metrics = [self.metric, training_utils.f1_score]
+        else:
+            predictions = tf.keras.layers.Activation(
+                'softmax', name='preds')(x)  # Output activation
+            loss = 'categorical_crossentropy'
+            metrics = [self.metric]
 
         return tf.keras.Model(inputs=base_model.input, outputs=predictions, name=self.transfer_model), base_model_last_block, loss, metrics
 
@@ -339,7 +352,7 @@ class ImageClassifier:
         """
 
         # use reduce learning rate and early stopping callbacks
-        reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_sparse_categorical_accuracy',
+        reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_' + self.metric,
                                                          factor=0.1,
                                                          patience=5,
                                                          mode='max')
@@ -354,7 +367,7 @@ class ImageClassifier:
 
         # if we want to stop training when no sufficient improvement in validation metric has been achieved
         if patience:
-            early_stop = tf.keras.callbacks.EarlyStopping(monitor='val_sparse_categorical_accuracy',
+            early_stop = tf.keras.callbacks.EarlyStopping(monitor='val_' + self.metric,
                                                           patience=patience,
                                                           restore_best_weights=True)
             callbacks.append(early_stop)
@@ -416,7 +429,7 @@ class ImageClassifier:
                                 verbose=verbose, callbacks=callbacks, initial_epoch=epochs)
 
         # Evaluate the model, just to be sure
-        self.fitness = history.history['val_sparse_categorical_accuracy'][-1]
+        self.fitness = history.history['val_' + self.metric][-1]
         self.model = model
         del history
         del model

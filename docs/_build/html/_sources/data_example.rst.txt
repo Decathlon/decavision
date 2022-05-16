@@ -3,7 +3,8 @@ Build a dataset from scratch
 
 This code example shows how you can use this library to prepare a dataset of images for training. You can 
 perform data augmentation on your images and transform the dataset into tfrecords to be used to train a classification model. 
-The data can come from any source and the only requirement is that the images are saved in separate folders for each class.
+The data can come from any source and the only requirement is that the images are saved in separate folders for each class. For 
+multilabel classification, however, all images need to be stored in a single folder while training and testing.
 
 
 Splitting a set of images into a training and a validation set
@@ -24,6 +25,27 @@ of classes, your dataset should be organized in the directory as follows::
           soccer_player_1.jpg
           soccer_player_2.jpg
           ...        
+
+However, for multilabel classification, all the images must be in a single folder and there must exist a JSON file with the keys
+being the filenames and the values being lists of labels. Your dataset should be organized in the directory as follows::
+
+  data/
+    image_dataset/
+      train/
+          sun_aabeeufygtjcsego.jpg
+          sun_aabmvnjgiecutfpx.jpg
+          sun_aaclfhnpacadfwfc.jpg
+          ...        
+
+and the json file as code::
+
+  {
+  "sun_aabeeufygtjcsego.jpg": ["grass", "dirt/soil", "natural_light", "man-made", "open_area", "far-away_horizon", "sky", "barn"],
+  "sun_aabmvnjgiecutfpx.jpg": ["trees", "grass", "asphalt", "natural_light", "man-made", "open_area", "no_horizon", "badminton_court"],
+  "sun_aaclfhnpacadfwfc.jpg": ["clouds", "natural_light", "man-made", "open_area", "no_horizon", "sky", "buildings"],
+  ...
+  }
+
 
 Then, you can run the following code::
 

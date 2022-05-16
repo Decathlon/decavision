@@ -168,7 +168,17 @@ access to the decavision-doc app.
    ```
    git subtree push --prefix docs/_build/html heroku master
    ```
-   This has to be done from the main directory and it pushes only the code in the docs/_build/html subfolder to heroku.
+   This has to be done from the main directory and it pushes only the code in the docs/_build/html subfolder to heroku. If it fails you can try
+   ```
+   cd docs/_build/html
+   git init
+   git add .
+   git commit -am "deploy"
+   heroku git:remote -a decavision-doc
+   git push --force heroku master
+   rm -rf .git
+   cd ../../..
+   ```
 
 ### To do
 

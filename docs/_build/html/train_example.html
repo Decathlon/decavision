@@ -54,6 +54,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ssl_example.html">Improve a classification model using unlabelled images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multilabel_testing_example.html">Testing Multilabel image classification model</a></li>
 </ul>
 
         </div>
@@ -104,8 +105,10 @@ You will also perform an optimization of the hyperparameters of the model to ach
 <span class="n">classifier</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>You can decide the transfer model between Xception, Inception_Resnet, Resnet, the EffcientNet models B0, B3, B5 and B7, and the EfficientNetV2 models V2-S, V2-M, V2-L and V2-XL. Their respective
-sizes and performance metrics can be found in the keras <a class="reference external" href="https://keras.io/api/applications/">documentation</a>. Many of the models use different image sizes so it is better to not resize the images prior to training. The library does it already.</p>
+<p>For multilabel classification, you can specify an additional argument <code class="code docutils literal notranslate"><span class="pre">multilabel=True</span></code>. You can decide the transfer model between Xception, Inception_Resnet,
+Resnet, the EffcientNet models B0, B3, B5 and B7, and the EfficientNetV2 models V2-S, V2-M and V2-L. Their respective sizes and performance metrics can be found
+in the keras <a class="reference external" href="https://keras.io/api/applications/">documentation</a>. Many of the models use different image sizes so it is better to not resize the images prior to training.
+The library does it already.</p>
 <p>Also, note that on the fly data augmentation is done by default so if you already generated new images manually be sure to set augment to False.</p>
 <p>The parameters that can be specified when training are:</p>
 <ul class="simple">

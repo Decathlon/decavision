@@ -25,8 +25,10 @@ The training is then done with the following code::
   classifier = decavision.model_training.tfrecords_image_classifier.ImageClassifier(tfrecords_folder='data/tfrecords', batch_size=16, transfer_model='B3')
   classifier.fit()
  
-You can decide the transfer model between Xception, Inception_Resnet, Resnet, the EffcientNet models B0, B3, B5 and B7, and the EfficientNetV2 models V2-S, V2-M, V2-L and V2-XL. Their respective
-sizes and performance metrics can be found in the keras `documentation <https://keras.io/api/applications/>`_. Many of the models use different image sizes so it is better to not resize the images prior to training. The library does it already.
+For multilabel classification, you can specify an additional argument :code:`multilabel=True`. You can decide the transfer model between Xception, Inception_Resnet, 
+Resnet, the EffcientNet models B0, B3, B5 and B7, and the EfficientNetV2 models V2-S, V2-M and V2-L. Their respective sizes and performance metrics can be found 
+in the keras `documentation <https://keras.io/api/applications/>`_. Many of the models use different image sizes so it is better to not resize the images prior to training. 
+The library does it already.
 
 Also, note that on the fly data augmentation is done by default so if you already generated new images manually be sure to set augment to False.
 
