@@ -429,7 +429,8 @@ class ModelTesterMultilabel:
         for i, item in enumerate(multilabel_confusion_matrix(cls_true, cls_pred)):
             print(self.categories[i], '\n', item, '\n')
 
-    def create_movie(self, path, classify_images, json_file, threshold, plot=True, save_img=True, **classified_path):
+            
+    def create_movie(self, path, classify_images, json_file, threshold=0.5, plot=True, save_img=True, **classified_path):
         """
         Create a movie from classified images.
 
