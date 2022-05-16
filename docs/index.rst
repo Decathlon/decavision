@@ -73,12 +73,14 @@ shows examples of how to use the code explicitely.
    
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Examples
 
    data_example
    train_example
    ssl_example
+   multilabel_testing_example
+   
 
 Roadmap
 =======

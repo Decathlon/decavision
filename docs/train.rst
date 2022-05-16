@@ -9,7 +9,7 @@ An example of how to use these functions can be found in :doc:`train_example`.
 
 
 Image classification including Multilabel classification
----------------------
+----------------------------------------------------------
 
 .. automodule:: decavision.model_training.tfrecords_image_classifier
    :members:

@@ -41,7 +41,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="data.html">Preparing datasets</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Train models</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-decavision.model_training.tfrecords_image_classifier">Image classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-decavision.model_training.tfrecords_image_classifier">Image classification including Multilabel classification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-decavision.model_training.progressive_learning">Progressive learning</a></li>
 </ul>
 </li>
@@ -53,6 +53,7 @@
 <li class="toctree-l1"><a class="reference internal" href="data_example.html">Build a dataset from scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="train_example.html">Train and optimize model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ssl_example.html">Improve a classification model using unlabelled images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multilabel_testing_example.html">Testing Multilabel image classification model</a></li>
 </ul>
 
         </div>
@@ -81,15 +82,15 @@
              
   <section id="train-models">
 <h1>Train models<a class="headerlink" href="#train-models" title="Permalink to this headline"></a></h1>
-<p>The following code details the functions and classes that are available to train an image classification model and opimize its
-hyperparameters. Progressive learning can also be performed to add new classes to a model that was already trained using
-the library without losing all the information learned.</p>
+<p>The following code details the functions and classes that are available to train an image classification model
+(also multilabel image classification) and opimize its hyperparameters. Progressive learning can also be performed
+to add new classes to a model that was already trained using the library without losing all the information learned.</p>
 <p>An example of how to use these functions can be found in <a class="reference internal" href="train_example.html"><span class="doc">Train and optimize model</span></a>.</p>
 <section id="module-decavision.model_training.tfrecords_image_classifier">
-<span id="image-classification"></span><h2>Image classification<a class="headerlink" href="#module-decavision.model_training.tfrecords_image_classifier" title="Permalink to this headline"></a></h2>
+<span id="image-classification-including-multilabel-classification"></span><h2>Image classification including Multilabel classification<a class="headerlink" href="#module-decavision.model_training.tfrecords_image_classifier" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="decavision.model_training.tfrecords_image_classifier.ImageClassifier">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">decavision.model_training.tfrecords_image_classifier.</span></span><span class="sig-name descname"><span class="pre">ImageClassifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tfrecords_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transfer_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Inception'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_training.tfrecords_image_classifier.ImageClassifier" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decavision.model_training.tfrecords_image_classifier.</span></span><span class="sig-name descname"><span class="pre">ImageClassifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tfrecords_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transfer_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Inception'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multilabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_training.tfrecords_image_classifier.ImageClassifier" title="Permalink to this definition"></a></dt>
 <dd><p>Class to train an image classification model by using transfer learning.
 A hyperparameter optimization tool is also provided. Data must be saved in tfrecords format.
 See data_preparation.generate_tfrecords to go from image data to tfrecords.</p>
@@ -100,9 +101,10 @@ See data_preparation.generate_tfrecords to go from image data to tfrecords.</p>
 folders train and val, filenames of the form filenumber-numberofimages.tfrec</p></li>
 <li><p><strong>batch_size</strong> (<em>int</em>) – size of batches of data used for training</p></li>
 <li><p><strong>transfer_model</strong> (<em>str</em>) – pretrained model to use for transfer learning, can be one of Inception,
-Xception, Inception_Resnet, Resnet, (EfficientNet) B0, B3, B5, B7 or (EfficientnetV2) V2-S, V2-M, V2-L, V2-XL</p></li>
+Xception, Inception_Resnet, Resnet, (EfficientNet) B0, B3, B5, B7 or (EfficientnetV2) V2-S, V2-M, V2-L</p></li>
 <li><p><strong>augment</strong> (<em>boolean</em>) – Whether to augment the training data, default is True</p></li>
 <li><p><strong>input_shape</strong> (<em>tuple</em><em>(</em><em>int</em><em>,</em><em>int</em><em>)</em>) – shape of the input images for the model, if not specified, recommended sizes are used for each one</p></li>
+<li><p><strong>multilable</strong> (<em>boolean</em>) – if each image is attached to multiple classes</p></li>
 </ul>
 </dd>
 </dl>
@@ -209,7 +211,7 @@ num_iterations/n_random_starts)</p></li>
 <span id="progressive-learning"></span><h2>Progressive learning<a class="headerlink" href="#module-decavision.model_training.progressive_learning" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="decavision.model_training.progressive_learning.ProgressiveLearner">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">decavision.model_training.progressive_learning.</span></span><span class="sig-name descname"><span class="pre">ProgressiveLearner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tfrecords_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transfer_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_training.progressive_learning.ProgressiveLearner" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decavision.model_training.progressive_learning.</span></span><span class="sig-name descname"><span class="pre">ProgressiveLearner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tfrecords_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transfer_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_training.progressive_learning.ProgressiveLearner" title="Permalink to this definition"></a></dt>
 <dd><p>Class to update an already trained model with new classes without losing too
 much of the information learned about the old classes.</p>
 <dl class="field-list simple">

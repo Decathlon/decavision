@@ -49,6 +49,7 @@
 <li class="toctree-l1"><a class="reference internal" href="data_example.html">Build a dataset from scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="train_example.html">Train and optimize model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ssl_example.html">Improve a classification model using unlabelled images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multilabel_testing_example.html">Testing Multilabel image classification model</a></li>
 </ul>
 
         </div>
@@ -78,10 +79,11 @@
   <section id="model-testing">
 <h1>Model testing<a class="headerlink" href="#model-testing" title="Permalink to this headline"></a></h1>
 <p>The following code details the functions and classes that are available to test the performance of a trained model. The model can
-be used to classify images directly or calculate various metrics on a validation/test dataset.</p>
+be used to classify images directly or calculate various metrics on a validation/test dataset. Multilabel image classification can
+also be performed using the library with a similar approach.</p>
 <span class="target" id="module-decavision.model_testing.testing"></span><dl class="py class">
 <dt class="sig sig-object py" id="decavision.model_testing.testing.ModelTester">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">decavision.model_testing.testing.</span></span><span class="sig-name descname"><span class="pre">ModelTester</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_testing.testing.ModelTester" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decavision.model_testing.testing.</span></span><span class="sig-name descname"><span class="pre">ModelTester</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_testing.testing.ModelTester" title="Permalink to this definition"></a></dt>
 <dd><p>Class to use a trained image classification model on some images. Using this
 when working with a TPU disables eager execution.</p>
 <dl class="field-list simple">
@@ -154,6 +156,86 @@ be located in separate folders for each class, for example a validation dataset.
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>path</strong> (<em>str</em>) – location of the images</p></li>
 <li><p><strong>num_pictures</strong> (<em>int</em>) – maximum number of errors to show</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="decavision.model_testing.testing.ModelTesterMultilabel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decavision.model_testing.testing.</span></span><span class="sig-name descname"><span class="pre">ModelTesterMultilabel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categories</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_testing.testing.ModelTesterMultilabel" title="Permalink to this definition"></a></dt>
+<dd><p>Class to use a trained multilabel image classification model on some images. Using this
+when working with a TPU disables eager execution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>str</em>) – path to trained model</p></li>
+<li><p><strong>categories</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – list of potential categories that the model can return</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="decavision.model_testing.testing.ModelTesterMultilabel.classify_images">
+<span class="sig-name descname"><span class="pre">classify_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_img</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_testing.testing.ModelTesterMultilabel.classify_images" title="Permalink to this definition"></a></dt>
+<dd><p>Classify images located directly in a folder. Plots and saves the images with the specified threshold.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – location of the images</p></li>
+<li><p><strong>json_file</strong> (<em>str</em>) – path to json file containing image ids and their associated labels</p></li>
+<li><p><strong>threshold</strong> (<em>int</em>) – threshold for prediction (default to 0.5)</p></li>
+<li><p><strong>plot</strong> (<em>bool</em>) – plot or not the images, if False, only results are printed</p></li>
+<li><p><strong>save_img</strong> (<em>bool</em>) – save classified images or not in a new folder. To save images, you will need to set plot=True, otherwise no images will be saved.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decavision.model_testing.testing.ModelTesterMultilabel.create_movie">
+<span class="sig-name descname"><span class="pre">create_movie</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classify_images</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_testing.testing.ModelTesterMultilabel.create_movie" title="Permalink to this definition"></a></dt>
+<dd><p>Create a movie from classified images.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – location of the images</p></li>
+<li><p><strong>classify_images</strong> (<em>bool</em>) – location of the classified images, set this to False if you have the images already saved</p></li>
+<li><p><strong>threshold</strong> (<em>int</em>) – threshold for prediction (default to 0.5)</p></li>
+<li><p><strong>json_file</strong> (<em>str</em>) – path to json file containing image ids and their associated labels</p></li>
+<li><p><strong>image_folder</strong> (<em>str</em>) – if using already classified saved images, provide path to those images.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decavision.model_testing.testing.ModelTesterMultilabel.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_testing.testing.ModelTesterMultilabel.evaluate" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the f1-score of the model on a dataset of images. The images must be
+in single folder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – location of the dataset</p></li>
+<li><p><strong>json_file</strong> (<em>str</em>) – path to json file containing image ids and their associated labels</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="decavision.model_testing.testing.ModelTesterMultilabel.generate_metrics">
+<span class="sig-name descname"><span class="pre">generate_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_testing.testing.ModelTesterMultilabel.generate_metrics" title="Permalink to this definition"></a></dt>
+<dd><p>Computes classification report and confusion matrix resulting from predictions on
+a dataset of images and prints the results. Images must be located in a single folder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – location of the images</p></li>
+<li><p><strong>json_file</strong> (<em>str</em>) – path to json file containing image ids and their associated labels</p></li>
+<li><p><strong>threshold</strong> (<em>int</em>) – threshold for prediction (default to 0.5)</p></li>
 </ul>
 </dd>
 </dl>

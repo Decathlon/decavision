@@ -46,6 +46,7 @@
 <li class="toctree-l1"><a class="reference internal" href="data_example.html">Build a dataset from scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="train_example.html">Train and optimize model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ssl_example.html">Improve a classification model using unlabelled images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multilabel_testing_example.html">Testing Multilabel image classification model</a></li>
 </ul>
 
         </div>
@@ -119,15 +120,21 @@
 </li>
       <li><a href="utils.html#decavision.utils.training_utils.CheckpointDownloader">CheckpointDownloader (class in decavision.utils.training_utils)</a>
 </li>
+      <li><a href="testing.html#decavision.model_testing.testing.ModelTester.classify_images">classify_images() (decavision.model_testing.testing.ModelTester method)</a>
+
+      <ul>
+        <li><a href="testing.html#decavision.model_testing.testing.ModelTesterMultilabel.classify_images">(decavision.model_testing.testing.ModelTesterMultilabel method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="testing.html#decavision.model_testing.testing.ModelTester.classify_images">classify_images() (decavision.model_testing.testing.ModelTester method)</a>
-</li>
       <li><a href="testing.html#decavision.model_testing.testing.ModelTester.confusion_matrix">confusion_matrix() (decavision.model_testing.testing.ModelTester method)</a>
 </li>
       <li><a href="data.html#decavision.dataset_preparation.generate_tfrecords.TfrecordsGenerator.convert_image_folder">convert_image_folder() (decavision.dataset_preparation.generate_tfrecords.TfrecordsGenerator method)</a>
 </li>
       <li><a href="utils.html#decavision.utils.data_utils.create_dir">create_dir() (in module decavision.utils.data_utils)</a>
+</li>
+      <li><a href="testing.html#decavision.model_testing.testing.ModelTesterMultilabel.create_movie">create_movie() (decavision.model_testing.testing.ModelTesterMultilabel method)</a>
 </li>
       <li><a href="utils.html#decavision.utils.training_utils.custom_loss">custom_loss() (in module decavision.utils.training_utils)</a>
 </li>
@@ -230,12 +237,20 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="testing.html#decavision.model_testing.testing.ModelTester.evaluate">evaluate() (decavision.model_testing.testing.ModelTester method)</a>
+
+      <ul>
+        <li><a href="testing.html#decavision.model_testing.testing.ModelTesterMultilabel.evaluate">(decavision.model_testing.testing.ModelTesterMultilabel method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="utils.html#decavision.utils.training_utils.f1_score">f1_score() (in module decavision.utils.training_utils)</a>
+</li>
+  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="train.html#decavision.model_training.progressive_learning.ProgressiveLearner.fit">fit() (decavision.model_training.progressive_learning.ProgressiveLearner method)</a>
 
@@ -255,9 +270,11 @@
 </li>
       <li><a href="data.html#decavision.dataset_preparation.data_augmentation.DataAugmentor.generate_images">generate_images() (decavision.dataset_preparation.data_augmentation.DataAugmentor method)</a>
 </li>
+      <li><a href="data.html#decavision.dataset_preparation.data_augmentation.DataAugmentor.generate_images_single_class">generate_images_single_class() (decavision.dataset_preparation.data_augmentation.DataAugmentor method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="data.html#decavision.dataset_preparation.data_augmentation.DataAugmentor.generate_images_single_class">generate_images_single_class() (decavision.dataset_preparation.data_augmentation.DataAugmentor method)</a>
+      <li><a href="testing.html#decavision.model_testing.testing.ModelTesterMultilabel.generate_metrics">generate_metrics() (decavision.model_testing.testing.ModelTesterMultilabel method)</a>
 </li>
       <li><a href="data.html#decavision.dataset_preparation.generate_pseudolabels.PseudoLabelGenerator.generate_pseudolabel_data">generate_pseudolabel_data() (decavision.dataset_preparation.generate_pseudolabels.PseudoLabelGenerator method)</a>
 </li>
@@ -308,6 +325,8 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="testing.html#decavision.model_testing.testing.ModelTester">ModelTester (class in decavision.model_testing.testing)</a>
+</li>
+      <li><a href="testing.html#decavision.model_testing.testing.ModelTesterMultilabel">ModelTesterMultilabel (class in decavision.model_testing.testing)</a>
 </li>
       <li>
     module
