@@ -10,7 +10,6 @@ import numpy as np
 import seaborn as sn
 import pandas as pd
 from sklearn.metrics import confusion_matrix, classification_report, multilabel_confusion_matrix
-from sklearn.preprocessing import MultiLabelBinarizer
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 
@@ -195,11 +194,12 @@ class ModelTester:
 
         # Plot the images we have loaded and their corresponding classes.
         self._plot_images(
-            images=[data_utils.prepare_image(image_paths[i], self.input_shape)[0] for i in random_errors],
+            images=[data_utils.prepare_image(image_paths[i], self.input_shape)[
+                0] for i in random_errors],
             categories=labels,
             cls_true=[cls_true[i] for i in random_errors],
             cls_pred=[cls_pred[i] for i in random_errors]
-            )
+        )
 
     def classify_images(self, image_path, categories, plot=True):
         """
@@ -234,7 +234,8 @@ class ModelTester:
             else:
                 print('\nImage: ', image_path)
                 for i in range(len(top_pred)):
-                    print('Prediction: {} (probability {}%)'.format(cls_pred_name[i], round(cls_pred_perc[i])))
+                    print('Prediction: {} (probability {}%)'.format(
+                        cls_pred_name[i], round(cls_pred_perc[i])))
 
     def evaluate(self, path):
         """
@@ -263,7 +264,8 @@ class ModelTester:
         cls_pred = np.argmax(cls_pred, axis=1)
         print('Labels loaded')
         # Show classification report
-        print(classification_report(cls_true, cls_pred, target_names=labels, digits=4))
+        print(classification_report(
+            cls_true, cls_pred, target_names=labels, digits=4))
 
 
 class ModelTesterMultilabel:
@@ -274,15 +276,16 @@ class ModelTesterMultilabel:
     Arguments:
         model (str): path to trained model
         categories (list[str]): list of potential categories that the model can return
-    """    
-    
+    """
+
     def __init__(self, model, categories):
         use_tpu, use_gpu = utils.check_PU()
         if use_tpu:
             # necessary because keras generators don'T work with TPUs...
             tf.compat.v1.disable_eager_execution()
         try:
-            self.model = load_model(model, custom_objects={"_f1_score": f1_score, "f1_score": f1_score})
+            self.model = load_model(model, custom_objects={
+                                    "_f1_score": f1_score, "f1_score": f1_score})
             # efficientnets have the scaling included in them so no need to
             # rescale the images when loading
             if self.model.name[0] in ['B', 'V']:
@@ -320,9 +323,9 @@ class ModelTesterMultilabel:
             values = json.load(file)
             for f, l in values.items():
                 data.append({"filenames": f, "labels": l})
-                
+
         df = pd.DataFrame(data)
-                           
+
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1 / self.rescaling)
         generator = datagen.flow_from_dataframe(directory=path,
                                                 dataframe=df,
@@ -336,7 +339,7 @@ class ModelTesterMultilabel:
                                                 batch_size=1)
         return generator
 
-    def classify_images(self, path, json_file, threshold = 0.5, plot=False, save_img=False):
+    def classify_images(self, path, json_file, threshold=0.5, plot=False, save_img=False):
         """
         Classify images located directly in a folder. Plots and saves the images with the specified threshold.
 
@@ -348,8 +351,8 @@ class ModelTesterMultilabel:
             save_img (bool): save classified images or not in a new folder
         """
         with open(json_file, 'r') as file:
-            values = json.load(file)       
-            
+            values = json.load(file)
+
         images = glob.glob(os.path.join(path, '*.jpg'))
         for image_path in images:
             # prepare the image
@@ -361,7 +364,7 @@ class ModelTesterMultilabel:
             cls_pred_name = np.array(self.categories)[top_pred]
             cls_pred_perc = result[top_pred] * 100
             cls_true = values[os.path.basename(image_path)]
-            
+
             if plot:
                 fig, ax = plt.subplots()
                 if self.model.name in ["Inception", "Xception"]:
@@ -373,11 +376,11 @@ class ModelTesterMultilabel:
                     xlabel += '{0}, {1:.2f}%\n'.format(x, y)
                 ax.set_xlabel(xlabel)
                 ax.set_xticks([])
-                ax.set_yticks([]) 
-                plt.tight_layout() 
+                ax.set_yticks([])
+                plt.tight_layout()
                 if save_img:
-                    data_utils.create_dir("classified_images") 
-                    fig.savefig("classified_images/" + os.path.basename(image_path))                
+                    data_utils.create_dir("classified_images")
+                    fig.savefig("classified_images/" +os.path.basename(image_path))
             else:
                 print('\nImage: ', image_path)
                 print("True label:", cls_true)
@@ -393,11 +396,11 @@ class ModelTesterMultilabel:
             path (str): location of the dataset
             json_file (str): path to json file containing image ids and their associated labels
         """
-        
+
         generator = self._load_dataset(path, json_file)
         results = self.model.evaluate(generator)
-        print('f1-score of', round(results[-1] * 100,3), '%')
-        
+        print('f1-score of', round(results[-1] * 100, 3), '%')
+
     def generate_metrics(self, path, json_file, threshold=0.5):
         """
         Computes classification report and confusion matrix resulting from predictions on
@@ -411,7 +414,7 @@ class ModelTesterMultilabel:
 
         # getting list of true and predicted labels
         generator = self._load_dataset(path, json_file)
-        cls_true = generator.classes #true label for each image
+        cls_true = generator.classes  # true label for each image
         cls_pred = self.model.predict(generator)
         cls_pred = cls_pred > threshold
         cls_true = np.array([generator.next()[1][0] for i in range(generator.n)])
@@ -424,9 +427,8 @@ class ModelTesterMultilabel:
         # confusion matrix
         print("\n Confusion matrix")
         for i, item in enumerate(multilabel_confusion_matrix(cls_true, cls_pred)):
-           print(self.categories[i], '\n', item, '\n')
+            print(self.categories[i], '\n', item, '\n')
 
-            
     def create_movie(self, path, classify_images, json_file, threshold, plot=True, save_img=True, **classified_path):
         """
         Create a movie from classified images.
@@ -440,14 +442,14 @@ class ModelTesterMultilabel:
             save_img (bool): save classified images or not in a new folder
             **classified_path: path to saved classified images
         """
-        
+
         if classify_images:
             self.classify_images(path, json_file, threshold, plot=True, save_img=True)
             image_folder = "classified_images/"
         else:
             for k, v in classified_path.items():
                 image_folder = v
-        
+
         video_name = 'video.avi'
 
         images = [img for img in os.listdir(
