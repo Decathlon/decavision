@@ -13,7 +13,7 @@ from decavision.utils import utils
 AUTO = tf.data.experimental.AUTOTUNE
 
 
-#metric for multilable classification
+# metric for multilable classification
 class ImageClassifier:
     """
     Class to train an image classification model by using transfer learning.
@@ -32,10 +32,10 @@ class ImageClassifier:
     """
 
     def __init__(self, 
-                 tfrecords_folder, 
-                 batch_size=128, 
-                 transfer_model='Inception', 
-                 augment=True, 
+                 tfrecords_folder,
+                 batch_size=128,
+                 transfer_model='Inception',
+                 augment=True,
                  input_shape=None,
                  multilabel=False):
 

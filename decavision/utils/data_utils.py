@@ -81,8 +81,8 @@ def create_dir(path):
         os.mkdir(path)
 
 
-def split_train(path='data/image_dataset', 
-                split=0.1, 
+def split_train(path='data/image_dataset',
+                split=0.1,
                 multilabel=False,
                 with_test=False):
     """

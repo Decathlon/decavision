@@ -29,7 +29,7 @@ class TfrecordsGenerator:
     def convert_image_folder(self, img_folder='data/image_dataset/train',
                              output_folder='data/tfrecords_dataset/train',
                              multilabel=False,
-                             img_folder_new=None, 
+                             img_folder_new=None,
                              target_size=None,
                              shards=16,
                              json_path=None):
