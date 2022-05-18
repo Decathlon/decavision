@@ -42,7 +42,10 @@ class ImageClassifier:
         self.tfrecords_folder = tfrecords_folder
         self.use_TPU, self.use_GPU = utils.check_PU()
         self.multilabel = multilabel
-        self.metric = 'accuracy'
+        if multilabel:
+            self.metric = training_utils.f1_score
+        else:
+            self.metric = 'accuracy'
         if self.use_TPU and batch_size % 8:
             print(
                 'Batch size {} is not multiple of 8, required for TPU'.format(batch_size))
@@ -312,12 +315,12 @@ class ImageClassifier:
             predictions = tf.keras.layers.Activation(
                 'sigmoid', name='preds')(x)  # Output activation
             loss = 'binary_crossentropy'
-            metrics = [self.metric, training_utils.f1_score]
+            metrics = ["accuracy", training_utils.f1_score]
         else:
             predictions = tf.keras.layers.Activation(
                 'softmax', name='preds')(x)  # Output activation
             loss = 'categorical_crossentropy'
-            metrics = [self.metric]
+            metrics = ["accuracy"]
 
         return tf.keras.Model(inputs=base_model.input, outputs=predictions, name=self.transfer_model), base_model_last_block, loss, metrics
 
