@@ -469,6 +469,7 @@ class ImageClassifier:
                 logging.StreamHandler()
             ]
         )
+        logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.ERROR)
         # declare the hyperparameters search space
         dim_epochs = skopt.space.Integer(low=1, high=6, name='epochs')
         dim_hidden_size = skopt.space.Integer(
@@ -566,10 +567,8 @@ class ImageClassifier:
 
         if save_results:
             with open('hyperparameters_dimensions.pickle', 'wb') as f:
-                dill.dump(dimensions, f)
-            with open('hyperparameters_search.pickle', 'wb') as f:
                 dill.dump(search_result.x, f)
-            print("Hyperparameter search saved!")
+            print("Hyperparameter results saved!")
 
         # build results dictionary
         results_dict = {dimensions[i].name: search_result.x[i]
