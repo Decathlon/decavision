@@ -43,7 +43,7 @@ class ImageClassifier:
         self.use_TPU, self.use_GPU = utils.check_PU()
         self.multilabel = multilabel
         if multilabel:
-            self.metric = training_utils.f1_score
+            self.metric = "f1_score"
         else:
             self.metric = 'accuracy'
         if self.use_TPU and batch_size % 8:
