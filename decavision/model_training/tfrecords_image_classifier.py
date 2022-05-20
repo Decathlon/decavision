@@ -333,7 +333,7 @@ class ImageClassifier:
         to the pretrained model, with potentially an extra combination of Dense, Dropout and Batchnorm.
         Only added layers are trained, unless there is some fine tuning, in which case a second round of
         training is done with the last block of the pretrained model unfrozen. Training can be stopped if
-        no sufficient improvement in accuracy.
+        no sufficient improvement in accuracy or f1-score (in case of multilabel classification).
 
         If one of the Efficientnet Bs is used, the model includes a layer that normalizes the pixels. This processing
         step is not included in the other models so it has to be done on the data separately.
