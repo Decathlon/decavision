@@ -42,7 +42,10 @@ class ImageClassifier:
         self.tfrecords_folder = tfrecords_folder
         self.use_TPU, self.use_GPU = utils.check_PU()
         self.multilabel = multilabel
-        self.metric = 'accuracy'
+        if multilabel:
+            self.metric = "f1_score"
+        else:
+            self.metric = 'accuracy'
         if self.use_TPU and batch_size % 8:
             print(
                 'Batch size {} is not multiple of 8, required for TPU'.format(batch_size))
@@ -312,12 +315,12 @@ class ImageClassifier:
             predictions = tf.keras.layers.Activation(
                 'sigmoid', name='preds')(x)  # Output activation
             loss = 'binary_crossentropy'
-            metrics = [self.metric, training_utils.f1_score]
+            metrics = ["accuracy", training_utils.f1_score]
         else:
             predictions = tf.keras.layers.Activation(
                 'softmax', name='preds')(x)  # Output activation
             loss = 'categorical_crossentropy'
-            metrics = [self.metric]
+            metrics = ["accuracy"]
 
         return tf.keras.Model(inputs=base_model.input, outputs=predictions, name=self.transfer_model), base_model_last_block, loss, metrics
 
@@ -330,7 +333,7 @@ class ImageClassifier:
         to the pretrained model, with potentially an extra combination of Dense, Dropout and Batchnorm.
         Only added layers are trained, unless there is some fine tuning, in which case a second round of
         training is done with the last block of the pretrained model unfrozen. Training can be stopped if
-        no sufficient improvement in accuracy.
+        no sufficient improvement in accuracy or f1-score (in case of multilabel classification).
 
         If one of the Efficientnet Bs is used, the model includes a layer that normalizes the pixels. This processing
         step is not included in the other models so it has to be done on the data separately.
@@ -466,6 +469,7 @@ class ImageClassifier:
                 logging.StreamHandler()
             ]
         )
+        logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.ERROR)
         # declare the hyperparameters search space
         dim_epochs = skopt.space.Integer(low=1, high=6, name='epochs')
         dim_hidden_size = skopt.space.Integer(
@@ -563,10 +567,8 @@ class ImageClassifier:
 
         if save_results:
             with open('hyperparameters_dimensions.pickle', 'wb') as f:
-                dill.dump(dimensions, f)
-            with open('hyperparameters_search.pickle', 'wb') as f:
                 dill.dump(search_result.x, f)
-            print("Hyperparameter search saved!")
+            print("Hyperparameter results saved!")
 
         # build results dictionary
         results_dict = {dimensions[i].name: search_result.x[i]
