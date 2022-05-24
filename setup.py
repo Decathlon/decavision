@@ -7,7 +7,7 @@ with open('requirements.txt', 'r') as req:
 
 setuptools.setup(
     name="decavision",
-    version="1.4.0",
+    version="1.4.1",
     author="Décathlon Canada",
     author_email="sportvisionapi@decathlon.com",
     description="A package to easily train powerful image classification models using colab's free TPUs.",
@@ -15,6 +15,9 @@ setuptools.setup(
                         classification models. It is specially made to exploit the free TPUs that are offered
                         in Google colab notebooks. You can find the full documentation
                         [here](https://decavision-doc.herokuapp.com/)
+
+                        ## Version 1.4.1
+                        Fix hyperparameter optimization for multilabel
 
                         ## Version 1.4.0
                         Added multilabel classification
