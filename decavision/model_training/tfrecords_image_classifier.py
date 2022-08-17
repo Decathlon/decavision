@@ -1,5 +1,4 @@
 import datetime
-import importlib
 import logging
 import math
 import os
@@ -12,8 +11,6 @@ from decavision.utils import training_utils
 from decavision.utils import utils
 
 AUTO = tf.data.experimental.AUTOTUNE
-
-importlib.reload(logging)
 
 
 # metric for multilable classification
@@ -464,14 +461,17 @@ class ImageClassifier:
             save_results (bool): decide to save optimal hyperparameters in hyperparameters_dimensions.pickle when done
         """
         # initialize logging
-        logging.basicConfig(
-            level=logging.INFO,
-            format="%(asctime)s [%(levelname)s] %(message)s",
-            handlers=[
-                logging.FileHandler("hyperparameters.log"),
-                logging.StreamHandler()
-            ]
-        )
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
+        handler.setFormatter(formatter)
+        logging.getLogger().addHandler(handler)
+
+        handler = logging.FileHandler("hyperparameters.log")
+        formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
+        handler.setFormatter(formatter)
+        logging.getLogger().addHandler(handler)
+
+        logging.getLogger().setLevel(logging.INFO)
         logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.ERROR)
         # declare the hyperparameters search space
         dim_epochs = skopt.space.Integer(low=1, high=6, name='epochs')
