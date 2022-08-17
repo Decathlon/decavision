@@ -1,4 +1,5 @@
 import datetime
+import importlib
 import logging
 import math
 import os
@@ -11,6 +12,8 @@ from decavision.utils import training_utils
 from decavision.utils import utils
 
 AUTO = tf.data.experimental.AUTOTUNE
+
+importlib.reload(logging)
 
 
 # metric for multilable classification
