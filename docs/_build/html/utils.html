@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Utils &mdash; decavision 1.3.0 documentation</title>
+  <title>Utils &mdash; decavision 1.4.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,7 +14,9 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -43,10 +45,40 @@
 <li class="toctree-l1"><a class="reference internal" href="train.html">Train models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Model testing</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Utils</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-decavision.utils.colab_utils">Colab utils</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-decavision.utils.training_utils">Training utils</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-decavision.utils.data_utils">Data utils</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id1">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-decavision.utils.colab_utils">Colab utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#decavision.utils.colab_utils.authenticate_colab"><code class="docutils literal notranslate"><span class="pre">authenticate_colab()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#decavision.utils.colab_utils.download_dataset"><code class="docutils literal notranslate"><span class="pre">download_dataset()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-decavision.utils.training_utils">Training utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#decavision.utils.training_utils.CheckpointDownloader"><code class="docutils literal notranslate"><span class="pre">CheckpointDownloader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#decavision.utils.training_utils.CheckpointDownloader.__call__"><code class="docutils literal notranslate"><span class="pre">CheckpointDownloader.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#decavision.utils.training_utils.custom_loss"><code class="docutils literal notranslate"><span class="pre">custom_loss()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#decavision.utils.training_utils.f1_score"><code class="docutils literal notranslate"><span class="pre">f1_score()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-decavision.utils.data_utils">Data utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#decavision.utils.data_utils.check_RGB"><code class="docutils literal notranslate"><span class="pre">check_RGB()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#decavision.utils.data_utils.create_dir"><code class="docutils literal notranslate"><span class="pre">create_dir()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#decavision.utils.data_utils.download_dataset"><code class="docutils literal notranslate"><span class="pre">download_dataset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#decavision.utils.data_utils.prepare_image"><code class="docutils literal notranslate"><span class="pre">prepare_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#decavision.utils.data_utils.print_download_progress"><code class="docutils literal notranslate"><span class="pre">print_download_progress()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#decavision.utils.data_utils.split_train"><code class="docutils literal notranslate"><span class="pre">split_train()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#decavision.utils.utils.check_PU"><code class="docutils literal notranslate"><span class="pre">check_PU()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#decavision.utils.utils.check_sep"><code class="docutils literal notranslate"><span class="pre">check_sep()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#decavision.utils.utils.empty_folder"><code class="docutils literal notranslate"><span class="pre">empty_folder()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#decavision.utils.utils.gcs_bucket"><code class="docutils literal notranslate"><span class="pre">gcs_bucket()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#decavision.utils.utils.is_gcs"><code class="docutils literal notranslate"><span class="pre">is_gcs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#decavision.utils.utils.load_classes"><code class="docutils literal notranslate"><span class="pre">load_classes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#decavision.utils.utils.load_model_clear"><code class="docutils literal notranslate"><span class="pre">load_model_clear()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#decavision.utils.utils.upload_file_gcs"><code class="docutils literal notranslate"><span class="pre">upload_file_gcs()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -83,12 +115,12 @@
            <div itemprop="articleBody">
              
   <section id="utils">
-<h1>Utils<a class="headerlink" href="#utils" title="Permalink to this headline"></a></h1>
+<h1>Utils<a class="headerlink" href="#utils" title="Permalink to this heading"></a></h1>
 <p>The following code details the functions and classes that are used extensively in this library. The colab utils are
 useful when working with a Google Colab notebook. They allow to authenticate and download a dataset from your Drive easily. The rest
 of the functions are provided in case they can be useful to someone.</p>
 <section id="module-decavision.utils.colab_utils">
-<span id="colab-utils"></span><h2>Colab utils<a class="headerlink" href="#module-decavision.utils.colab_utils" title="Permalink to this headline"></a></h2>
+<span id="colab-utils"></span><h2>Colab utils<a class="headerlink" href="#module-decavision.utils.colab_utils" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="decavision.utils.colab_utils.authenticate_colab">
 <span class="sig-prename descclassname"><span class="pre">decavision.utils.colab_utils.</span></span><span class="sig-name descname"><span class="pre">authenticate_colab</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.colab_utils.authenticate_colab" title="Permalink to this definition"></a></dt>
@@ -117,7 +149,7 @@ of the functions are provided in case they can be useful to someone.</p>
 
 </section>
 <section id="module-decavision.utils.training_utils">
-<span id="training-utils"></span><h2>Training utils<a class="headerlink" href="#module-decavision.utils.training_utils" title="Permalink to this headline"></a></h2>
+<span id="training-utils"></span><h2>Training utils<a class="headerlink" href="#module-decavision.utils.training_utils" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="decavision.utils.training_utils.CheckpointDownloader">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decavision.utils.training_utils.</span></span><span class="sig-name descname"><span class="pre">CheckpointDownloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">checkpoint_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.training_utils.CheckpointDownloader" title="Permalink to this definition"></a></dt>
@@ -183,7 +215,7 @@ High temperature puts more importance on the dominant classes and low temperatur
 
 </section>
 <section id="module-decavision.utils.data_utils">
-<span id="data-utils"></span><h2>Data utils<a class="headerlink" href="#module-decavision.utils.data_utils" title="Permalink to this headline"></a></h2>
+<span id="data-utils"></span><h2>Data utils<a class="headerlink" href="#module-decavision.utils.data_utils" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="decavision.utils.data_utils.check_RGB">
 <span class="sig-prename descclassname"><span class="pre">decavision.utils.data_utils.</span></span><span class="sig-name descname"><span class="pre">check_RGB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.data_utils.check_RGB" title="Permalink to this definition"></a></dt>
@@ -274,7 +306,7 @@ Val and potentially test folders will be created amd images moved into it from t
 
 </section>
 <section id="id1">
-<h2>Utils<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
+<h2>Utils<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
 <span class="target" id="module-decavision.utils.utils"></span><dl class="py function">
 <dt class="sig sig-object py" id="decavision.utils.utils.check_PU">
 <span class="sig-prename descclassname"><span class="pre">decavision.utils.utils.</span></span><span class="sig-name descname"><span class="pre">check_PU</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#decavision.utils.utils.check_PU" title="Permalink to this definition"></a></dt>

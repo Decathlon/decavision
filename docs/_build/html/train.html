@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Train models &mdash; decavision 1.3.0 documentation</title>
+  <title>Train models &mdash; decavision 1.4.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,7 +14,9 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -41,8 +43,25 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="data.html">Preparing datasets</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Train models</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-decavision.model_training.tfrecords_image_classifier">Image classification including Multilabel classification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-decavision.model_training.progressive_learning">Progressive learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-decavision.model_training.tfrecords_image_classifier">Image classification including Multilabel classification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#decavision.model_training.tfrecords_image_classifier.ImageClassifier"><code class="docutils literal notranslate"><span class="pre">ImageClassifier</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#decavision.model_training.tfrecords_image_classifier.ImageClassifier.data_augment"><code class="docutils literal notranslate"><span class="pre">ImageClassifier.data_augment()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#decavision.model_training.tfrecords_image_classifier.ImageClassifier.fit"><code class="docutils literal notranslate"><span class="pre">ImageClassifier.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#decavision.model_training.tfrecords_image_classifier.ImageClassifier.get_training_dataset"><code class="docutils literal notranslate"><span class="pre">ImageClassifier.get_training_dataset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#decavision.model_training.tfrecords_image_classifier.ImageClassifier.get_validation_dataset"><code class="docutils literal notranslate"><span class="pre">ImageClassifier.get_validation_dataset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#decavision.model_training.tfrecords_image_classifier.ImageClassifier.hyperparameter_optimization"><code class="docutils literal notranslate"><span class="pre">ImageClassifier.hyperparameter_optimization()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-decavision.model_training.progressive_learning">Progressive learning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#decavision.model_training.progressive_learning.ProgressiveLearner"><code class="docutils literal notranslate"><span class="pre">ProgressiveLearner</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#decavision.model_training.progressive_learning.ProgressiveLearner.fit"><code class="docutils literal notranslate"><span class="pre">ProgressiveLearner.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#decavision.model_training.progressive_learning.ProgressiveLearner.hyperparameter_optimization"><code class="docutils literal notranslate"><span class="pre">ProgressiveLearner.hyperparameter_optimization()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Model testing</a></li>
@@ -81,13 +100,13 @@
            <div itemprop="articleBody">
              
   <section id="train-models">
-<h1>Train models<a class="headerlink" href="#train-models" title="Permalink to this headline"></a></h1>
+<h1>Train models<a class="headerlink" href="#train-models" title="Permalink to this heading"></a></h1>
 <p>The following code details the functions and classes that are available to train an image classification model
 (also multilabel image classification) and opimize its hyperparameters. Progressive learning can also be performed
 to add new classes to a model that was already trained using the library without losing all the information learned.</p>
 <p>An example of how to use these functions can be found in <a class="reference internal" href="train_example.html"><span class="doc">Train and optimize model</span></a>.</p>
 <section id="module-decavision.model_training.tfrecords_image_classifier">
-<span id="image-classification-including-multilabel-classification"></span><h2>Image classification including Multilabel classification<a class="headerlink" href="#module-decavision.model_training.tfrecords_image_classifier" title="Permalink to this headline"></a></h2>
+<span id="image-classification-including-multilabel-classification"></span><h2>Image classification including Multilabel classification<a class="headerlink" href="#module-decavision.model_training.tfrecords_image_classifier" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="decavision.model_training.tfrecords_image_classifier.ImageClassifier">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decavision.model_training.tfrecords_image_classifier.</span></span><span class="sig-name descname"><span class="pre">ImageClassifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tfrecords_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transfer_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Inception'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multilabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_training.tfrecords_image_classifier.ImageClassifier" title="Permalink to this definition"></a></dt>
@@ -130,7 +149,7 @@ and saturation for each batch during training a model.</p>
 to the pretrained model, with potentially an extra combination of Dense, Dropout and Batchnorm.
 Only added layers are trained, unless there is some fine tuning, in which case a second round of
 training is done with the last block of the pretrained model unfrozen. Training can be stopped if
-no sufficient improvement in accuracy.</p>
+no sufficient improvement in accuracy or f1-score (in case of multilabel classification).</p>
 <p>If one of the Efficientnet Bs is used, the model includes a layer that normalizes the pixels. This processing
 step is not included in the other models so it has to be done on the data separately.</p>
 <dl class="field-list simple">
@@ -208,7 +227,7 @@ num_iterations/n_random_starts)</p></li>
 
 </section>
 <section id="module-decavision.model_training.progressive_learning">
-<span id="progressive-learning"></span><h2>Progressive learning<a class="headerlink" href="#module-decavision.model_training.progressive_learning" title="Permalink to this headline"></a></h2>
+<span id="progressive-learning"></span><h2>Progressive learning<a class="headerlink" href="#module-decavision.model_training.progressive_learning" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="decavision.model_training.progressive_learning.ProgressiveLearner">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">decavision.model_training.progressive_learning.</span></span><span class="sig-name descname"><span class="pre">ProgressiveLearner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tfrecords_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transfer_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#decavision.model_training.progressive_learning.ProgressiveLearner" title="Permalink to this definition"></a></dt>

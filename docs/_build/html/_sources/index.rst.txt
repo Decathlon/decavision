@@ -32,7 +32,7 @@ The library has been updated most recently to also include multilabel image clas
 Installation
 =============
 
-This library works with python 3.6 and above and it is based on the following dependencies:
+This library works best with python 3.7 (because it's the version used on colab) and it is based on the following dependencies:
 
 - tensorflow 2
 - matplotlib
@@ -54,7 +54,7 @@ This library is available through the Python Package Installer (PyPI) by typing:
 
 All the dependencies are installed along with the library, so it is safer to perform the installation in a fresh virtual environment. If you are not working in colab you also need to install tensorflow.
 
-``pip install tensorflow>=2.5.0``
+``pip install tensorflow>=2.9.2``
 
 Contents
 ========

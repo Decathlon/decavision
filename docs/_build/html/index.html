@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to DecaVision’s documentation! &mdash; decavision 1.3.0 documentation</title>
+  <title>Welcome to DecaVision’s documentation! &mdash; decavision 1.4.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,7 +14,9 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -77,7 +79,7 @@
            <div itemprop="articleBody">
              
   <section id="welcome-to-decavision-s-documentation">
-<h1>Welcome to DecaVision’s documentation!<a class="headerlink" href="#welcome-to-decavision-s-documentation" title="Permalink to this headline"></a></h1>
+<h1>Welcome to DecaVision’s documentation!<a class="headerlink" href="#welcome-to-decavision-s-documentation" title="Permalink to this heading"></a></h1>
 <p>This library contains the methods required to build an image classification neural network using transfer learning.</p>
 <p>The module can be used to prepare a dataset of images for training, train a classification model
 built on top of various pretrained models, optimize model hyperparameters using scikit-optimize library and evaluate
@@ -95,8 +97,8 @@ The method was also described in a <a class="reference external" href="https://a
 <p>The library has been updated most recently to also include multilabel image classification.</p>
 </section>
 <section id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h1>
-<p>This library works with python 3.6 and above and it is based on the following dependencies:</p>
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
+<p>This library works best with python 3.7 (because it’s the version used on colab) and it is based on the following dependencies:</p>
 <ul class="simple">
 <li><p>tensorflow 2</p></li>
 <li><p>matplotlib</p></li>
@@ -115,32 +117,91 @@ The method was also described in a <a class="reference external" href="https://a
 <p>This library is available through the Python Package Installer (PyPI) by typing:</p>
 <p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">decavision</span></code></p>
 <p>All the dependencies are installed along with the library, so it is safer to perform the installation in a fresh virtual environment. If you are not working in colab you also need to install tensorflow.</p>
-<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">tensorflow&gt;=2.5.0</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">tensorflow&gt;=2.9.2</span></code></p>
 </section>
 <section id="contents">
-<h1>Contents<a class="headerlink" href="#contents" title="Permalink to this headline"></a></h1>
+<h1>Contents<a class="headerlink" href="#contents" title="Permalink to this heading"></a></h1>
 <p>This documentation is separated in two distinct parts. The first one explains what the functions made available to you do. The second part
 shows examples of how to use the code explicitely.</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Functions</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="data.html">Preparing datasets</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="data.html#module-decavision.dataset_preparation.data_augmentation">Data augmentation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="data.html#module-decavision.dataset_preparation.generate_tfrecords">Make tfrecords</a></li>
-<li class="toctree-l2"><a class="reference internal" href="data.html#module-decavision.dataset_preparation.generate_pseudolabels">Generate pseudo labels for unlabelled data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#module-decavision.dataset_preparation.data_augmentation">Data augmentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data.html#decavision.dataset_preparation.data_augmentation.DataAugmentor"><code class="docutils literal notranslate"><span class="pre">DataAugmentor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#module-decavision.dataset_preparation.generate_tfrecords">Make tfrecords</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data.html#decavision.dataset_preparation.generate_tfrecords.TfrecordsGenerator"><code class="docutils literal notranslate"><span class="pre">TfrecordsGenerator</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#module-decavision.dataset_preparation.generate_pseudolabels">Generate pseudo labels for unlabelled data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data.html#decavision.dataset_preparation.generate_pseudolabels.PseudoLabelGenerator"><code class="docutils literal notranslate"><span class="pre">PseudoLabelGenerator</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="train.html">Train models</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="train.html#module-decavision.model_training.tfrecords_image_classifier">Image classification including Multilabel classification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="train.html#module-decavision.model_training.progressive_learning">Progressive learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="train.html#module-decavision.model_training.tfrecords_image_classifier">Image classification including Multilabel classification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="train.html#decavision.model_training.tfrecords_image_classifier.ImageClassifier"><code class="docutils literal notranslate"><span class="pre">ImageClassifier</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="testing.html">Model testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="train.html#module-decavision.model_training.progressive_learning">Progressive learning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="train.html#decavision.model_training.progressive_learning.ProgressiveLearner"><code class="docutils literal notranslate"><span class="pre">ProgressiveLearner</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Model testing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#decavision.model_testing.testing.ModelTester"><code class="docutils literal notranslate"><span class="pre">ModelTester</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#decavision.model_testing.testing.ModelTester.classify_images"><code class="docutils literal notranslate"><span class="pre">ModelTester.classify_images()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#decavision.model_testing.testing.ModelTester.confusion_matrix"><code class="docutils literal notranslate"><span class="pre">ModelTester.confusion_matrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#decavision.model_testing.testing.ModelTester.evaluate"><code class="docutils literal notranslate"><span class="pre">ModelTester.evaluate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#decavision.model_testing.testing.ModelTester.generate_classification_report"><code class="docutils literal notranslate"><span class="pre">ModelTester.generate_classification_report()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#decavision.model_testing.testing.ModelTester.plot_errors"><code class="docutils literal notranslate"><span class="pre">ModelTester.plot_errors()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#decavision.model_testing.testing.ModelTesterMultilabel"><code class="docutils literal notranslate"><span class="pre">ModelTesterMultilabel</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#decavision.model_testing.testing.ModelTesterMultilabel.classify_images"><code class="docutils literal notranslate"><span class="pre">ModelTesterMultilabel.classify_images()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#decavision.model_testing.testing.ModelTesterMultilabel.create_movie"><code class="docutils literal notranslate"><span class="pre">ModelTesterMultilabel.create_movie()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#decavision.model_testing.testing.ModelTesterMultilabel.evaluate"><code class="docutils literal notranslate"><span class="pre">ModelTesterMultilabel.evaluate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#decavision.model_testing.testing.ModelTesterMultilabel.generate_metrics"><code class="docutils literal notranslate"><span class="pre">ModelTesterMultilabel.generate_metrics()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#module-decavision.utils.colab_utils">Colab utils</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#module-decavision.utils.training_utils">Training utils</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#module-decavision.utils.data_utils">Data utils</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#id1">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html#module-decavision.utils.colab_utils">Colab utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#decavision.utils.colab_utils.authenticate_colab"><code class="docutils literal notranslate"><span class="pre">authenticate_colab()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#decavision.utils.colab_utils.download_dataset"><code class="docutils literal notranslate"><span class="pre">download_dataset()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html#module-decavision.utils.training_utils">Training utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#decavision.utils.training_utils.CheckpointDownloader"><code class="docutils literal notranslate"><span class="pre">CheckpointDownloader</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#decavision.utils.training_utils.custom_loss"><code class="docutils literal notranslate"><span class="pre">custom_loss()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#decavision.utils.training_utils.f1_score"><code class="docutils literal notranslate"><span class="pre">f1_score()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html#module-decavision.utils.data_utils">Data utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#decavision.utils.data_utils.check_RGB"><code class="docutils literal notranslate"><span class="pre">check_RGB()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#decavision.utils.data_utils.create_dir"><code class="docutils literal notranslate"><span class="pre">create_dir()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#decavision.utils.data_utils.download_dataset"><code class="docutils literal notranslate"><span class="pre">download_dataset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#decavision.utils.data_utils.prepare_image"><code class="docutils literal notranslate"><span class="pre">prepare_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#decavision.utils.data_utils.print_download_progress"><code class="docutils literal notranslate"><span class="pre">print_download_progress()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#decavision.utils.data_utils.split_train"><code class="docutils literal notranslate"><span class="pre">split_train()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html#id1">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#decavision.utils.utils.check_PU"><code class="docutils literal notranslate"><span class="pre">check_PU()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#decavision.utils.utils.check_sep"><code class="docutils literal notranslate"><span class="pre">check_sep()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#decavision.utils.utils.empty_folder"><code class="docutils literal notranslate"><span class="pre">empty_folder()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#decavision.utils.utils.gcs_bucket"><code class="docutils literal notranslate"><span class="pre">gcs_bucket()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#decavision.utils.utils.is_gcs"><code class="docutils literal notranslate"><span class="pre">is_gcs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#decavision.utils.utils.load_classes"><code class="docutils literal notranslate"><span class="pre">load_classes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#decavision.utils.utils.load_model_clear"><code class="docutils literal notranslate"><span class="pre">load_model_clear()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#decavision.utils.utils.upload_file_gcs"><code class="docutils literal notranslate"><span class="pre">upload_file_gcs()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -177,11 +238,11 @@ shows examples of how to use the code explicitely.</p>
 </div>
 </section>
 <section id="roadmap">
-<h1>Roadmap<a class="headerlink" href="#roadmap" title="Permalink to this headline"></a></h1>
+<h1>Roadmap<a class="headerlink" href="#roadmap" title="Permalink to this heading"></a></h1>
 <p>Follow the <a class="reference external" href="https://developers.decathlon.com/products/sport-vision/docs">Sport Vision API</a> and our blog at <a class="reference external" href="https://medium.com/decathlondevelopers/">https://medium.com/decathlondevelopers/</a> for updates.</p>
 </section>
 <section id="support">
-<h1>Support<a class="headerlink" href="#support" title="Permalink to this headline"></a></h1>
+<h1>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h1>
 <p>Pull requests to the library are welcomed. If you have any problem, question or suggestion regarding this library, don’t hesitate to create an issue or contact us at <a class="reference external" href="mailto:aicanada&#37;&#52;&#48;decathlon&#46;net">aicanada<span>&#64;</span>decathlon<span>&#46;</span>net</a>.</p>
 </section>
 

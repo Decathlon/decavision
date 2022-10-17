@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Testing Multilabel image classification model &mdash; decavision 1.3.0 documentation</title>
+  <title>Testing Multilabel image classification model &mdash; decavision 1.4.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,7 +14,9 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -82,11 +84,11 @@
            <div itemprop="articleBody">
              
   <section id="testing-multilabel-image-classification-model">
-<h1>Testing Multilabel image classification model<a class="headerlink" href="#testing-multilabel-image-classification-model" title="Permalink to this headline"></a></h1>
+<h1>Testing Multilabel image classification model<a class="headerlink" href="#testing-multilabel-image-classification-model" title="Permalink to this heading"></a></h1>
 <p>This code example shows how to use this library to test a multilabel image classification model from scratch, using an already trained model.
 You can also create a movie from the classified images with predicted labels on them.</p>
 <section id="evaluating-the-multilabel-classification-model">
-<h2>Evaluating the multilabel classification model<a class="headerlink" href="#evaluating-the-multilabel-classification-model" title="Permalink to this headline"></a></h2>
+<h2>Evaluating the multilabel classification model<a class="headerlink" href="#evaluating-the-multilabel-classification-model" title="Permalink to this heading"></a></h2>
 <p>You can use this library to evaluate the trained multilabel image classification model with different tools. The simplest test to do is evaluating
 the f1-score on different datasets where you could just place the images in say a <strong>val/</strong> directory. The data is in a directory with the following structure:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">image_dataset</span><span class="o">/</span>
@@ -110,7 +112,7 @@ the f1-score on different datasets where you could just place the images in say 
 </div>
 </section>
 <section id="plot-save-classified-images">
-<h2>Plot &amp; Save classified images<a class="headerlink" href="#plot-save-classified-images" title="Permalink to this headline"></a></h2>
+<h2>Plot &amp; Save classified images<a class="headerlink" href="#plot-save-classified-images" title="Permalink to this heading"></a></h2>
 <p>You can also explicitly look at the classified images with predictions on the fly.
 To do so use the following function:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tester</span><span class="o">.</span><span class="n">classify_images</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;image_dataset/val&quot;</span><span class="p">,</span> <span class="n">json_file</span><span class="o">=</span><span class="s2">&quot;image_dataset/classes.json&quot;</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">save_img</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -124,7 +126,7 @@ images without plotting, this will be updated in the next version of the library
 </div>
 </section>
 <section id="create-a-movie-from-classified-images">
-<h2>Create a movie from classified images<a class="headerlink" href="#create-a-movie-from-classified-images" title="Permalink to this headline"></a></h2>
+<h2>Create a movie from classified images<a class="headerlink" href="#create-a-movie-from-classified-images" title="Permalink to this heading"></a></h2>
 <p>There are two ways to create a movie from classified images: you can directly run the following code by setting <code class="code docutils literal notranslate"><span class="pre">classify_images=True</span></code> to
 make predictions on new images -&gt; save classified images to a folder and create a movie from them:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tester</span><span class="o">.</span><span class="n">create_movie</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;image_dataset/val&quot;</span><span class="p">,</span> <span class="n">json_file</span><span class="o">=</span><span class="s2">&quot;image_dataset/classes.json&quot;</span><span class="p">,</span> <span class="n">classify_images</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -137,7 +139,7 @@ to the classified saved images directory <code class="code docutils literal notr
 </div>
 </section>
 <section id="generate-classification-report-and-confusion-matrix">
-<h2>Generate Classification report and Confusion matrix<a class="headerlink" href="#generate-classification-report-and-confusion-matrix" title="Permalink to this headline"></a></h2>
+<h2>Generate Classification report and Confusion matrix<a class="headerlink" href="#generate-classification-report-and-confusion-matrix" title="Permalink to this heading"></a></h2>
 <p>Finally, you can also generate a confusion matrix and classification report using the function:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tester</span><span class="o">.</span><span class="n">generate_metrics</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;image_dataset/val&quot;</span><span class="p">,</span> <span class="n">json_file</span><span class="p">)</span>
 </pre></div>
