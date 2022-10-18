@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Build a dataset from scratch &mdash; decavision 1.3.0 documentation</title>
+  <title>Build a dataset from scratch &mdash; decavision 1.4.2 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,7 +14,9 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -82,13 +84,13 @@
            <div itemprop="articleBody">
              
   <section id="build-a-dataset-from-scratch">
-<h1>Build a dataset from scratch<a class="headerlink" href="#build-a-dataset-from-scratch" title="Permalink to this headline"></a></h1>
+<h1>Build a dataset from scratch<a class="headerlink" href="#build-a-dataset-from-scratch" title="Permalink to this heading"></a></h1>
 <p>This code example shows how you can use this library to prepare a dataset of images for training. You can
 perform data augmentation on your images and transform the dataset into tfrecords to be used to train a classification model.
 The data can come from any source and the only requirement is that the images are saved in separate folders for each class. For
 multilabel classification, however, all images need to be stored in a single folder while training and testing.</p>
 <section id="splitting-a-set-of-images-into-a-training-and-a-validation-set">
-<h2>Splitting a set of images into a training and a validation set<a class="headerlink" href="#splitting-a-set-of-images-into-a-training-and-a-validation-set" title="Permalink to this headline"></a></h2>
+<h2>Splitting a set of images into a training and a validation set<a class="headerlink" href="#splitting-a-set-of-images-into-a-training-and-a-validation-set" title="Permalink to this heading"></a></h2>
 <p>If you have a single set of images, but would like to split it into a training and a validation set, first place your images in
 a train folder located in ‘data/image_dataset’ for this example. Using hockey and soccer players as examples
 of classes, your dataset should be organized in the directory as follows:</p>
@@ -133,7 +135,7 @@ being the filenames and the values being lists of labels. Your dataset should be
 move them from the train/ directory to a newly created val/ directory.</p>
 </section>
 <section id="make-data-augmentation-on-training-images">
-<h2>Make data augmentation on training images<a class="headerlink" href="#make-data-augmentation-on-training-images" title="Permalink to this headline"></a></h2>
+<h2>Make data augmentation on training images<a class="headerlink" href="#make-data-augmentation-on-training-images" title="Permalink to this heading"></a></h2>
 <p>You can increase the training dataset by using data augmentation. You can choose between all these options : distortion,
 flip_horizontal, flip_vertical, random_crop, random_erasing, rotate, resize, skew, shear, brightness, contrast, color. All the images
 in the specified folder will have a combination of the desired augmentations. Then you need to specify a desired number of images for all the classes, and it will generate new images to get as close as possible
@@ -145,7 +147,7 @@ to that number:</p>
 <p>If you don’t want to generate new images there is an option to do data augmentation during training by modifying the training data online.</p>
 </section>
 <section id="generate-tfrecord-files">
-<h2>Generate Tfrecord files<a class="headerlink" href="#generate-tfrecord-files" title="Permalink to this headline"></a></h2>
+<h2>Generate Tfrecord files<a class="headerlink" href="#generate-tfrecord-files" title="Permalink to this heading"></a></h2>
 <p>Once this is done you can generate Tfrecords, which is hardly recommended if you want to use TPU, or just to get better performance
 from your GPU. It is recommended that you create 100 Mb file using multiple shards. Also, you can save the generated files in a
 GCS Bucket (gs://) as the output folder (only if you are on colab and have authenticated your account):</p>

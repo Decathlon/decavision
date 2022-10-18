@@ -66,7 +66,7 @@ class ModelTester:
                                                 shuffle=False,
                                                 interpolation='bilinear',
                                                 color_mode='rgb',
-                                                class_mode='sparse',
+                                                class_mode='categorical',
                                                 batch_size=1)
         return generator
 
@@ -223,7 +223,10 @@ class ModelTester:
             cls_pred_name = np.array(categories)[top_pred]
             cls_pred_perc = result[top_pred] * 100
             if plot:
-                plt.imshow(image_tensor[0], interpolation='spline16')
+                if self.model.name[0] not in ["B", "V"]:
+                    plt.imshow(image_tensor[0], interpolation='nearest')
+                else:
+                    plt.imshow(image_tensor[0].astype('uint8'), interpolation='nearest')
                 xlabel = 'Prediction :\n'
                 for (x, y) in zip(cls_pred_name, cls_pred_perc):
                     xlabel += '{0}, {1:.2f}%\n'.format(x, y)
