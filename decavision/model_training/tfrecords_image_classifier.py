@@ -51,7 +51,8 @@ class ImageClassifier:
                 'Batch size {} is not multiple of 8, required for TPU'.format(batch_size))
             batch_size = 8 * round(batch_size / 8)
             print('New batch size is {}'.format(batch_size))
-        self.batch_size = batch_size
+        self.train_batch_size = batch_size
+        self.val_batch_size = batch_size
         self.transfer_model = transfer_model
         self.augment = augment
 
@@ -82,6 +83,9 @@ class ImageClassifier:
             nb_val_images += int(val_tfrecord.split('.')[0].split('-')[1])
         print('Val images = ' + str(nb_val_images))
 
+        if self.val_batch_size > nb_val_images:
+            self.val_batch_size = 8 * round(nb_val_images/16)
+
         self.training_shard_size = math.ceil(
             self.nb_train_images / self.nb_train_shards)
         print('Training shard size = {}'.format(self.training_shard_size))
@@ -89,12 +93,13 @@ class ImageClassifier:
         val_shard_size = math.ceil(nb_val_images / self.nb_val_shards)
         print('Val shard size = {}'.format(val_shard_size))
 
-        print('Training batch size = ' + str(self.batch_size))
-        self.steps_per_epoch = int(self.nb_train_images / self.batch_size)
+        print('Training batch size = ' + str(self.train_batch_size))
+        self.steps_per_epoch = int(
+            self.nb_train_images / self.train_batch_size)
         print('Training steps per epochs = ' + str(self.steps_per_epoch))
 
-        print('Val batch size = ' + str(self.batch_size))
-        self.validation_steps = int(nb_val_images / self.batch_size)
+        print('Val batch size = {}'.format(self.val_batch_size))
+        self.validation_steps = int(nb_val_images / self.val_batch_size)
         print('Val steps per epochs = ' + str(self.validation_steps))
 
         input_dims = {'Inception': 299,
@@ -115,7 +120,8 @@ class ImageClassifier:
         if input_shape:
             self.target_size = input_shape
         else:
-            self.target_size = (input_dims.get(self.transfer_model, 224), input_dims.get(self.transfer_model, 224))
+            self.target_size = (input_dims.get(
+                self.transfer_model, 224), input_dims.get(self.transfer_model, 224))
 
         print("Data augmentation during training: " + str(augment))
 
@@ -147,7 +153,8 @@ class ImageClassifier:
             if self.transfer_model not in ['B0', 'B3', 'B5', 'B7', 'V2-S', 'V2-M', 'V2-L']:
                 image = tf.image.convert_image_dtype(image, dtype=tf.float32)
             feature = tf.image.resize(image, [*self.target_size])
-            label = tf.one_hot(example['label'], depth=len(self.categories), on_value=1.0, off_value=0.0)
+            label = tf.one_hot(example['label'], depth=len(
+                self.categories), on_value=1.0, off_value=0.0)
             label = tf.reduce_sum(label, 0)
             return feature, label
 
@@ -172,10 +179,16 @@ class ImageClassifier:
             # Shuffle only for training.
             dataset = dataset.shuffle(buffer_size=math.ceil(
                 self.training_shard_size * self.nb_train_shards / 4))
-        dataset = dataset.repeat()
-        dataset = dataset.map(_read_tfrecord, num_parallel_calls=AUTO)
-        dataset = dataset.batch(
-            batch_size=self.batch_size, drop_remainder=self.use_TPU)
+            dataset = dataset.repeat()
+            dataset = dataset.map(_read_tfrecord, num_parallel_calls=AUTO)
+            dataset = dataset.batch(
+                batch_size=self.train_batch_size, drop_remainder=self.use_TPU)
+        else:
+            dataset = dataset.repeat()
+            dataset = dataset.map(_read_tfrecord, num_parallel_calls=AUTO)
+            dataset = dataset.batch(
+                batch_size=self.val_batch_size, drop_remainder=self.use_TPU)
+
         dataset = dataset.prefetch(AUTO)
         return dataset
 
@@ -387,7 +400,8 @@ class ImageClassifier:
                 model, base_model_last_block, loss, metrics = self._create_model(
                     activation, hidden_size, dropout, l2_lambda)
                 print('Compiling for TPU')
-                optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
+                optimizer = tf.keras.optimizers.Adam(
+                    learning_rate=learning_rate)
                 model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
 
         else:
@@ -423,7 +437,8 @@ class ImageClassifier:
             # Fit the model
             # we need to recompile the model for these modifications to take effect with a low learning rate
             print('Recompiling model')
-            optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate_fine_tuning)
+            optimizer = tf.keras.optimizers.Adam(
+                learning_rate=learning_rate_fine_tuning)
             model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
 
             print('Fine tunning')
@@ -441,7 +456,9 @@ class ImageClassifier:
             self.model.save(save_model + '.h5')
             print('Model saved')
         if export_model:
-            self.model.save(export_model)
+            save_locally = tf.saved_model.SaveOptions(
+                experimental_io_device='/job:localhost')
+            self.model.save(export_model, options=save_locally)
             print('Model exported')
 
     def hyperparameter_optimization(self, num_iterations=20, n_random_starts=10, patience=0, save_results=False):
@@ -469,7 +486,8 @@ class ImageClassifier:
                 logging.StreamHandler()
             ]
         )
-        logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.ERROR)
+        logging.getLogger(
+            'googleapiclient.discovery_cache').setLevel(logging.ERROR)
         # declare the hyperparameters search space
         dim_epochs = skopt.space.Integer(low=1, high=6, name='epochs')
         dim_hidden_size = skopt.space.Integer(
